@@ -1,0 +1,11 @@
+.logo_wrap{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+
+.logo_img{
+    width: 60px;
+}

@@ -1,0 +1,19 @@
+.auth_btn{
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgb(159, 11, 11);
+    color: white;
+    font-size: 20px;
+    font-weight:bold;
+    padding: 10px 0 10px 0;
+    border: none;
+    outline: none;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.auth_btn:active{
+    scale: 0.98;
+}

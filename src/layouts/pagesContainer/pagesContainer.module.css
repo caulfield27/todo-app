@@ -1,0 +1,9 @@
+.pages_container{
+    margin-left: var(--sidebarWidth);
+    transition: all 0.3s ease-in;
+}
+
+.hiden_sidebar_container{
+    margin-left: 0;
+    transition: all 0.3s ease-in;
+}

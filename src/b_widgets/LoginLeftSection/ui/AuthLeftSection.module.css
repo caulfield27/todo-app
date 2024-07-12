@@ -1,0 +1,19 @@
+.auth_form{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    max-width: 500px;
+}
+
+.auth_content{
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.auth_content h1{
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+

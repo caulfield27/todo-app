@@ -1,0 +1,145 @@
+.sidebar_container{
+    position: fixed;
+    width: var(--sidebarWidth);
+    height: 100%;
+    border-right: 1px solid gainsboro;
+    padding: 15px 20px 15px 20px;
+    transition: all 0.3s ease-in;
+    scroll-behavior: auto;
+}
+
+.hide_sidebar{
+    position: fixed;
+    width: var(--sidebarWidth);
+    height: 100%;
+    border-right: 1px solid gainsboro;
+    padding: 15px 20px 15px 20px;
+    transition: all 0.3s ease-in;
+    margin-left: var(--hideSidebar);
+}
+
+.sidebar_header{
+    margin-bottom: 15px;
+}
+
+.closedArrow{
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.openArrow{
+    position: absolute;
+    top: 0;
+    left: var(--sidebarWidth);
+}
+
+.sidebar_content{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.navigation_container{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.link_item{
+    text-decoration: none;
+    color: var(--defaultColor);
+    padding: 5px 10px 5px 10px;
+    background: transparent;
+    border-radius: 8px;
+}
+
+.active_link{
+    background: rgb(255, 213, 213);
+    color: rgb(116, 0, 0);
+}
+
+.link_item:hover{
+    background: rgb(225, 255, 225);
+    color: var(--defaultColor);
+}
+
+.user_wrapper{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* .arrow{
+    position: absolute;
+    top: 10px;
+    left: 20px;
+} */
+
+.user_wrapper img{
+    width: 24px;
+}
+
+.header_btn{
+    cursor: pointer;
+    background:transparent;
+    border: none;
+    outline: none;
+    border-radius: 50%;
+    padding: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header_btn:hover{
+    background: rgb(228, 228, 228);
+}
+
+.add{
+    padding: 5px 10px 5px 10px;
+}
+
+.add:hover{
+    border-radius: 8px;
+    background: rgb(225, 255, 225);;
+}
+
+.add:active{
+    scale: 0.97;
+}
+
+.link_text{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.user{
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+}
+
+.user button{
+    border: none;
+    outline: none;
+    padding: 2px;
+    background: transparent;
+    border-radius: 50%;
+}
+
+.user img{
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+}
+
+.user span{
+    font-size: 18px;
+    color: black;
+    font-weight: 500;
+}
