@@ -32,6 +32,7 @@ export default function LoginForm() {
     }
     fetchData()
   }, [])
+  
 
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -48,16 +49,16 @@ export default function LoginForm() {
       setText('Из-за технических неполадок сервера временно не работают.')
       setTimeout(() => {
         setModal(false)
-      }, 3500)
+      }, 2700)
     }else {
       let currentUser = users.filter((elem)=> elem.email === userData.email && elem.password === userData.password)
       if(currentUser.length > 0){
-        setBackground('#74E291')
-        setText('Авторизация прошла успешно!')
-        setModal(true)
         navigateTo.push('/myDay')
         currentUser[0]['password'] = 'confidential'
         localStorage.setItem('user', JSON.stringify(currentUser))
+        setBackground('#74E291')
+        setText('Авторизация прошла успешно!')
+        setModal(true)
       }else{
         setBackground('#EE4E4E')
         setText('Пользователь не разегистрирован!')

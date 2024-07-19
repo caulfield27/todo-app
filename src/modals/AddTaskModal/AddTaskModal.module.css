@@ -1,0 +1,64 @@
+.addTask_conteiner{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: white;
+    box-shadow: 0 15px 50px 0 rgba(0, 0, 0, .35);
+    padding: 15px 20px 15px 20px;;
+    height: fit-content;
+    border-radius: 12px;
+}
+
+.addTask_header{
+    margin-bottom: 15px;
+}
+
+.addTask_header input{
+    border: none;
+    outline: none;
+    font-size: 20px;
+    color: var(--defaultColor);
+    font-weight: 600;
+}
+
+.addTask_header input::placeholder{
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.addTask_body input{
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: var(--defaultColor);
+    font-weight: 400;
+}
+.addTask_body input::placeholder{
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.addTask_footer{
+    margin-top: 15px;
+    position: relative;
+}
+
+.tags_container{
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+}
+
+.calendar{
+    position:absolute;
+    top: -300px;
+    left: 170px;
+    background: white;
+    z-index: 100;
+    border-radius: 8px;
+}
+
+.display_none{
+    display: none !important;
+}

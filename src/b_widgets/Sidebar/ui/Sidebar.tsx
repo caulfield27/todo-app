@@ -21,7 +21,8 @@ export default function Sidebar() {
   const icons = [<TodayIcon />, <CalendarMonthIcon />, <StarsIcon />, <AddTaskIcon />]
   const currentPage = usePathname()
   const user = getFromStorage('user')
-  const userAvatar = user[0].image
+  
+  const userAvatar = user[0].image === undefined ? '' : user[0].image
   const userName = user[0].name
   const router = useRouter()
 
