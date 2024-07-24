@@ -32,7 +32,7 @@ export default function LoginForm() {
     }
     fetchData()
   }, [])
-  
+
 
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -43,32 +43,32 @@ export default function LoginForm() {
   }
 
   function handlSubmit() {
-    if (users.length < 1) {
+    // if (users.length < 1) {
+    //   setModal(true)
+    //   setBackground('#EE4E4E')
+    //   setText('Из-за технических неполадок сервера временно не работают.')
+    //   setTimeout(() => {
+    //     setModal(false)
+    //   }, 2700)
+    // }else {
+    let currentUser = users.filter((elem) => elem.email === userData.email && elem.password === userData.password)
+    if (currentUser.length > 0) {
+      navigateTo.push('/myDay')
+      currentUser[0]['password'] = 'confidential'
+      localStorage.setItem('user', JSON.stringify(currentUser))
+      setBackground('#74E291')
+      setText('Авторизация прошла успешно!')
       setModal(true)
+    } else {
       setBackground('#EE4E4E')
-      setText('Из-за технических неполадок сервера временно не работают.')
+      setText('Пользователь не разегистрирован!')
+      setModal(true)
       setTimeout(() => {
         setModal(false)
-      }, 2700)
-    }else {
-      let currentUser = users.filter((elem)=> elem.email === userData.email && elem.password === userData.password)
-      if(currentUser.length > 0){
-        navigateTo.push('/myDay')
-        currentUser[0]['password'] = 'confidential'
-        localStorage.setItem('user', JSON.stringify(currentUser))
-        setBackground('#74E291')
-        setText('Авторизация прошла успешно!')
-        setModal(true)
-      }else{
-        setBackground('#EE4E4E')
-        setText('Пользователь не разегистрирован!')
-        setModal(true)
-        setTimeout(()=>{
-          setModal(false)
-        },3500)
-      }
-      
+      }, 3500)
     }
+
+
 
   }
 

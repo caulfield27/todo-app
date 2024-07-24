@@ -16,7 +16,6 @@ export default function SignupForm() {
   const navigateTo = useRouter()
   const [userData, setUserData] = useState<IUserData>({
     name: '',
-    image: '',
     email: '',
     password: ''
   })
@@ -41,41 +40,38 @@ export default function SignupForm() {
   }
 
   function handleSubmit() {
-    if (users.length < 1) {
-      setModal(true)
+    // if (users.length < 1) {
+    //   setModal(true)
+    //   setBackground('#EE4E4E')
+    //   setText('Из-за технических неполадок сервера временно не работают.')
+    //   setTimeout(() => {
+    //     setModal(false)
+    //   }, 3500)
+    // } else {
+    if (users.find((elem) => elem.email === userData.email)) {
       setBackground('#EE4E4E')
-      setText('Из-за технических неполадок сервера временно не работают.')
+      setText('Пользователь с такой почтой уже зарегистриролван!')
+      setModal(true)
       setTimeout(() => {
         setModal(false)
       }, 3500)
     } else {
-      if (users.find((elem) => elem.email === userData.email)) {
-        setBackground('#EE4E4E')
-        setText('Пользователь с такой почтой уже зарегистриролван!')
-        setModal(true)
-        setTimeout(() => {
-          setModal(false)
-        }, 3500)
-      } else {
-        postUser(userData, `http://localhost:3001/users`)
-        setBackground('#74E291')
-        setText('Регистрация прошла успешно!')
-        setModal(true)
-        navigateTo.push('/myDay')
-        userData['password'] = 'confidential'
-        localStorage.setItem('user', JSON.stringify(userData))
-      }
-
+      postUser(userData, `http://localhost:3001/users`)
+      setBackground('#74E291')
+      setText('Регистрация прошла успешно!')
+      setModal(true)
+      navigateTo.push('/myDay')
+      userData['password'] = 'confidential'
+      localStorage.setItem('user', JSON.stringify(userData))
     }
+
+
   }
 
   return (
     <>
       <Input name="name" placeholder="Введите Имя..."
         type="text" label="Name"
-        handleChange={handleChange} />
-      <Input name="image" placeholder=""
-        type="file" label="Выберите фото профиля"
         handleChange={handleChange} />
       <Input name="email" placeholder="Введите Email..."
         type="email" label="Email"

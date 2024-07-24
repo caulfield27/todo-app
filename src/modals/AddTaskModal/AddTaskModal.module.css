@@ -27,14 +27,15 @@
     font-weight: 600;
 }
 
-.addTask_body input{
+.addTask_body textarea{
     border: none;
     outline: none;
     font-size: 16px;
     color: var(--defaultColor);
     font-weight: 400;
+    width: 100%;
 }
-.addTask_body input::placeholder{
+.addTask_body textarea::placeholder{
     font-size: 16px;
     font-weight: 400;
 }
@@ -42,6 +43,9 @@
 .addTask_footer{
     margin-top: 15px;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    gap:25px;
 }
 
 .tags_container{
@@ -61,4 +65,28 @@
 
 .display_none{
     display: none !important;
+}
+
+.buttons_container{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 25px;
+}
+
+.footer_btn{
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    padding: 10px;
+    color: white;
+}
+
+.cancel_btn{
+    background: red;
+}
+
+.add_btn{
+    background: green;
 }

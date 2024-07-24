@@ -2,7 +2,6 @@
 import { LoginLeftSection } from "@/b_widgets/LoginLeftSection";
 import Wrapper from "@/layouts/wrappepr/wrapper";
 import styles from '../auth.module.css'
-import { isAuth } from "@/utils/isAuth";
 import { BrowserGuestRoute } from "@/routes/BrowserGuestRoute";
 
 const Login = () => {
