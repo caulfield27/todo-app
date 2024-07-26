@@ -2,11 +2,12 @@
 import AuthButton from "@/e_shared/authButton/authButton"
 import AuthDirections from "@/e_shared/authDirections/authDirections"
 import Input from "@/e_shared/input/input"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { IUserData } from "../model"
-import { getUsers, postUser } from "../api"
+import { postUser } from "../api"
 import { useAuthModal } from "@/store/auth/auth"
 import { useRouter } from "next/navigation"
+import { useUsers } from "@/hooks/useUsers"
 
 
 export default function SignupForm() {
@@ -19,18 +20,7 @@ export default function SignupForm() {
     email: '',
     password: ''
   })
-  let [users, setUsers] = useState<IUserData[]>([])
-
-  useEffect(() => {
-    async function fetchData() {
-      const data = await getUsers('http://localhost:3001/users')
-      if (data) {
-        setUsers(data)
-      }
-    }
-    fetchData()
-
-  }, [])
+  const users = useUsers()
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target
@@ -48,7 +38,7 @@ export default function SignupForm() {
     //     setModal(false)
     //   }, 3500)
     // } else {
-    if (users.find((elem) => elem.email === userData.email)) {
+    if (users?.find((elem) => elem.email === userData.email)) {
       setBackground('#EE4E4E')
       setText('Пользователь с такой почтой уже зарегистриролван!')
       setModal(true)
@@ -56,7 +46,7 @@ export default function SignupForm() {
         setModal(false)
       }, 3500)
     } else {
-      postUser(userData, `http://localhost:3001/users`)
+      postUser(userData, `http://localhost:3000/api/users`)
       setBackground('#74E291')
       setText('Регистрация прошла успешно!')
       setModal(true)

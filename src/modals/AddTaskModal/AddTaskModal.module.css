@@ -81,12 +81,28 @@
     border-radius: 8px;
     padding: 10px;
     color: white;
+    cursor: pointer;
 }
 
 .cancel_btn{
     background: red;
+    transition: all 0.3s ease-in;
+}
+
+.cancel_btn:hover{
+    background: rgb(156, 4, 4);
 }
 
 .add_btn{
     background: green;
+    transition: all 0.3s ease-in;
+}
+
+.add_btn:hover{
+    background: rgb(4, 99, 4);
+}
+
+.disable_btn{
+    background:rgb(96, 185, 96);
+    cursor: default;
 }

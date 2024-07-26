@@ -1,10 +1,11 @@
+"use client"
 import Input from "@/e_shared/input/input"
 import AuthButton from "@/e_shared/authButton/authButton"
 import AuthDirections from "@/e_shared/authDirections/authDirections"
-import { useEffect, useState } from "react"
-import { getUsers, IUserData } from "@/c_feauters/signupForm"
+import {  useState } from "react"
 import { useAuthModal } from "@/store/auth/auth"
 import { useRouter } from "next/navigation"
+import { useUsers } from "@/hooks/useUsers"
 
 interface IUserLoginData {
   email: string,
@@ -17,23 +18,11 @@ export default function LoginForm() {
   const setModal = useAuthModal((state) => state.setModal)
   const setText = useAuthModal((state) => state.setText)
   const navigateTo = useRouter()
-  const [users, setUsers] = useState<IUserData[]>([])
   const [userData, setUserData] = useState<IUserLoginData>({
     email: '',
     password: ''
   })
-
-  useEffect(() => {
-    async function fetchData() {
-      const data = await getUsers('http://localhost:3001/users')
-      if (data) {
-        setUsers(data)
-      }
-    }
-    fetchData()
-  }, [])
-
-
+  const users = useUsers()
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     let { value, name } = e.target
@@ -51,21 +40,23 @@ export default function LoginForm() {
     //     setModal(false)
     //   }, 2700)
     // }else {
-    let currentUser = users.filter((elem) => elem.email === userData.email && elem.password === userData.password)
-    if (currentUser.length > 0) {
-      navigateTo.push('/myDay')
-      currentUser[0]['password'] = 'confidential'
-      localStorage.setItem('user', JSON.stringify(currentUser))
-      setBackground('#74E291')
-      setText('Авторизация прошла успешно!')
-      setModal(true)
-    } else {
-      setBackground('#EE4E4E')
-      setText('Пользователь не разегистрирован!')
-      setModal(true)
-      setTimeout(() => {
-        setModal(false)
-      }, 3500)
+    let currentUser = users?.filter((user) => user.email === userData.email && user.password === userData.password)
+    if (currentUser) {
+      if (currentUser.length > 0) {
+        navigateTo.push('/myDay')
+        currentUser[0]['password'] = 'confidential'
+        localStorage.setItem('user', JSON.stringify(currentUser))
+        setBackground('#74E291')
+        setText('Авторизация прошла успешно!')
+        setModal(true)
+      } else {
+        setBackground('#EE4E4E')
+        setText('Пользователь не разегистрирован!')
+        setModal(true)
+        setTimeout(() => {
+          setModal(false)
+        }, 3500)
+      }
     }
 
 

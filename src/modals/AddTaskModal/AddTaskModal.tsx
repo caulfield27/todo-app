@@ -17,14 +17,25 @@ const AddTaskModal = () => {
     const currentDay = parseDay(new Date())
     const [day, setDay] = useState(dayjs(currentDay))
     const calendarModal = useTaskStore((state)=> state.calendarModal)
-    const setCalendarModal = useTaskStore((state)=> state.setCalendarModal)
-    const completeDate = useTaskStore((state) => state.completeDate)
-    const executor = useTaskStore((state) => state.executor)
-    const priority = useTaskStore((state) => state.priority)
+    const completeDate = useTaskStore((state) => state.todo.completeDate)
+    const executor = useTaskStore((state) => state.todo.executor)
+    const priority = useTaskStore((state) => state.todo.priority)
+    const taskName = useTaskStore((state)=> state.todo.taskName)
+    const taskDescription = useTaskStore((state)=> state.todo.taskDescription)
     const setExecutorModal = useTaskStore((state) => state.setExecutorModal)
     const setCompleteDate = useTaskStore((state) => state.setCompleteDate)
     const setPriorityModal = useTaskStore((state)=> state.setPriorityModal)
-    
+    const setCalendarModal = useTaskStore((state)=> state.setCalendarModal)
+    const setTaskName = useTaskStore((state)=> state.setTaskName)
+    const setTaskDescription = useTaskStore((state)=> state.setDescription)
+    const priorityModal = useTaskStore((state)=> state.priorityModal)
+    const executorModal = useTaskStore((state)=> state.executorModal)
+    const setTaskModal = useTaskStore((state)=> state.setAddTaskModal)
+    const addTaskModal = useTaskStore((state)=> state.addTaskModal)
+    const resetAll = useTaskStore((state)=> state.resetAll)
+    const todo = useTaskStore((state)=> state.todo)
+
+
     function passedDays(date: any) {
         let today = new Date()
         today.setHours(0, 0, 0, 0)
@@ -38,29 +49,83 @@ const AddTaskModal = () => {
         setCalendarModal()
     }
 
+    function handleCalendarModal(){
+        setCalendarModal()
+        if(priorityModal){
+            setPriorityModal()
+        }else if(executorModal){
+            setExecutorModal()
+        }else if(priorityModal && executorModal){
+            setPriorityModal()
+            setExecutorModal()
+        }
+
+    }
+    function handleExecutorModal(){
+        setExecutorModal()
+        if(priorityModal){
+            setPriorityModal()
+        }else if(calendarModal){
+            setCalendarModal()
+        }else if(priorityModal && calendarModal){
+            setPriorityModal()
+            setCalendarModal()
+        }
+
+    }
+    function handlePriorityModal(){
+        setPriorityModal()
+        if(calendarModal){
+            setCalendarModal()
+        }else if(executorModal){
+            setExecutorModal()
+        }else if(calendarModal && executorModal){
+            setCalendarModal()
+            setExecutorModal()
+        }
+
+    }
+
+    function handleCancel(){
+        setTaskModal(false)
+        resetAll()
+    }
+
+    function handleAddTask(){
+        console.log(todo);
+        
+    }
+    
+    const sendBtnDisable = !taskName
+
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <div className={styles.addTask_conteiner}>
+            <div className={addTaskModal ? styles.addTask_conteiner : styles.display_none}>
                 <header className={styles.addTask_header}>
-                    <input type="text" placeholder='Название задачи' />
+                    <input type="text" placeholder='Название задачи' value={taskName} onChange={(e)=> setTaskName(e.target.value)}/>
                 </header>
                 <div className={styles.addTask_body}>
-                    <textarea placeholder='описание' />
+                    <textarea placeholder='описание' value={taskDescription} onChange={(e)=> setTaskDescription(e.target.value)}/>
                 </div>
                 <footer className={styles.addTask_footer}>
                     <div className={styles.tags_container}>
-                        <AddTaskModalButton label={completeDate}
-                            handleClick={() => setCalendarModal()} />
-                        <AddTaskModalButton label={executor} handleClick={() => setExecutorModal()} />
-                        <AddTaskModalButton label={priority} handleClick={() => setPriorityModal()} />
+                        <AddTaskModalButton label={completeDate} id={1}
+                            handleClick={handleCalendarModal} />
+                        <AddTaskModalButton label={executor} handleClick={handleExecutorModal} id={2}/>
+                        <AddTaskModalButton label={priority} handleClick={handlePriorityModal} id={3}/>
                         <ExecutorModal />
                         <DateCalendar className={calendarModal ? styles.calendar : styles.display_none}
                             value={day} onChange={handleDateChange} shouldDisableDate={passedDays} />
                         <PriorityModal/>
                     </div>
                     <div className={styles.buttons_container}>
-                        <button className={`${styles.cancel_btn} ${styles.footer_btn}`}>Отмена</button>
-                        <button className={`${styles.add_btn} ${styles.footer_btn}`}>Добавить</button>
+                        <button className={`${styles.cancel_btn} ${styles.footer_btn}`} onClick={handleCancel}>
+                            Отмена
+                        </button>
+                        <button className={sendBtnDisable ? `${styles.disable_btn} ${styles.footer_btn}` : `${styles.add_btn} ${styles.footer_btn}`} 
+                        disabled={sendBtnDisable} onClick={handleAddTask}>
+                            Добавить
+                        </button>
                     </div>
                 </footer>
             </div>

@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 import { useSidebarStore } from '@/store/sidebar/sidebar';
 import { getFromStorage } from '@/utils/useLocaleStorage';
 import { ProfileDropdown } from '@/c_feauters/profileDropdown';
+import { useTaskStore } from '@/store/addTask/addTask';
 
 
 export default function Sidebar() {
@@ -23,6 +24,7 @@ export default function Sidebar() {
   const user = getFromStorage('user')
   const userName = user.name
   const router = useRouter()
+  const setAddTaskModal = useTaskStore((state)=> state.setAddTaskModal)
 
   function handleLogout(){
     localStorage.removeItem('user')
@@ -52,7 +54,7 @@ export default function Sidebar() {
         </div>
       </header>
       <div className={styles.sidebar_content}>
-        <div onClick={() => console.log('test')} className={styles.add}>
+        <div onClick={() => setAddTaskModal(true)} className={styles.add}>
           <AddTaskButton />
         </div>
         <nav className={styles.navigation_container}>
