@@ -10,18 +10,31 @@ import { useState } from 'react';
 import { parseDay } from '@/utils/getDate';
 import { useTaskStore } from '@/store/addTask/addTask';
 import ExecutorModal from '../ExecutorModal/ExecutorModal';
+import PriorityModal from '../PriorityModal/PriorityModal';
 
 
 const AddTaskModal = () => {
     const currentDay = parseDay(new Date())
     const [day, setDay] = useState(dayjs(currentDay))
-    const [showCalendar, setShowCalendar] = useState(false)
-    const completeDate = useTaskStore((state) => state.completeDate)
-    const executor = useTaskStore((state) => state.executor)
-    const priority = useTaskStore((state) => state.priority)
-    const reminder = useTaskStore((state) => state.reminder)
+    const calendarModal = useTaskStore((state)=> state.calendarModal)
+    const completeDate = useTaskStore((state) => state.todo.completeDate)
+    const executor = useTaskStore((state) => state.todo.executor)
+    const priority = useTaskStore((state) => state.todo.priority)
+    const taskName = useTaskStore((state)=> state.todo.taskName)
+    const taskDescription = useTaskStore((state)=> state.todo.taskDescription)
     const setExecutorModal = useTaskStore((state) => state.setExecutorModal)
     const setCompleteDate = useTaskStore((state) => state.setCompleteDate)
+    const setPriorityModal = useTaskStore((state)=> state.setPriorityModal)
+    const setCalendarModal = useTaskStore((state)=> state.setCalendarModal)
+    const setTaskName = useTaskStore((state)=> state.setTaskName)
+    const setTaskDescription = useTaskStore((state)=> state.setDescription)
+    const priorityModal = useTaskStore((state)=> state.priorityModal)
+    const executorModal = useTaskStore((state)=> state.executorModal)
+    const setTaskModal = useTaskStore((state)=> state.setAddTaskModal)
+    const addTaskModal = useTaskStore((state)=> state.addTaskModal)
+    const resetAll = useTaskStore((state)=> state.resetAll)
+    const todo = useTaskStore((state)=> state.todo)
+
 
     function passedDays(date: any) {
         let today = new Date()
@@ -33,34 +46,89 @@ const AddTaskModal = () => {
         const selectedDay = parseDay(newValue.$d)
         setDay(dayjs(selectedDay))
         setCompleteDate(selectedDay)
-        setShowCalendar(false)
+        setCalendarModal()
     }
+
+    function handleCalendarModal(){
+        setCalendarModal()
+        if(priorityModal){
+            setPriorityModal()
+        }else if(executorModal){
+            setExecutorModal()
+        }else if(priorityModal && executorModal){
+            setPriorityModal()
+            setExecutorModal()
+        }
+
+    }
+    function handleExecutorModal(){
+        setExecutorModal()
+        if(priorityModal){
+            setPriorityModal()
+        }else if(calendarModal){
+            setCalendarModal()
+        }else if(priorityModal && calendarModal){
+            setPriorityModal()
+            setCalendarModal()
+        }
+
+    }
+    function handlePriorityModal(){
+        setPriorityModal()
+        if(calendarModal){
+            setCalendarModal()
+        }else if(executorModal){
+            setExecutorModal()
+        }else if(calendarModal && executorModal){
+            setCalendarModal()
+            setExecutorModal()
+        }
+
+    }
+
+    function handleCancel(){
+        setTaskModal(false)
+        resetAll()
+    }
+
+    function handleAddTask(){
+        console.log(todo);
+        
+    }
+    
+    const sendBtnDisable = !taskName
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <div className={styles.addTask_conteiner}>
+            <div className={addTaskModal ? styles.addTask_conteiner : styles.display_none}>
                 <header className={styles.addTask_header}>
-                    <input type="text" placeholder='Название задачи' />
+                    <input type="text" placeholder='Название задачи' value={taskName} onChange={(e)=> setTaskName(e.target.value)}/>
                 </header>
                 <div className={styles.addTask_body}>
-                    <input type="text" placeholder='описание' />
+                    <textarea placeholder='описание' value={taskDescription} onChange={(e)=> setTaskDescription(e.target.value)}/>
                 </div>
                 <footer className={styles.addTask_footer}>
                     <div className={styles.tags_container}>
-                        <AddTaskModalButton label={completeDate}
-                            handleClick={() => setShowCalendar((prev) => !prev)} />
-                        <AddTaskModalButton label={executor} handleClick={() => setExecutorModal()} />
-                        <AddTaskModalButton label={priority} handleClick={() => console.log('test')} />
-                        <AddTaskModalButton label={reminder} handleClick={() => console.log('test')} />
+                        <AddTaskModalButton label={completeDate} id={1}
+                            handleClick={handleCalendarModal} />
+                        <AddTaskModalButton label={executor} handleClick={handleExecutorModal} id={2}/>
+                        <AddTaskModalButton label={priority} handleClick={handlePriorityModal} id={3}/>
                         <ExecutorModal />
-                        <DateCalendar className={showCalendar ? styles.calendar : styles.display_none}
+                        <DateCalendar className={calendarModal ? styles.calendar : styles.display_none}
                             value={day} onChange={handleDateChange} shouldDisableDate={passedDays} />
+                        <PriorityModal/>
+                    </div>
+                    <div className={styles.buttons_container}>
+                        <button className={`${styles.cancel_btn} ${styles.footer_btn}`} onClick={handleCancel}>
+                            Отмена
+                        </button>
+                        <button className={sendBtnDisable ? `${styles.disable_btn} ${styles.footer_btn}` : `${styles.add_btn} ${styles.footer_btn}`} 
+                        disabled={sendBtnDisable} onClick={handleAddTask}>
+                            Добавить
+                        </button>
                     </div>
                 </footer>
             </div>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" data-icon-name="priority-icon" data-priority="1"><path fill="currentColor" fill-rule="evenodd" d="M4.223 4.584A.5.5 0 0 0 4 5v14.5a.5.5 0 0 0 1 0v-5.723C5.886 13.262 7.05 13 8.5 13c.97 0 1.704.178 3.342.724 1.737.58 2.545.776 3.658.776 1.759 0 3.187-.357 4.277-1.084A.5.5 0 0 0 20 13V4.5a.5.5 0 0 0-.777-.416C18.313 4.69 17.075 5 15.5 5c-.97 0-1.704-.178-3.342-.724C10.421 3.696 9.613 3.5 8.5 3.5c-1.758 0-3.187.357-4.277 1.084Z" clip-rule="evenodd"></path>
-                <path fill="currentColor" fill-rule="evenodd" d="M4.223 4.584A.5.5 0 0 0 4 5v14.5a.5.5 0 0 0 1 0v-5.723C5.886 13.262 7.05 13 8.5 13c.97 0 1.704.178 3.342.724 1.737.58 2.545.776 3.658.776 1.759 0 3.187-.357 4.277-1.084A.5.5 0 0 0 20 13V4.5a.5.5 0 0 0-.777-.416C18.313 4.69 17.075 5 15.5 5c-.97 0-1.704-.178-3.342-.724C10.421 3.696 9.613 3.5 8.5 3.5c-1.758 0-3.187.357-4.277 1.084Z" clip-rule="evenodd"></path>
-            </svg>
         </LocalizationProvider>
 
     );

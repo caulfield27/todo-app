@@ -1,0 +1,31 @@
+.priority_modal_container{
+    position: absolute;
+    top: 35px;
+    left: 360px;
+    padding: 20px 15px 20px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: white;
+    z-index: 99;
+    border-radius: 12px;
+    border: 1px solid gainsboro;
+}
+
+.display_none{
+    display: none;
+}
+
+.priority_wrap{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+
+.priority_wrap span:hover{
+    color:black;
+}
+
