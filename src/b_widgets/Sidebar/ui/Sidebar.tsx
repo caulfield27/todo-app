@@ -21,9 +21,7 @@ export default function Sidebar() {
   const icons = [<TodayIcon />, <CalendarMonthIcon />, <StarsIcon />, <AddTaskIcon />]
   const currentPage = usePathname()
   const user = getFromStorage('user')
-  
-  const userAvatar = user[0].image === undefined ? '' : user[0].image
-  const userName = user[0].name
+  const userName = user.name
   const router = useRouter()
 
   function handleLogout(){
@@ -39,7 +37,7 @@ export default function Sidebar() {
             <ProfileDropdown active={userDropdown} handleClick={handleLogout}/>
             <div className={styles.user}>
               <button onClick={()=> setUserDropdown(prev=> !prev)}>
-                <img src={userAvatar ? userAvatar : userName[0].toUpperCase()} alt="user photo" />
+                <span>{userName[0].toUpperCase()}</span>
               </button>
               <span>{userName}</span>
             </div>
