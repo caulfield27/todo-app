@@ -7,10 +7,12 @@ import { DateCalendar } from '@mui/x-date-pickers';
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useState } from 'react';
-import { parseDay } from '@/utils/getDate';
+import { parseDay, parseToSentense } from '@/utils/getDate';
 import { useTaskStore } from '@/store/addTask/addTask';
 import ExecutorModal from '../ExecutorModal/ExecutorModal';
 import PriorityModal from '../PriorityModal/PriorityModal';
+import {  postTodo } from '@/utils/api';
+import { getFromStorage } from '@/utils/useLocaleStorage';
 
 
 const AddTaskModal = () => {
@@ -45,7 +47,8 @@ const AddTaskModal = () => {
     function handleDateChange(newValue: any) {
         const selectedDay = parseDay(newValue.$d)
         setDay(dayjs(selectedDay))
-        setCompleteDate(selectedDay)
+        let parseSelected = parseToSentense(selectedDay)
+        setCompleteDate(parseSelected)
         setCalendarModal()
     }
 
@@ -92,7 +95,9 @@ const AddTaskModal = () => {
     }
 
     function handleAddTask(){
-        console.log(todo);
+        const currentUser = getFromStorage('user')
+        let request = {userId:currentUser[0].id, todo}
+        postTodo(request,'http://localhost:3000/api/todoes')
         
     }
     

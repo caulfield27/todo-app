@@ -22,7 +22,7 @@ export default function Sidebar() {
   const icons = [<TodayIcon />, <CalendarMonthIcon />, <StarsIcon />, <AddTaskIcon />]
   const currentPage = usePathname()
   const user = getFromStorage('user')
-  const userName = user.name
+  const userName = user[0].name
   const router = useRouter()
   const setAddTaskModal = useTaskStore((state)=> state.setAddTaskModal)
 
@@ -38,10 +38,10 @@ export default function Sidebar() {
           <article style={{ display: 'flex', alignItems: 'center', gap: '12px',position:'relative'}}>
             <ProfileDropdown active={userDropdown} handleClick={handleLogout}/>
             <div className={styles.user}>
-              <button onClick={()=> setUserDropdown(prev=> !prev)}>
+              <button className={styles.user_btn} onClick={()=> setUserDropdown(prev=> !prev)}>
                 <span>{userName[0].toUpperCase()}</span>
               </button>
-              <span>{userName}</span>
+              <span className={styles.userName}>{userName}</span>
             </div>
             <button className={`${styles.not_btn} ${styles.header_btn}`}>
               <img src="/notification.png" alt="notification" />

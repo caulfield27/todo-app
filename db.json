@@ -1,16 +1,78 @@
 {
   "users": [
     {
-      "id": "478f",
+      "id": 1722225039477,
       "name": "Alisher",
       "email": "salikhovalisher@mail.ru",
       "password": "12345"
     },
     {
-      "name": "Usmon",
-      "email": "usmon@gmail.com",
+      "id": 1722250036427,
+      "name": "Daler ",
+      "email": "kamolovd@gmail.com",
       "password": "12345"
     }
   ],
-  "todoes": []
+  "todoes": [
+    {
+      "id": 1722225039477,
+      "todo": [
+        {
+          "taskName": "test",
+          "taskDescription": "test",
+          "completeDate": "29 июля",
+          "executor": "Alisher",
+          "priority": {
+            "name": "Средний",
+            "color": "#F6FF70"
+          }
+        },
+        {
+          "taskName": "#90",
+          "taskDescription": "",
+          "completeDate": "30 июля",
+          "executor": "jonibek",
+          "priority": {
+            "name": "Средний",
+            "color": "#F6FF70"
+          }
+        },
+        {
+          "taskName": "#100",
+          "taskDescription": "",
+          "completeDate": "29 июля",
+          "executor": "alisher",
+          "priority": {
+            "name": "Высокий",
+            "color": "#F22B2B"
+          }
+        }
+      ]
+    },
+    {
+      "id": 1722250036427,
+      "todo": [
+        {
+          "taskName": "деплой",
+          "taskDescription": "задеплоить проект нового сайта хумо",
+          "completeDate": "7 августа",
+          "executor": "Далер",
+          "priority": {
+            "name": "Высокий",
+            "color": "#F22B2B"
+          }
+        },
+        {
+          "taskName": "Собес",
+          "taskDescription": "провести собес у джунов",
+          "completeDate": "31 июля",
+          "executor": "Далер",
+          "priority": {
+            "name": "Средний",
+            "color": "#F6FF70"
+          }
+        }
+      ]
+    }
+  ]
 }

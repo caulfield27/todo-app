@@ -3,8 +3,8 @@ import AuthButton from "@/e_shared/authButton/authButton"
 import AuthDirections from "@/e_shared/authDirections/authDirections"
 import Input from "@/e_shared/input/input"
 import { useState } from "react"
-import { IUserData } from "../model"
-import { postUser } from "../api"
+import { IUserData } from "@/utils/api"
+import { postUser } from "@/utils/api"
 import { useAuthModal } from "@/store/auth/auth"
 import { useRouter } from "next/navigation"
 import { useUsers } from "@/hooks/useUsers"
@@ -16,6 +16,7 @@ export default function SignupForm() {
   const setText = useAuthModal((state) => state.setText)
   const navigateTo = useRouter()
   const [userData, setUserData] = useState<IUserData>({
+    id: Date.now(),
     name: '',
     email: '',
     password: ''
@@ -70,7 +71,7 @@ export default function SignupForm() {
         type="password" label="Password"
         handleChange={handleChange} />
       <AuthButton handleClick={handleSubmit} label="Зарегистрироваться" />
-      <AuthDirections label="Вход" text="Уже есть акаунт?" link="/auth/signup" />
+      <AuthDirections label="Вход" text="Уже есть акаунт?" link="/auth/login" />
     </>
   )
 }

@@ -21,6 +21,7 @@ const MyDay = () => {
             <PagesContainer>
                 <Wrapper>
                     <h1>My Day</h1>
+                    
                     <AddTaskModal/>
                 </Wrapper>
             </PagesContainer>

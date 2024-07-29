@@ -2,8 +2,6 @@ import { NextResponse } from 'next/server'
 import data from '../../../../db.json'
 import fs from 'fs'
 import path from 'path'
-import { error } from 'console'
-
 
 const dbPath = path.join(process.cwd(), 'db.json')
 
@@ -27,7 +25,7 @@ export async function POST(request: Request) {
     try{
         return NextResponse.json(newUser, {status:201})
     }catch(e){
-        return NextResponse.json({error},{status:500})
+        return NextResponse.json({e},{status:500})
     }
 }
 
