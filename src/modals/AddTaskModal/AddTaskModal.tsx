@@ -48,7 +48,7 @@ const AddTaskModal = () => {
         const selectedDay = parseDay(newValue.$d)
         setDay(dayjs(selectedDay))
         let parseSelected = parseToSentense(selectedDay)
-        setCompleteDate(parseSelected)
+        setCompleteDate({numbered: selectedDay, inWords: parseSelected})
         setCalendarModal()
     }
 
@@ -64,6 +64,7 @@ const AddTaskModal = () => {
         }
 
     }
+    
     function handleExecutorModal(){
         setExecutorModal()
         if(priorityModal){

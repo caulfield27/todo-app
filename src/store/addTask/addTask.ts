@@ -12,7 +12,7 @@ interface IStates{
 }
 
 interface Actions{
-    setCompleteDate:(payload: string)=> void,
+    setCompleteDate:(payload: string | ICompleteDate)=> void,
     setExecutor: (payload: string)=> void,
     setPriority: (payload: IPriority)=> void,
     setExecutorModal: ()=> void,
@@ -30,9 +30,14 @@ interface Actions{
 export interface ITodo{
     taskName: string,
     taskDescription: string,
-    completeDate: string,
+    completeDate: ICompleteDate | string,
     executor: string,
     priority: string | IPriority
+}
+
+export interface ICompleteDate{
+    numbered: string,
+    inWords: string
 }
 
 export const todo = {

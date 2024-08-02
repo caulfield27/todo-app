@@ -47,6 +47,16 @@ async function postTodo(todo:ITodoPostData, url:string){
     }
 }
 
+async function getTodoes(url: string,) {
+    try{
+        const response = await axios.get(url)
+        return response.data
+    }catch(e){
+        console.log(e);
+        
+    }    
+}
 
 
-export {postTodo, postUser, getUsers }
+
+export {postTodo, postUser, getUsers, getTodoes}

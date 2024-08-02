@@ -1,10 +1,10 @@
 import styles from './AddTaskModalButton.module.css'
 import { IPriority } from '@/modals/PriorityModal/PriorityModal';
 import PriorityIcon from '../priorityIcon/PriorityIcon';
-import { useTaskStore } from '@/store/addTask/addTask';
+import { ICompleteDate, useTaskStore } from '@/store/addTask/addTask';
 
 interface Props {
-    label: string | IPriority,
+    label: any,
     handleClick: (e:any) => void,
     id:number
 }
@@ -35,15 +35,16 @@ const AddTaskModalButton = ({ label, handleClick , id}: Props) => {
     
     return (
         <div onClick={handleClick} className={styles.btn}>
-            {typeof label === 'string' ? <span>{label}</span> :
+            {typeof label === 'string' ? <span>{label}</span> : label.hasOwnProperty('name') ?  
                 <div style={{display:'flex',flexDirection:'row', alignItems: 'center',gap:'5px'}}>
                     <PriorityIcon color={label.color} />
                     <span>
                         {label.name}
                     </span>
 
-                </div>
-            }
+                </div> :
+                <span>{label.inWords}</span> 
+            } 
             <button className={showCloseBtn() ? styles.display_none : styles.close_btn}
             onClick={handleClose}>
                 &#10006;

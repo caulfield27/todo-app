@@ -18,9 +18,12 @@
       "id": 1722225039477,
       "todo": [
         {
-          "taskName": "test",
-          "taskDescription": "test",
-          "completeDate": "29 июля",
+          "taskName": "Сон",
+          "taskDescription": "Поспать хорошенько",
+          "completeDate": {
+            "numbered": "2024-08-26",
+            "inWords": "26 августа"
+          },
           "executor": "Alisher",
           "priority": {
             "name": "Средний",
@@ -28,20 +31,13 @@
           }
         },
         {
-          "taskName": "#90",
-          "taskDescription": "",
-          "completeDate": "30 июля",
-          "executor": "jonibek",
-          "priority": {
-            "name": "Средний",
-            "color": "#F6FF70"
-          }
-        },
-        {
-          "taskName": "#100",
-          "taskDescription": "",
-          "completeDate": "29 июля",
-          "executor": "alisher",
+          "taskName": "Еда",
+          "taskDescription": "поесть хорошенько",
+          "completeDate": {
+            "numbered": "2024-08-01",
+            "inWords": "1 августа"
+          },
+          "executor": "Daler",
           "priority": {
             "name": "Высокий",
             "color": "#F22B2B"
@@ -53,20 +49,13 @@
       "id": 1722250036427,
       "todo": [
         {
-          "taskName": "деплой",
-          "taskDescription": "задеплоить проект нового сайта хумо",
-          "completeDate": "7 августа",
-          "executor": "Далер",
-          "priority": {
-            "name": "Высокий",
-            "color": "#F22B2B"
-          }
-        },
-        {
-          "taskName": "Собес",
-          "taskDescription": "провести собес у джунов",
-          "completeDate": "31 июля",
-          "executor": "Далер",
+          "taskName": "код",
+          "taskDescription": "провести ревью кода",
+          "completeDate": {
+            "numbered": "2024-08-02",
+            "inWords": "2 августа"
+          },
+          "executor": "Daler",
           "priority": {
             "name": "Средний",
             "color": "#F6FF70"

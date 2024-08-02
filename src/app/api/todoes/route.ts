@@ -1,4 +1,3 @@
-import { log } from 'console'
 import data from '../../../../db.json'
 import fs from 'fs'
 import { NextResponse } from 'next/server'
@@ -9,7 +8,14 @@ const dbPath = path.join(process.cwd(), 'db.json')
 
 export async function GET(request: Request) {
     const todoes = data.todoes
-    return NextResponse.json(todoes,{status: 200})
+    const {searchParams} = new URL(request.url)
+    const id = searchParams.get('id')
+    const response = todoes.filter((todo)=> String(todo.id) === id)
+    try{
+        return NextResponse.json(response[0].todo,{status: 200})
+    }catch(e){
+        return NextResponse.json({e}, {status: 500})
+    }
     
 }
 

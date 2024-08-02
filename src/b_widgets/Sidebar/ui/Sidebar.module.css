@@ -125,8 +125,8 @@
 }
 
 .user_btn{
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     border: none;
     outline: none;
     padding: 2px;
@@ -136,7 +136,7 @@
 }
 
 .user_btn span{
-    font-size: 22px;
+    font-size: 18px;
 }
 
 .user img{

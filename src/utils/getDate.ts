@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 
 export const month: {[key: string] : string} = {
     '01': 'января',
@@ -46,5 +47,13 @@ export function parseToSentense(date: string){
         }
     }
     return sentense.reverse().join(' ')
+    
+}
+
+function isToday(day: string){
+    let props = dayjs(day)
+    let currentDay = dayjs(parseDay(new Date()))
+    console.log(props);
+    console.log(currentDay);
     
 }
