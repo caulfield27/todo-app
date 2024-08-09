@@ -1,5 +1,9 @@
+"use server"
+
 import { ITodo } from "@/store/addTask/addTask";
 import axios from "axios";
+import { revalidatePath } from "next/cache";
+import { instance } from "./services";
 
 export interface IUserData{
     id: number,
@@ -41,9 +45,12 @@ async function getUsers(url:string) {
 
 async function postTodo(todo:ITodoPostData, url:string){
     try{
-        await axios.post(url, todo)
+        const res =  await instance.post(url, todo)
+        console.log(res);
+        
     }catch(e){
         console.log(e);
+        
     }
 }
 

@@ -11,6 +11,7 @@ export async function GET(request: Request) {
     const {searchParams} = new URL(request.url)
     const id = searchParams.get('id')
     const response = todoes.filter((todo)=> String(todo.id) === id)
+    
     try{
         return NextResponse.json(response[0].todo,{status: 200})
     }catch(e){
@@ -20,16 +21,10 @@ export async function GET(request: Request) {
 }
 
 
-
-
-
-
 export async function POST(request: Request){
     let newTask = await request.json()
     const data = fs.readFileSync(dbPath, 'utf-8')
     const parsedData = JSON.parse(data)
-    console.log("id ", newTask);
-    
     const userId = newTask.userId
     const newTodo = newTask.todo
     

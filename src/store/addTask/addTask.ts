@@ -6,6 +6,7 @@ import { immer } from "zustand/middleware/immer";
 interface IStates{
     addTaskModal: boolean,
     todo: ITodo,
+    todoes: ITodo[],
     executorModal: boolean,
     priorityModal: boolean,
     calendarModal: boolean
@@ -24,15 +25,17 @@ interface Actions{
     resetExecutor: ()=> void,
     resetDate: ()=> void,
     resetPriority: ()=> void,
-    setAddTaskModal: (payload: boolean) => void
+    setAddTaskModal: (payload: boolean) => void,
+    getTodoes: (payload: ITodo[])=> void,
+    setTodo: (payload: ITodo) => void
 }
 
 export interface ITodo{
     taskName: string,
     taskDescription: string,
-    completeDate: ICompleteDate | string,
+    completeDate: any,
     executor: string,
-    priority: string | IPriority
+    priority: any
 }
 
 export interface ICompleteDate{
@@ -53,6 +56,7 @@ export const todo = {
 export const useTaskStore = create<IStates & Actions>()(devtools(immer((set)=>({
     addTaskModal: false,
     todo,
+    todoes: [],
     executorModal: false,
     priorityModal: false,
     calendarModal: false,
@@ -74,6 +78,10 @@ export const useTaskStore = create<IStates & Actions>()(devtools(immer((set)=>({
     resetExecutor: ()=> set((state)=> {state.todo.executor = 'Исполнитель'}),
     resetDate: ()=> set((state)=> {state.todo.completeDate = 'Срок выполнения'}),
     resetPriority: ()=> set((state)=> {state.todo.priority = 'Приоритет'}),
-    setAddTaskModal: (payload)=> set(()=> ({addTaskModal: payload}))
+    setAddTaskModal: (payload)=> set(()=> ({addTaskModal: payload})),
+    getTodoes: (payload) => set(()=> ({todoes: payload})),
+    setTodo: (payload) => set((state)=> {
+        state.todoes.push(payload)
+    })
 
 }))))

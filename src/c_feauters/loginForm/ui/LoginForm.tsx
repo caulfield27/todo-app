@@ -2,7 +2,7 @@
 import Input from "@/e_shared/input/input"
 import AuthButton from "@/e_shared/authButton/authButton"
 import AuthDirections from "@/e_shared/authDirections/authDirections"
-import {  useState } from "react"
+import { useState } from "react"
 import { useAuthModal } from "@/store/auth/auth"
 import { useRouter } from "next/navigation"
 import { useUsers } from "@/hooks/useUsers"
@@ -32,30 +32,31 @@ export default function LoginForm() {
   }
 
   function handlSubmit() {
-    // if (users.length < 1) {
-    //   setModal(true)
-    //   setBackground('#EE4E4E')
-    //   setText('Из-за технических неполадок сервера временно не работают.')
-    //   setTimeout(() => {
-    //     setModal(false)
-    //   }, 2700)
-    // }else {
-    let currentUser = users?.filter((user) => user.email === userData.email && user.password === userData.password)
-    if (currentUser) {
-      if (currentUser.length > 0) {
-        navigateTo.push('/myDay')
-        currentUser[0]['password'] = 'confidential'
-        localStorage.setItem('user', JSON.stringify(currentUser))
-        setBackground('#74E291')
-        setText('Авторизация прошла успешно!')
-        setModal(true)
-      } else {
-        setBackground('#EE4E4E')
-        setText('Пользователь не разегистрирован!')
-        setModal(true)
-        setTimeout(() => {
-          setModal(false)
-        }, 3500)
+    if (users.error) {
+      setModal(true)
+      setBackground('#EE4E4E')
+      setText('Из-за технических неполадок сервера временно не работают.')
+      setTimeout(() => {
+        setModal(false)
+      }, 2700)
+    } else {
+      let currentUser = users.data?.filter((user) => user.email === userData.email && user.password === userData.password)
+      if (currentUser) {
+        if (currentUser.length > 0) {
+          navigateTo.push('/myDay')
+          currentUser[0]['password'] = 'confidential'
+          localStorage.setItem('user', JSON.stringify(currentUser))
+          setBackground('#74E291')
+          setText('Авторизация прошла успешно!')
+          setModal(true)
+        } else {
+          setBackground('#EE4E4E')
+          setText('Пользователь не разегистрирован!')
+          setModal(true)
+          setTimeout(() => {
+            setModal(false)
+          }, 3500)
+        }
       }
     }
 
