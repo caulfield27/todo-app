@@ -55,7 +55,7 @@ export async function POST(request: Request){
     fs.writeFileSync(dbPath, JSON.stringify(parsedData,null,2))
 
     try{
-        return NextResponse.json(newTask,{status:201})
+        return NextResponse.json({status:201})
     }catch(e){
         return NextResponse.json({e}, {status: 500})
     }

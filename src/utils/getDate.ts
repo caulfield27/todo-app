@@ -50,10 +50,10 @@ export function parseToSentense(date: string){
     
 }
 
-function isToday(day: string){
-    let props = dayjs(day)
-    let currentDay = dayjs(parseDay(new Date()))
-    console.log(props);
-    console.log(currentDay);
+// function isToday(day: string){
+//     let props = dayjs(day)
+//     let currentDay = dayjs(parseDay(new Date()))
+//     console.log(props);
+//     console.log(currentDay);
     
-}
+// }

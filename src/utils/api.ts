@@ -45,8 +45,7 @@ async function getUsers(url:string) {
 
 async function postTodo(todo:ITodoPostData, url:string){
     try{
-        const res =  await instance.post(url, todo)
-        console.log(res);
+        await instance.post(url, todo)
         
     }catch(e){
         console.log(e);

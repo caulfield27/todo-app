@@ -77,6 +77,7 @@ const AddTaskModal = () => {
         }
 
     }
+    
     function handlePriorityModal() {
         setPriorityModal()
         if (calendarModal) {
