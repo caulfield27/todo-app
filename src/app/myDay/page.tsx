@@ -1,5 +1,4 @@
 "use client"
-import AddTaskModal from "@/modals/AddTaskModal/AddTaskModal";
 import PagesContainer from "@/layouts/pagesContainer/pagesContainer"
 import Wrapper from "@/layouts/wrappepr/wrapper";
 import BrowserPrivateRoute from "@/routes/BrowserPrivateRoute";
@@ -9,15 +8,7 @@ import { ITodo, useTaskStore } from "@/store/addTask/addTask";
 import PriorityIcon from "@/e_shared/priorityIcon/PriorityIcon";
 
 const MyDay = () => {
-    const setModal = useAuthModal((state)=> state.setModal)
-    const todoes = useTaskStore((state)=> state.todoes)
-    useEffect(()=>{
-        setTimeout(()=>{
-            setModal(false)
-        },3000)
-    },[])
-
-
+    
     return (
         <BrowserPrivateRoute>
             <PagesContainer>
@@ -34,7 +25,7 @@ const MyDay = () => {
                         </div>
                     })} */}
                     
-                    <AddTaskModal/>
+                
                 </Wrapper>
             </PagesContainer>
         </BrowserPrivateRoute>

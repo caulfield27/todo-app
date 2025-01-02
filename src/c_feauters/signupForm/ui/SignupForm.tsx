@@ -4,25 +4,16 @@ import AuthDirections from "@/e_shared/authDirections/authDirections"
 import Input from "@/e_shared/input/input"
 import { useState } from "react"
 import { IUserData } from "@/utils/api"
-import { postUser } from "@/utils/api"
 import { useAuthModal } from "@/store/auth/auth"
 import { useRouter } from "next/navigation"
-import { useUsers } from "@/hooks/useUsers"
-
 
 export default function SignupForm() {
-  const setBackground = useAuthModal((state) => state.setBackground)
-  const setModal = useAuthModal((state) => state.setModal)
-  const setText = useAuthModal((state) => state.setText)
-  const navigateTo = useRouter()
   const [userData, setUserData] = useState<IUserData>({
-    id: Date.now(),
     name: '',
     email: '',
-    password: ''
+    password: '',
   })
-  const users = useUsers()
-
+  
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target
     setUserData(prevUserData => (
@@ -31,33 +22,7 @@ export default function SignupForm() {
   }
 
   function handleSubmit() {
-    if (users.error) {
-      setModal(true)
-      setBackground('#EE4E4E')
-      setText('Из-за технических неполадок сервера временно не работают.')
-      setTimeout(() => {
-        setModal(false)
-      }, 3500)
-    } else {
-      if (users.data?.find((elem) => elem.email === userData.email)) {
-        setBackground('#EE4E4E')
-        setText('Пользователь с такой почтой уже зарегистриролван!')
-        setModal(true)
-        setTimeout(() => {
-          setModal(false)
-        }, 3500)
-      } else {
-        postUser(userData, `http://localhost:3000/api/users`)
-        setBackground('#74E291')
-        setText('Регистрация прошла успешно!')
-        setModal(true)
-        navigateTo.push('/myDay')
-        userData['password'] = 'confidential'
-        localStorage.setItem('user', JSON.stringify(userData))
-      }
 
-
-    }
   }
 
 

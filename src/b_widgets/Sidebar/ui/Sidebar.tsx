@@ -9,7 +9,7 @@ import TodayIcon from '@mui/icons-material/Today';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSidebarStore } from '@/store/sidebar/sidebar';
 import { getFromStorage } from '@/utils/useLocaleStorage';
 import { ProfileDropdown } from '@/c_feauters/profileDropdown';
