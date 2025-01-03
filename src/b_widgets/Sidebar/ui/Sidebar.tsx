@@ -9,11 +9,11 @@ import TodayIcon from '@mui/icons-material/Today';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSidebarStore } from '@/store/sidebar/sidebar';
-import { getFromStorage } from '@/utils/useLocaleStorage';
 import { ProfileDropdown } from '@/c_feauters/profileDropdown';
-import { useTaskStore } from '@/store/addTask/addTask';
+import axios from 'axios';
+import { IUserData } from '@/e_shared/types/types';
 
 
 export default function Sidebar() {
@@ -21,14 +21,21 @@ export default function Sidebar() {
   const [userDropdown, setUserDropdown] = useState(false)
   const icons = [<TodayIcon />, <CalendarMonthIcon />, <StarsIcon />, <AddTaskIcon />]
   const currentPage = usePathname()
-  const user = getFromStorage('user')
-  const userName = user[0].name
   const router = useRouter()
-  const setAddTaskModal = useTaskStore((state)=> state.setAddTaskModal)
+  const [user, setUser] = useState<IUserData | "">("");
+
+  useEffect(()=>{
+    const getUserFromStorage = JSON.parse(localStorage.getItem("user") ?? "");
+    setUser(getUserFromStorage);
+  }, [])
 
   function handleLogout(){
-    localStorage.removeItem('user')
-    router.push('/auth/login')
+    axios.post("/api/logout").then((response)=>{
+      if(response.status === 200){
+        localStorage.removeItem("user");
+        router.push('/auth/login');
+      }
+    });
   }
   
   return (
@@ -39,9 +46,9 @@ export default function Sidebar() {
             <ProfileDropdown active={userDropdown} handleClick={handleLogout}/>
             <div className={styles.user}>
               <button className={styles.user_btn} onClick={()=> setUserDropdown(prev=> !prev)}>
-                <span>{userName[0].toUpperCase()}</span>
+                <span>{typeof user === 'object' ? user?.username[0] : 'U'}</span>
               </button>
-              <span className={styles.userName}>{userName}</span>
+              <span className={styles.userName}>{typeof user === "object" ? user.username : "Unknown"}</span>
             </div>
             <button className={`${styles.not_btn} ${styles.header_btn}`}>
               <img src="/notification.png" alt="notification" />
@@ -54,7 +61,7 @@ export default function Sidebar() {
         </div>
       </header>
       <div className={styles.sidebar_content}>
-        <div onClick={() => setAddTaskModal(true)} className={styles.add}>
+        <div onClick={() => {}} className={styles.add}>
           <AddTaskButton />
         </div>
         <nav className={styles.navigation_container}>

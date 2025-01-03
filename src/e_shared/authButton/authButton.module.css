@@ -17,3 +17,18 @@
 .auth_btn:active{
     scale: 0.98;
 }
+
+.disabled{
+    background: gainsboro !important;
+    color: gray !important;
+    cursor:not-allowed !important;
+}
+
+.loading{
+    background: rgb(219, 77, 77) !important;
+    cursor: not-allowed !important;
+}
+
+.auth_btn:hover{
+    background:  rgb(219, 32, 32);;
+}
