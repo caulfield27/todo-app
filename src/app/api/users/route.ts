@@ -18,7 +18,7 @@ export async function GET(request: Request){
 }
 
 export async function POST(request: Request) {
-    let newUser = await request.json()     
+    let newUser = await request.json() 
     const data = fs.readFileSync(dbPath,'utf-8')
     const jsonData = JSON.parse(data)
     jsonData.users.push(newUser)

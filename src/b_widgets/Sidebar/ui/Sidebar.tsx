@@ -22,7 +22,7 @@ export default function Sidebar() {
   const icons = [<TodayIcon />, <CalendarMonthIcon />, <StarsIcon />, <AddTaskIcon />]
   const currentPage = usePathname()
   const user = getFromStorage('user')
-  const userName = user.name
+  const userName = user[0].name
   const router = useRouter()
   const setAddTaskModal = useTaskStore((state)=> state.setAddTaskModal)
 

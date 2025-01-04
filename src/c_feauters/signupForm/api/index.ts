@@ -4,6 +4,7 @@ import axios from "axios";
 async function postUser(userData: IUserData, url:string){
     try{
         await axios.post(url,userData)
+        
     }catch(e){
         console.log(`postError: ${e}`);
         

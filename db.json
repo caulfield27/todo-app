@@ -1,14 +1,9 @@
 {
   "users": [
     {
-      "id": "478f",
+      "id": 1722140867334,
       "name": "Alisher",
       "email": "salikhovalisher@mail.ru",
-      "password": "12345"
-    },
-    {
-      "name": "Usmon",
-      "email": "usmon@gmail.com",
       "password": "12345"
     }
   ],

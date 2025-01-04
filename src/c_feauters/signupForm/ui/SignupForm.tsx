@@ -16,6 +16,7 @@ export default function SignupForm() {
   const setText = useAuthModal((state) => state.setText)
   const navigateTo = useRouter()
   const [userData, setUserData] = useState<IUserData>({
+    id: Date.now(),
     name: '',
     email: '',
     password: ''
@@ -38,7 +39,7 @@ export default function SignupForm() {
     //     setModal(false)
     //   }, 3500)
     // } else {
-    if (users?.find((elem) => elem.email === userData.email)) {
+    if (users?.find((elem: IUserData) => elem.email === userData.email)) {
       setBackground('#EE4E4E')
       setText('Пользователь с такой почтой уже зарегистриролван!')
       setModal(true)
