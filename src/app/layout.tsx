@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ReactNode } from "react";
-import AuthModal from "@/modals/AuthModal/AuthModal";
+import AuthModal from "@/modals/authModal/AuthModal";
 
 export const metadata: Metadata = {
   title: "ToDo App",
@@ -9,15 +9,15 @@ export const metadata: Metadata = {
 };
 
 interface Props {
-  children: ReactNode
+  children: ReactNode;
 }
 
 export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
       <body>
-        <AuthModal />
         <div className="app_container">
+          <AuthModal/>
           {children}
         </div>
       </body>
