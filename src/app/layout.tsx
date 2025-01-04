@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ReactNode } from "react";
-import AuthModal from "@/modals/authModal/AuthModal";
 
 export const metadata: Metadata = {
   title: "ToDo App",

@@ -1,10 +1,6 @@
 "use client"
 import PagesContainer from "@/layouts/pagesContainer/pagesContainer";
 import Wrapper from "@/layouts/wrappepr/wrapper";
-import BrowserPrivateRoute from "@/routes/BrowserPrivateRoute";
-import styles from './page.module.css'
-import { Loader } from "humo-ui"
-import { useRef, useState } from "react";
 
 const Important = () => {
     const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -23,7 +19,7 @@ const Important = () => {
     console.log(loading);
     
     return (
-        <BrowserPrivateRoute>
+       
             <PagesContainer>
                 <Wrapper>
                     {loading ? <h1>Загрузка видео...</h1> : null}
@@ -38,7 +34,7 @@ const Important = () => {
                     </main>
                 </Wrapper>
             </PagesContainer>
-        </BrowserPrivateRoute>
+       
     );
 }
 

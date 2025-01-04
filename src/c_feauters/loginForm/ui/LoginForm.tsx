@@ -2,10 +2,10 @@
 import Input from "@/e_shared/input/input"
 import AuthButton from "@/e_shared/authButton/authButton"
 import AuthDirections from "@/e_shared/authDirections/authDirections"
-import {  useState } from "react"
-import { useAuthModal } from "@/store/auth/auth"
+import { useState } from "react"
+import axios from "axios"
+import { IUserData } from "@/e_shared/types/types"
 import { useRouter } from "next/navigation"
-import { useUsers } from "@/hooks/useUsers"
 
 interface IUserLoginData {
   email: string,
@@ -14,15 +14,11 @@ interface IUserLoginData {
 }
 
 export default function LoginForm() {
-  const setBackground = useAuthModal((state) => state.setBackground)
-  const setModal = useAuthModal((state) => state.setModal)
-  const setText = useAuthModal((state) => state.setText)
-  const navigateTo = useRouter()
+  const router = useRouter();
   const [userData, setUserData] = useState<IUserLoginData>({
     email: '',
     password: ''
   })
-  const users = useUsers()
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     let { value, name } = e.target
@@ -32,35 +28,24 @@ export default function LoginForm() {
   }
 
   function handlSubmit() {
-    // if (users.length < 1) {
-    //   setModal(true)
-    //   setBackground('#EE4E4E')
-    //   setText('Из-за технических неполадок сервера временно не работают.')
-    //   setTimeout(() => {
-    //     setModal(false)
-    //   }, 2700)
-    // }else {
-    let currentUser = users?.filter((user) => user.email === userData.email && user.password === userData.password)
-    if (currentUser) {
-      if (currentUser.length > 0) {
-        navigateTo.push('/myDay')
-        currentUser[0]['password'] = 'confidential'
-        localStorage.setItem('user', JSON.stringify(currentUser))
-        setBackground('#74E291')
-        setText('Авторизация прошла успешно!')
-        setModal(true)
-      } else {
-        setBackground('#EE4E4E')
-        setText('Пользователь не разегистрирован!')
-        setModal(true)
-        setTimeout(() => {
-          setModal(false)
-        }, 3500)
+    axios.post("http://localhost:1337/api/auth/local",{
+      identifier: userData.email,
+      password: userData.password,
+    }).then((response)=>{
+      const user:IUserData = response?.data?.user;
+      const jwt = response?.data?.jwt;
+      if(user && jwt){
+        localStorage.setItem("user", JSON.stringify(user));
+        return axios.post("/api/set-cookies",{jwt}); 
       }
-    }
-
-
-
+    }).then((res)=>{
+      if(res?.status === 200){
+        router.push("/myDay");
+      }
+    })
+    .catch((e)=>{
+      console.log(e);
+    })
   }
 
 

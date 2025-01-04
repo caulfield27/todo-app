@@ -21,3 +21,15 @@
 .input_wrapper input::placeholder{
     font-size: 16px;
 }
+
+.input_container{
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.input_container span{
+    margin-left: 5px;
+    color: rgb(230, 71, 71);
+    font-size: 12px;
+}
