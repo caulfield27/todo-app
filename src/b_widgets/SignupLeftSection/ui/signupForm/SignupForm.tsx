@@ -6,6 +6,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useValidation } from "@/hooks/useValidation";
+import ConfirmEmail from "../confirmEmail/ConfirmEmail";
+import { useSignupStore } from "../../model/store";
+
 
 interface ISIgnupData {
   name: string;
@@ -27,6 +30,7 @@ const isBtnDisabled = (
 
 export default function SignupForm() {
   const router = useRouter();
+  const { setCurrentComponent } = useSignupStore()
   const [userData, setUserData] = useState<ISIgnupData>({
     name: "",
     email: "",
@@ -40,32 +44,34 @@ export default function SignupForm() {
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     setUserData((prevUserData) => ({ ...prevUserData, [name]: value }));
-    if(name === 'password' && value.length < 6){
-      setPasswordValidation({isError: true, message: "Длина пароля должна быть больше 5 символов"})
-    }else{
-      setPasswordValidation({isError: false, message: ""})
+    if (name === 'password' && value.length < 6) {
+      setPasswordValidation({ isError: true, message: "Длина пароля должна быть больше 5 символов" })
+    } else {
+      setPasswordValidation({ isError: false, message: "" })
     }
   }
 
   function handleSubmit() {
     setLoading(true);
-    axios
-      .post("http://localhost:1337/api/auth/local/register", {
-        username: userData.name,
-        email: userData.email,
-        password: userData.password,
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          router.push("/auth/login");
+    axios.post('/api/check-email-code', { email: userData.email, type: "send" })
+      .then((res) => {
+        if (res.status === 200) {
+          setCurrentComponent(<ConfirmEmail {...userData}/>);
         } else {
-          setLoading(false);
+          setEmailValidation(
+            {
+              message: res.data.message ?? "неверный адресс почты",
+              isError: true
+            })
         }
-      })
-      .catch((err) => {
-        setLoading(false);
+      }).catch((err) => {
+        setEmailValidation(
+          {
+            message: "неверный адресс почты",
+            isError: true
+          })
         console.log(err);
-      });
+      }).finally(() => setLoading(false))
   }
 
   function handleBlur(e: React.FocusEvent<HTMLInputElement>) {
@@ -102,6 +108,7 @@ export default function SignupForm() {
   return (
     <>
       <Input
+        value={userData.name}
         name="name"
         placeholder="Введите Имя..."
         type="text"
@@ -111,6 +118,7 @@ export default function SignupForm() {
         validation={nameValidation}
       />
       <Input
+        value={userData.email}
         name="email"
         placeholder="Введите Email..."
         type="email"
@@ -120,6 +128,7 @@ export default function SignupForm() {
         validation={emailValidation}
       />
       <Input
+        value={userData.password}
         name="password"
         placeholder="Введите пароль..."
         type="password"

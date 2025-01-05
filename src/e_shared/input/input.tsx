@@ -3,8 +3,9 @@ import styles from "./input.module.css";
 
 interface Props {
   placeholder: string;
-  label: string;
-  type: string;
+  value: string,
+  label?: string;
+  type?: string;
   name: string;
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
@@ -14,6 +15,7 @@ interface Props {
 
 const Input = ({
   placeholder,
+  value,
   label,
   type,
   name,
@@ -25,10 +27,11 @@ const Input = ({
   return (
     <div className={styles.input_container}>
       <div className={styles.input_wrapper}>
-        <label htmlFor={label}>{label}</label>
+        {label && <label htmlFor={label}>{label}</label>}
         <input
+          value={value}
           name={name}
-          type={type}
+          type={type ?? "text"}
           id={label}
           placeholder={placeholder}
           onFocus={handleFocus ? handleFocus : () => {}}

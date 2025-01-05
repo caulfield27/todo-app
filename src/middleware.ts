@@ -5,7 +5,6 @@ import { cookies } from "next/headers";
 export async function middleware(request: NextRequest){
     const {pathname} = request.nextUrl;
     const cookieStore = cookies();
-    console.log('test');
     
     if(cookieStore.has("authToken") && (pathname.startsWith('/auth') || pathname === "/")){
         return NextResponse.redirect(new URL("/myDay" ,request.url))
