@@ -14,10 +14,6 @@
     cursor: pointer;
 }
 
-.auth_btn:active{
-    scale: 0.98;
-}
-
 .disabled{
     background: gainsboro !important;
     color: gray !important;

@@ -1,4 +1,4 @@
-import Loader from "../loader/loader";
+import Loader from "../loader/Loader";
 import styles from "./authButton.module.css";
 
 interface Props {

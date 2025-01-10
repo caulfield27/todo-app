@@ -29,7 +29,6 @@ const isBtnDisabled = (
 };
 
 export default function SignupForm() {
-  const router = useRouter();
   const { setCurrentComponent } = useSignupStore()
   const [userData, setUserData] = useState<ISIgnupData>({
     name: "",

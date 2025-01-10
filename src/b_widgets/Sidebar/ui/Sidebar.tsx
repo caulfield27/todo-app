@@ -67,12 +67,12 @@ export default function Sidebar() {
         <nav className={styles.navigation_container}>
           {sidebarLinks.map((elem, ind) => {
             const isActive = elem.path === currentPage
-            return <Link key={elem.id} href={elem.path} className={isActive ? `${styles.link_item} ${styles.active_link}` : styles.link_item}>
+            return <a key={elem.id} href={elem.path} className={isActive ? `${styles.link_item} ${styles.active_link}` : styles.link_item}>
               <div className={styles.link_text}>
                 {icons[ind]}
                 {elem.label}
               </div>
-            </Link>
+            </a>
           })}
         </nav>
       </div>

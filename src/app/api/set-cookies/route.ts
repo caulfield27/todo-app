@@ -12,12 +12,5 @@ export async function POST(request: NextRequest) {
     sameSite: "strict",
   });
 
-  return NextResponse.json(
-    {
-      message: "Авторизация прошла успешно",
-    },
-    {
-      status: 200,
-    }
-  );
+  return NextResponse.json({message: "Авторизация прошла успешно"},{status: 200});
 }

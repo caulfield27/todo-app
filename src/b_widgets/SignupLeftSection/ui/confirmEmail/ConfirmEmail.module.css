@@ -1,0 +1,43 @@
+.confirm_email_wrapper {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  border: 1px solid gainsboro;
+  border-radius: 16px;
+  padding: 20px;
+  max-width: 600px;
+}
+
+.email_confirm_text {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  text-align: left;
+  color: #737373;
+}
+
+.resend_btn , .resend_span{
+  font-size: 14px;
+}
+
+.resend_wrapper{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resend_btn{
+  border: none;
+  background: transparent;
+  outline: none;
+  color: rgb(118, 0, 197);
+  cursor: pointer;
+  width: fit-content;
+  align-items: center;
+}
+
+.resend_span{
+  color: #737373;
+}
