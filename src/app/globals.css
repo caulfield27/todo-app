@@ -3,7 +3,10 @@
 :root{
     --sidebarWidth: 280px;
     --hideSidebar: -280px;
-    --defaultColor: rgb(105, 102, 102);
+    --defaultColor: #696666;
+    --container-bg: #fdf9f9;
+    --primaryRed: #db1414;
+    --secondaryRed: #740000;
 }
 
 *{

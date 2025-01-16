@@ -56,7 +56,7 @@
 
 .active_link{
     background: rgb(255, 213, 213);
-    color: rgb(116, 0, 0);
+    color: var(--secondaryRed);
 }
 
 .link_item:hover{
@@ -130,7 +130,7 @@
     border: none;
     outline: none;
     padding: 2px;
-    background: rgb(219, 20, 20);
+    background: var(--primaryRed);
     color: white;
     border-radius: 50%;
 }
