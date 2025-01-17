@@ -10,6 +10,7 @@ export async function POST(request: NextRequest) {
     secure: process.env.NODE_ENV === "production",
     path: "/",
     sameSite: "strict",
+    maxAge: 60 * 60 * 24 * 364
   });
 
   return NextResponse.json({message: "Авторизация прошла успешно"},{status: 200});

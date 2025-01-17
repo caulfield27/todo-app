@@ -1,7 +1,7 @@
 const PriorityIcon = ({ color }: { color?: string }) => {
   return (
     <svg
-      style={{ color: color ?? "black",}}
+      style={{ color: color ?? "#626262"}}
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
