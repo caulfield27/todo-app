@@ -1,0 +1,33 @@
+.ul_container{
+    width: 100px;
+    border-radius: 8px;
+    background: white;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    list-style-type: none;
+    box-shadow: var(--default-box-shadow);
+}
+
+.list_item{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+    justify-content: flex-start;
+    width: 50px;
+    width: 100%;
+    border-radius: 8px;
+    padding: 2px;
+    cursor: pointer;
+
+}
+
+.list_item:hover{
+    background: whitesmoke;
+}
+
+.active_item{
+    background: whitesmoke;
+}

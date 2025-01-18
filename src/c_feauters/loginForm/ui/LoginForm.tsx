@@ -43,6 +43,14 @@ export default function LoginForm() {
     setUserData(prevData => ({
       ...prevData, [name]: value
     }))
+
+    if(name === "password"){
+      if(value.length < 6){
+        setPasswordValidation({isError: true, message: "Пароль должен состоять минимум из 6 символов"})
+      }else {
+        setPasswordValidation({isError: false, message: ""})
+      }
+    }
   }
 
   function handleBlur(e: React.FocusEvent<HTMLInputElement>) {
@@ -107,8 +115,6 @@ export default function LoginForm() {
         })
       })
   }
-
-
 
   return (
     <>

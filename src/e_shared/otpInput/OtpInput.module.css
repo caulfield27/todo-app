@@ -1,0 +1,28 @@
+.otp_input{
+    width: 100%;
+    background: gainsboro;
+    border: none;
+    outline: none;
+    padding: 10px 0 10px;
+    font-size: 24px;
+    font-weight: 600;
+    color: rgb(82, 82, 82);
+    text-align: center;
+    letter-spacing: 5px;
+}
+
+.otp_input::placeholder{
+    text-align: center;
+}
+
+.otp_input_wrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.otp_input_wrapper span{
+    margin-left: 5px;
+    color: rgb(230, 71, 71);
+    font-size: 12px;
+}

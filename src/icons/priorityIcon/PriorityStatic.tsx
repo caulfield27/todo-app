@@ -1,0 +1,20 @@
+interface Props {
+  handleClick?: () => void;
+}
+
+const PriorityStatic = ({ handleClick }: Props) => {
+  return (
+    <svg
+      onClick={handleClick ? handleClick : () => {}}
+      cursor="pointer"
+      height="25"
+      viewBox="0 0 24 24"
+      width="25"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="m14 19h8v-2h-8zm0-5.5h8v-2h-8zm0-5.5h8v-2h-8zm-12 4.5c0-3.58 2.92-6.5 6.5-6.5h.5v-2l3 3-3 3v-2h-.5c-2.5 0-4.5 2-4.5 4.5s2 4.5 4.5 4.5h3.5v2h-3.5c-3.58 0-6.5-2.92-6.5-6.5z" />
+    </svg>
+  );
+};
+
+export default PriorityStatic;

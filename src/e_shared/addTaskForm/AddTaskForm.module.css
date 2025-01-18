@@ -1,0 +1,56 @@
+.form{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: var(--default-box-shadow);
+    background: white;
+}
+
+.input{
+    width: 100%;
+    padding: 5px;
+    border: none;
+    outline: none;
+}
+
+.input::placeholder{
+    color: var(--defaultColor);
+    font-size: 16px;
+}
+
+.options_wrapper{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.options_container{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.calendar_wrapper, .priority_wrapper{
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.calendar, .priority_modal{
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    background: white;
+}
+
+.options_icon_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

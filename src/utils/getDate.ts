@@ -1,27 +1,10 @@
 import dayjs from "dayjs";
+import { month, weeks, parseMonth, monthNumeric } from "@/e_shared/constants/date";
 
-export const month: {[key: string] : string} = {
-    '01': 'января',
-    '02': 'февраля',
-    '03': 'марта',
-    '04': 'апреля',
-    '05': 'мая',
-    '06': 'июня',
-    '07': 'июля',
-    '08':'августа',
-    '09':'сентября',
-    '10': 'октяюря',
-    '11':'ноября',
-    '12': 'декабря'
-
-}
-
-export function parseDay(day: any){
-    let year = day.getFullYear(); 
-    let month = ('0' + (day.getMonth() + 1)).slice(-2); 
-    let currentDay = ('0' + day.getDate()).slice(-2); 
+export function parseDay(date: string){
+    const arr = date.split(" ");
+    return `${arr[3]}-${monthNumeric[arr[1]]}-${arr[2]}`
     
-    return `${year}-${month}-${currentDay}`
 }
 
 export function parseToSentense(date: string){
@@ -50,3 +33,7 @@ export function parseToSentense(date: string){
     
 }
 
+export function parseDateToReadable(day: string){
+    const arr = day.split(" ");
+    return `${weeks[arr[0]]}, ${arr[2]} ${parseMonth[arr[1]]}`
+}
