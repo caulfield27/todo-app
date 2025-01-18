@@ -49,7 +49,6 @@ export async function POST(request: NextRequest) {
 
         if(mailResponse.accepted){
             console.log('mailResponse: ', mailResponse);
-            
             return NextResponse.json({message: "успешно"}, {status: 200})
         }else{
             return NextResponse.json({message: "неверныый адресс почты"}, {status: 400})
