@@ -1,12 +1,13 @@
 interface Props {
   handleClick?: () => void;
+  cursor? :string
 }
 
-const PriorityStatic = ({ handleClick }: Props) => {
+const PriorityStatic = ({ handleClick, cursor }: Props) => {
   return (
     <svg
       onClick={handleClick ? handleClick : () => {}}
-      cursor="pointer"
+      cursor={cursor ?? ""}
       height="25"
       viewBox="0 0 24 24"
       width="25"

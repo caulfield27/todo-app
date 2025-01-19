@@ -41,3 +41,18 @@
 .resend_span{
   color: #737373;
 }
+
+.go_gack_btn_wrapper{
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.go_back_btn{
+  border: none;
+  outline: none;
+  background: transparent;
+  cursor: pointer;
+  margin-bottom: -10px;
+}

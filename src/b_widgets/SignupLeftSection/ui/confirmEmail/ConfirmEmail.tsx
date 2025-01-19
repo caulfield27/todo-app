@@ -12,6 +12,8 @@ import styles from "./ConfirmEmail.module.css";
 import OtpInput from "@/e_shared/otpInput/OtpInput";
 import AuthButton from "@/e_shared/authButton/authButton";
 import Loader from "@/e_shared/loader/Loader";
+import { strapi } from "@/e_shared/api";
+import { apiUrl } from "@/routes";
 
 interface Props {
   email: string;
@@ -59,8 +61,8 @@ const ConfirmEmail = ({ email, name, password }: Props) => {
       })
       .then((res) => {
         if (res.status === 200) {
-          return axios
-            .post("http://localhost:1337/api/auth/local/register", {
+          return strapi
+            .post(apiUrl.signUp, {
               username: name,
               email,
               password,
@@ -72,7 +74,7 @@ const ConfirmEmail = ({ email, name, password }: Props) => {
                   title: "Регистрация прошла успешно",
                   text: "Войдите в свой аккаунт для начало работы",
                 }).then(() => {
-                  router.push("/auth/login");
+                  router.push(`/auth/login?email=${email}`);
                 });
               } else {
                 Swal.fire({
@@ -147,29 +149,37 @@ const ConfirmEmail = ({ email, name, password }: Props) => {
   };
 
   return (
-    <div className={styles.confirm_email_wrapper}>
-      <p className={styles.email_confirm_text}>
-        Для успешного завершения регистрации подтвердите код отправленный по адрессу: <b>{email}</b>
-      </p>
-      <OtpInput handleChange={handleChange} validation={codeValidation} value={code} />
-      <div className={styles.resend_wrapper}>
-        {seconds === 0 ? (
-          resendLoading ? (
-            <Loader size="s" color="primary" />
+    <>
+      <div className={styles.confirm_email_wrapper}>
+        <div className={styles.go_gack_btn_wrapper}>
+          <button className={styles.go_back_btn} onClick={()=> setCurrentComponent(<SignupForm/>)}>
+            <img src="/left_arrow.svg" alt="go back icon" />
+          </button>
+        </div>
+        <p className={styles.email_confirm_text}>
+          Для успешного завершения регистрации подтвердите код отправленный по адрессу: <b>{email}</b>
+        </p>
+        <OtpInput handleChange={handleChange} validation={codeValidation} value={code} />
+        <div className={styles.resend_wrapper}>
+          {seconds === 0 ? (
+            resendLoading ? (
+              <Loader size="s" color="primary" />
+            ) : (
+              <button onClick={handleResend} className={styles.resend_btn}>Отправить код повторно</button>
+            )
           ) : (
-            <button onClick={handleResend} className={styles.resend_btn}>Отправить код повторно</button>
-          )
-        ) : (
-          <span className={styles.resend_span}>Отправить код повторно через: {seconds} секунд</span>
-        )}
+            <span className={styles.resend_span}>Отправить код повторно через: {seconds} секунд</span>
+          )}
+        </div>
+        <AuthButton
+          handleClick={handleSubmit}
+          isLoading={loading}
+          isDisabled={codeValidation.isError || code.length !== 4}
+          label="Подтвердить"
+        />
       </div>
-      <AuthButton
-        handleClick={handleSubmit}
-        isLoading={loading}
-        isDisabled={codeValidation.isError || code.length !== 4}
-        label="Подтвердить"
-      />
-    </div>
+    </>
+
   );
 };
 

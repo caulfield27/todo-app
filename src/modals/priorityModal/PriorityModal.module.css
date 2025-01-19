@@ -1,13 +1,11 @@
 .ul_container{
     width: 100px;
-    border-radius: 8px;
     background: white;
     padding: 8px;
     display: flex;
     flex-direction: column;
     gap: 5px;
     list-style-type: none;
-    box-shadow: var(--default-box-shadow);
 }
 
 .list_item{

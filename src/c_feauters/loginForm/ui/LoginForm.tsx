@@ -5,9 +5,11 @@ import AuthDirections from "@/e_shared/authDirections/authDirections"
 import React, { useState } from "react"
 import axios from "axios"
 import { IUserData } from "@/e_shared/types/types"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useValidation } from "@/hooks/useValidation"
 import Swal from "sweetalert2"
+import { strapi } from "@/e_shared/api"
+import { apiUrl } from "@/routes"
 
 interface IUserLoginData {
   email: string,
@@ -28,10 +30,13 @@ const isBtnDisabled = (
   );
 };
 
+
+
 export default function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [userData, setUserData] = useState<IUserLoginData>({
-    email: '',
+    email: searchParams.get("email") ?? "",
     password: ''
   })
   const [emailValidation, setEmailValidation] = useValidation();
@@ -76,7 +81,7 @@ export default function LoginForm() {
 
   function handlSubmit() {
     setLoading(true);
-    axios.post("http://localhost:1337/api/auth/local", {
+    strapi.post(apiUrl.login, {
       identifier: userData.email,
       password: userData.password,
     }).then((response) => {

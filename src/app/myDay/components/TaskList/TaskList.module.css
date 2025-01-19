@@ -1,0 +1,43 @@
+.task_list_section{
+    padding: 20px 0;
+}
+
+
+.add_task_btn{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    width: fit-content;
+}
+
+.plus_wrapper{
+    position: relative;
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border-radius: 50%;
+}
+
+.plus{
+    color: var(--primaryRed);
+    font-size: 31px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.add_task_btn:hover .plus_wrapper {
+    background: var(--primaryRed);
+}
+
+.add_task_btn:hover .add_span {
+    color: var(--primaryRed);
+}
+
+.add_task_btn:hover .plus_wrapper .plus {
+    color: #ffffff;
+}

@@ -1,5 +1,5 @@
-import dayjs from "dayjs";
-import { month, weeks, parseMonth, monthNumeric } from "@/e_shared/constants/date";
+import dayjs, { Dayjs } from "dayjs";
+import { month, weeks, parseMonth, monthNumeric, weeksNumeric, weeksShorted } from "@/e_shared/constants/date";
 
 export function parseDay(date: string){
     const arr = date.split(" ");
@@ -33,7 +33,27 @@ export function parseToSentense(date: string){
     
 }
 
-export function parseDateToReadable(day: string){
+export function parseDateToReadable(day: string, isShorted: boolean){
     const arr = day.split(" ");
-    return `${weeks[arr[0]]}, ${arr[2]} ${parseMonth[arr[1]]}`
+    return `${isShorted ? weeksShorted[arr[0]] : weeks[arr[0]]}, ${arr[2]} ${parseMonth[arr[1]]}`
+}
+
+export function parseDeadlineToReadable(day: string){
+    if(!day) return day;
+
+    const array = day.split(" ");
+    const today = new Date();
+    const todayArr = today.toDateString().split(" ");
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    const tomorrowArr = tomorrow.toDateString().split(" ")
+    
+    if(array[1] === todayArr[1] && array[2] === todayArr[2] && array[3] === todayArr[3]){
+        return "Сегодня"
+    }else if(array[1] === tomorrowArr[1] && array[2] === tomorrowArr[2] && array[3] === tomorrowArr[3]){
+        return "Завтра"
+    }else{
+        return `Срок: ${weeksShorted[array[0]]}, ${array[2]} ${parseMonth[array[1]]}`
+    }
+    
 }

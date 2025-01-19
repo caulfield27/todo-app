@@ -13,6 +13,17 @@ export const month: { [key: string]: string } = {
   "12": "декабря",
 };
 
+
+export const weeksNumeric: {[key: string] : string} = {
+  "0" : "Пн",
+  "1" : "Вт",
+  "2" : "Ср",
+  "3" : "Чт",
+  "4" : "Пт",
+  "5" : "Сб",
+  "6" : "Вс" 
+}
+
 export const weeks: {[key: string] : string} = {
   Sun: "Воскресение",
   Mon: "Понедельник",
@@ -21,6 +32,16 @@ export const weeks: {[key: string] : string} = {
   Thu: "Четверг",
   Fri: "Пятница",
   Sat: "Суббота",
+};
+
+export const weeksShorted: {[key: string] : string} = {
+  Sun: "Вс",
+  Mon: "Пн",
+  Tue: "Вт",
+  Wed: "Ср",
+  Thu: "Чт",
+  Fri: "Пт",
+  Sat: "Сб",
 };
 
 export const monthNumeric: {[key: string] : string} = {

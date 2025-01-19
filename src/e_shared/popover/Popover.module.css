@@ -34,7 +34,7 @@
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
     border-bottom: 10px solid var(--triangle-color);
-    top: -20px;
+    top: -18px;
     left: 50%;
     transform: translateX(-50%);
 }

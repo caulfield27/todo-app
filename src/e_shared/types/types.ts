@@ -11,4 +11,18 @@ interface IUserData{
     username: string
 }
 
-export type {IUserData}
+interface ITodoResponse{
+    id: number,
+    documentId: string,
+    subject: string,
+    isExpired: boolean,
+    isCompleted: boolean,
+    deadline: null | string,
+    priority: number,
+    createdAt: string,
+    updatedAt: string,
+    publishedAt: string,
+    userName?: IUserData
+}
+
+export type {IUserData, ITodoResponse}
