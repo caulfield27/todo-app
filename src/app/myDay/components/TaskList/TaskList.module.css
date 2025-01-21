@@ -41,3 +41,11 @@
 .add_task_btn:hover .plus_wrapper .plus {
     color: #ffffff;
 }
+
+.table{
+    width: 100%;;
+}
+
+.header_cell{
+    text-align: start;
+}

@@ -1,13 +1,16 @@
 import styles from './Loader.module.css'
 
 interface Props{
-    size: "s" | "m" | "l",
+    size: "xs" | "s" | "m" | "l",
     color?: 'primary' | "secondary"
 }
 
 const generateStyle = (size: string, color: string | undefined)=>{
     const style: {[key: string]: string} = {}
     switch(size){
+        case "xs":
+            style["width"] = "15px";
+            break;
         case "s":
             style["width"] = "25px";
             break;

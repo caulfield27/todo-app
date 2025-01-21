@@ -17,10 +17,11 @@ import { IUserData } from "@/e_shared/types/types";
 import { json } from "stream/consumers";
 import AddTaskModal from "@/modals/addTaskModal/AddTaskModal";
 
+const icons = [<TodayIcon />, <CalendarMonthIcon />, <StarsIcon />, <AddTaskIcon />];
+
 export default function Sidebar() {
   const { showSidebar, setSidebar } = useSidebarStore();
   const [userDropdown, setUserDropdown] = useState(false);
-  const icons = [<TodayIcon />, <CalendarMonthIcon />, <StarsIcon />, <AddTaskIcon />];
   const currentPage = usePathname();
   const router = useRouter();
   const [user, setUser] = useState<IUserData | "">("");

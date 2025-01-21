@@ -16,6 +16,8 @@ import { strapi } from "../api";
 import { apiUrl } from "@/routes";
 import { ITodoResponse } from "../types/types";
 import Loader from "../loader/Loader";
+import { priorityColors } from "../constants/priority";
+import CategoryIcon from "@/icons/categoryIcon/CategoryIcon";
 
 interface IFormData {
   subject: string;
@@ -31,12 +33,6 @@ interface IOptionsState {
   isSelected: boolean;
 }
 
-const priorityColors: { [key: string]: string } = {
-  "1": "#68FF6D",
-  "2": "#E6FF00",
-  "3": "#FFBB1A",
-  "4": "#FF0000",
-}
 
 interface Props {
   setAddTaskActive: Dispatch<SetStateAction<boolean>>,
@@ -119,11 +115,14 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes }: Props) => {
                   setCalendarState({ isOpen: false, isSelected: false })
                   setFormData({ ...formData, deadline: null })
                 }}>&#10006;</button>
-              </div> : <CalendarIcon
+              </div> : 
+              <CalendarIcon
                 cursor="pointer"
                 handleClick={() => setCalendarState((prev) => ({ ...prev, isOpen: !prev.isOpen }))}
               />}
+              
               {!calendarState.isSelected && <Popover bg="black" content="Добавить дату выполнения" />}
+              
             </div>
             {calendarState.isOpen && (
               <Calendar
@@ -137,7 +136,7 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes }: Props) => {
           <div className={styles.priority_wrapper}>
             <div className={styles.options_icon_container}>
               {priorityState.isSelected ? <div className={styles.selected_wrapper}>
-                <PriorityStatic />
+                <PriorityStatic/>
                 <span>
                   <PriorityIcon color={priorityColors[formData.priority]} />
                   {formData.priority}
@@ -161,11 +160,14 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes }: Props) => {
               />
             )}
           </div>
+          <div className={styles.category_wrapepr}>
+            <CategoryIcon/>
+          </div>
         </div>
         <div className={styles.controll_buttons_wrapper}>
           <button disabled={loading} className={styles.cancel_btn} onClick={() => setAddTaskActive(false)}>Отмена</button>
           <button disabled={!formData.subject} className={styles.submit_btn} type="submit">
-            {loading ?  <Loader size="s" color="secondary"/> : "Добавить"}
+            {loading ?  <Loader size="xs" color="secondary"/> : "Добавить"}
           </button>
         </div>
       </div>
