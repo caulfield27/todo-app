@@ -14,18 +14,22 @@ import PriorityIcon from "@/icons/priorityIcon/PriorityIcon";
 import { getToken } from "@/utils/getToken";
 import { strapi } from "../api";
 import { apiUrl } from "@/routes";
-import { ITodoResponse } from "../types/types";
+import { CategoryType, ITodoResponse } from "../types/types";
 import Loader from "../loader/Loader";
 import { priorityColors } from "../constants/priority";
 import CategoryIcon from "@/icons/categoryIcon/CategoryIcon";
+import CategoryModal from "@/modals/categoryModal/CategoryModal";
+import { ICategoryList } from "../constants/categories";
+import InterestsIcon from "@mui/icons-material/Interests";
 
 interface IFormData {
   subject: string;
   isExpired: boolean;
   isCompleted: boolean;
   deadline: null | Dayjs;
-  userName: number | null;
+  userId: number | null;
   priority: number;
+  category: ICategoryList;
 }
 
 interface IOptionsState {
@@ -33,11 +37,10 @@ interface IOptionsState {
   isSelected: boolean;
 }
 
-
 interface Props {
-  setAddTaskActive: Dispatch<SetStateAction<boolean>>,
-  todoes: ITodoResponse[] | [],
-  setTodoes: Dispatch<SetStateAction<ITodoResponse[] | []>>
+  setAddTaskActive: Dispatch<SetStateAction<boolean>>;
+  todoes: ITodoResponse[] | [];
+  setTodoes: Dispatch<SetStateAction<ITodoResponse[] | []>>;
 }
 
 const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes }: Props) => {
@@ -46,11 +49,17 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes }: Props) => {
     isExpired: false,
     isCompleted: false,
     deadline: null,
-    userName: null,
+    userId: null,
     priority: 1,
+    category: {
+      label: {
+        text: "Другое",
+        icon: () => <InterestsIcon />,
+      },
+      value: "others",
+    },
   });
   const [loading, setLoading] = useState(false);
-
   const [calendarState, setCalendarState] = useState<IOptionsState>({
     isOpen: false,
     isSelected: false,
@@ -59,29 +68,49 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes }: Props) => {
     isOpen: false,
     isSelected: false,
   });
+  const [categoryState, setCategoryState] = useState<IOptionsState>({
+    isOpen: false,
+    isSelected: false,
+  });
 
   useEffect(() => {
-    setFormData({ ...formData, userName: getUserAttribute('id') });
-
+    setFormData({ ...formData, userId: getUserAttribute("id") });
   }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    getToken().then((token) => {
-      setLoading(true);
-      return strapi.post(apiUrl.todoes, {
-        data: {...formData, deadline: formData.deadline ? parseDay(formData.deadline?.toDate()+"") : formData.deadline}
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+    getToken()
+      .then((token) => {
+        setLoading(true);
+        return strapi.post(
+          apiUrl.todoes,
+          {
+            data: {
+              ...formData,
+              deadline: formData.deadline
+                ? parseDay(formData.deadline?.toDate() + "")
+                : formData.deadline,
+              category: formData.category.value,
+            },
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
       })
-    }).then((res)=> {
-      setTodoes([...todoes, res.data.data]);
-    }).catch((e)=>{
-      console.log(e);
-    }).finally(()=> {setAddTaskActive(false); setLoading(false)})
-  }; 
+      .then((res) => {
+        setTodoes([...todoes, res.data.data]);
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(() => {
+        setAddTaskActive(false);
+        setLoading(false);
+      });
+  };
 
   const handleDeadlineChnage = (newValue: Dayjs) => {
     setFormData({ ...formData, deadline: newValue });
@@ -91,6 +120,11 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes }: Props) => {
   const handlePriorityChange = (value: number) => {
     setFormData({ ...formData, priority: +value });
     setPriorityState({ isOpen: false, isSelected: true });
+  };
+
+  const handleCategoryChange = (val: ICategoryList) => {
+    setFormData({ ...formData, category: val });
+    setCategoryState({ isOpen: false, isSelected: true });
   };
 
   return (
@@ -108,21 +142,33 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes }: Props) => {
         <div className={styles.options_container}>
           <div className={styles.calendar_wrapper}>
             <div className={styles.options_icon_container}>
-              {calendarState.isSelected ? <div className={styles.selected_wrapper}>
-                <CalendarIcon />
-                <span>{parseDeadlineToReadable(formData.deadline?.toDate().toString() ?? "")}</span>
-                <button onClick={() => {
-                  setCalendarState({ isOpen: false, isSelected: false })
-                  setFormData({ ...formData, deadline: null })
-                }}>&#10006;</button>
-              </div> : 
-              <CalendarIcon
-                cursor="pointer"
-                handleClick={() => setCalendarState((prev) => ({ ...prev, isOpen: !prev.isOpen }))}
-              />}
-              
-              {!calendarState.isSelected && <Popover bg="black" content="Добавить дату выполнения" />}
-              
+              {calendarState.isSelected ? (
+                <div className={styles.selected_wrapper}>
+                  <CalendarIcon />
+                  <span>
+                    {parseDeadlineToReadable(formData.deadline?.toDate().toString() ?? "")}
+                  </span>
+                  <button
+                    onClick={() => {
+                      setCalendarState({ isOpen: false, isSelected: false });
+                      setFormData({ ...formData, deadline: null });
+                    }}
+                  >
+                    &#10006;
+                  </button>
+                </div>
+              ) : (
+                <CalendarIcon
+                  cursor="pointer"
+                  handleClick={() =>
+                    setCalendarState((prev) => ({ ...prev, isOpen: !prev.isOpen }))
+                  }
+                />
+              )}
+
+              {!calendarState.isSelected && !calendarState.isOpen && (
+                <Popover bg="black" content="Добавить дату выполнения" />
+              )}
             </div>
             {calendarState.isOpen && (
               <Calendar
@@ -135,21 +181,33 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes }: Props) => {
           </div>
           <div className={styles.priority_wrapper}>
             <div className={styles.options_icon_container}>
-              {priorityState.isSelected ? <div className={styles.selected_wrapper}>
-                <PriorityStatic/>
-                <span>
-                  <PriorityIcon color={priorityColors[formData.priority]} />
-                  {formData.priority}
-                </span>
-                <button onClick={() => {
-                  setPriorityState({ isOpen: false, isSelected: false })
-                  setFormData({ ...formData, priority: 1 })
-                }}>&#10006;</button>
-              </div> : <PriorityStatic
-                cursor="pointer"
-                handleClick={() => setPriorityState((prev) => ({ ...prev, isOpen: !prev.isOpen }))}
-              />}
-              {!priorityState.isSelected && <Popover bg="black" content="Добавить приоритет" />}
+              {priorityState.isSelected ? (
+                <div className={styles.selected_wrapper}>
+                  <PriorityStatic />
+                  <span>
+                    <PriorityIcon color={priorityColors[formData.priority]} />
+                    {formData.priority}
+                  </span>
+                  <button
+                    onClick={() => {
+                      setPriorityState({ isOpen: false, isSelected: false });
+                      setFormData({ ...formData, priority: 1 });
+                    }}
+                  >
+                    &#10006;
+                  </button>
+                </div>
+              ) : (
+                <PriorityStatic
+                  cursor="pointer"
+                  handleClick={() =>
+                    setPriorityState((prev) => ({ ...prev, isOpen: !prev.isOpen }))
+                  }
+                />
+              )}
+              {!priorityState.isSelected && !priorityState.isOpen && (
+                <Popover bg="black" content="Добавить приоритет" />
+              )}
             </div>
             {priorityState.isOpen && (
               <PriorityModal
@@ -161,13 +219,64 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes }: Props) => {
             )}
           </div>
           <div className={styles.category_wrapepr}>
-            <CategoryIcon/>
+            {categoryState.isSelected ? (
+              <div className={styles.selected_wrapper}>
+                {formData.category.label.icon()}
+                <span>{formData.category.label.text}</span>
+                <button
+                  onClick={() => {
+                    setCategoryState({ isOpen: false, isSelected: false });
+                    setFormData({
+                      ...formData,
+                      category: {
+                        label: {
+                          text: "Другое",
+                          icon: () => <InterestsIcon />,
+                        },
+                        value: "others",
+                      },
+                    });
+                  }}
+                >
+                  &#10006;
+                </button>
+              </div>
+            ) : (
+              <div className={styles.category_options_container}>
+                <CategoryIcon
+                  cursor="pointer"
+                  handleCLick={() =>
+                    setCategoryState((prev) => ({
+                      isOpen: !prev.isOpen,
+                      isSelected: prev.isSelected,
+                    }))
+                  }
+                />
+                {!categoryState.isSelected && !categoryState.isOpen && (
+                  <Popover bg="black" content="Добавить категорию задачи" />
+                )}
+              </div>
+            )}
+            {categoryState.isOpen && (
+              <CategoryModal
+                value={formData.category.value}
+                handleChange={handleCategoryChange}
+                setCategoryState={setCategoryState}
+                classes={styles["category_dropdown"]}
+              />
+            )}
           </div>
         </div>
         <div className={styles.controll_buttons_wrapper}>
-          <button disabled={loading} className={styles.cancel_btn} onClick={() => setAddTaskActive(false)}>Отмена</button>
+          <button
+            disabled={loading}
+            className={styles.cancel_btn}
+            onClick={() => setAddTaskActive(false)}
+          >
+            Отмена
+          </button>
           <button disabled={!formData.subject} className={styles.submit_btn} type="submit">
-            {loading ?  <Loader size="xs" color="secondary"/> : "Добавить"}
+            {loading ? <Loader size="xs" color="secondary" /> : "Добавить"}
           </button>
         </div>
       </div>

@@ -4,7 +4,11 @@ import { month, weeks, parseMonth, monthNumeric, weeksNumeric, weeksShorted } fr
 export function parseDay(date: string){
     const arr = date.split(" ");
     return `${arr[3]}-${monthNumeric[arr[1]]}-${arr[2]}`
-    
+}
+
+export function dottedDayFormat(date: string){
+    const array = date.split("-");
+    return array.reverse().join('.');
 }
 
 export function parseToSentense(date: string){

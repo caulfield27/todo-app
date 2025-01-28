@@ -22,7 +22,19 @@ interface ITodoResponse{
     createdAt: string,
     updatedAt: string,
     publishedAt: string,
-    userName?: IUserData
+    userId?: IUserData
 }
 
-export type {IUserData, ITodoResponse}
+type CategoryType = 
+| "work"
+| "home"
+| "sport"
+| "study"
+| "self-development"
+| "health"
+| "finance"
+| "trips"
+| "rest"
+| "others";
+
+export type {IUserData, ITodoResponse, CategoryType}

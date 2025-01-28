@@ -43,7 +43,7 @@
     align-items: center;
 }
 
-.calendar, .priority_modal{
+.calendar, .priority_modal, .category_dropdown{
     position: absolute;
     top: 25px;
     left: 25px;
@@ -53,7 +53,7 @@
     z-index: 99;
 }
 
-.options_icon_container{
+.options_icon_container , .category_options_container{
     display: flex;
     justify-content: center;
     align-items: center;
