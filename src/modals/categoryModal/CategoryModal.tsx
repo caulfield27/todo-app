@@ -21,7 +21,7 @@ const CategoryModal = ({ value, classes, setCategoryState, handleChange }: Props
 
   useEffect(() => {
     const handleCLickOutside = (e: any) => {
-      if (categoryRef.current && !categoryRef.current.contains(e.target.value)) {
+      if (categoryRef.current && !categoryRef.current.contains(e.target)) {
         setCategoryState((prev) => ({ isOpen: false, isSelected: prev.isSelected }));
       }
     };

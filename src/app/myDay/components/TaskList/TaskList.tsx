@@ -11,15 +11,24 @@ import Loader from "@/e_shared/loader/Loader";
 import AddIcon from "@mui/icons-material/Add";
 import PriorityIcon from "@/icons/priorityIcon/PriorityIcon";
 import { priorityColors } from "@/e_shared/constants/priority";
-import { dottedDayFormat } from "@/utils/getDate";
+import { dottedDayFormat, parseDay } from "@/utils/getDate";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Swal from "sweetalert2";
+import InfoModal from "@/modals/infoModal/InfoModal";
+import { useInfoModalState } from "@/hooks/useInfoModalState";
+import { categoryIcons } from "@/e_shared/constants/categories";
+import UpdateTaskModal from "@/modals/updateTaskModal/UpdateTaskModal";
 
 const TaskList = () => {
   const [isTaskFormActive, setIsTaskFormActive] = useState(false);
   const [todoes, setTodoes] = useState<ITodoResponse[] | []>([]);
   const [loading, setLoading] = useState(false);
+  const [infoModal, setInfoModal] = useInfoModalState();
+  const [updateModalState, setUpdateModalState] = useState({
+    isActive: false,
+    index: 0,
+  });
   const [completeLoding, setCompleteLoading] = useState({
     loading: false,
     id: "",
@@ -32,11 +41,14 @@ const TaskList = () => {
       .then((token) => {
         if (token) {
           setToken(token);
-          return strapi.get(apiUrl.getTodoes(getUserAttribute("id")), {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+          return strapi.get(
+            apiUrl.getTodayTodoes(getUserAttribute("id"), parseDay(new Date().toDateString())),
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
         }
       })
       .then((res) => {
@@ -50,10 +62,10 @@ const TaskList = () => {
       });
   }, []);
 
-  function handleTaskComplete(documentId: string, index: number) {
+  function handleTaskComplete(documentId: string, index: number, isCompleted: boolean) {
     const data = {
       data: {
-        isCompleted: true,
+        isCompleted: !isCompleted,
       },
     };
     setCompleteLoading({ loading: true, id: documentId });
@@ -65,13 +77,19 @@ const TaskList = () => {
         },
       })
       .then((res) => {
-        if(res.status === 200){
+        if (res.status === 200) {
           const newTodoes = [...todoes];
-          newTodoes[index] = {...newTodoes[index], ...res.data.data};
+          newTodoes[index] = { ...newTodoes[index], ...res.data.data };
           setTodoes(newTodoes);
+          setInfoModal({
+            isActive: true,
+            message: isCompleted ? "Задача снова активна!" : "Поздравляю, Вы выполнили задачу!",
+            type: "success",
+          });
         }
       })
       .catch((e) => {
+        setInfoModal({ isActive: true, message: "Ошибка!", type: "error" });
         console.log(e);
       })
       .finally(() => {
@@ -80,6 +98,7 @@ const TaskList = () => {
   }
 
   function handleDelete(documentId: string) {
+    document.body.style.overflowY = "hidden";
     Swal.fire({
       icon: "warning",
       title: "Вы действительно хотите удалить задачу?",
@@ -87,31 +106,57 @@ const TaskList = () => {
       confirmButtonText: "Удалить",
       confirmButtonColor: "#d30808",
       cancelButtonText: "Отмена",
-    }).then((res) => {
-      if (res.isConfirmed) {
-        strapi
-          .delete(apiUrl.updateTodo(documentId), {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
-          .then((res) => {
-            if (res.status === 204) {
-              const updatedTodoes = todoes.filter((todo) => todo.documentId !== documentId);
-              setTodoes(updatedTodoes);
-            }
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-      }
-    });
+    })
+      .then((res) => {
+        if (res.isConfirmed) {
+          strapi
+            .delete(apiUrl.updateTodo(documentId), {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            })
+            .then((res) => {
+              if (res.status === 204) {
+                const updatedTodoes = todoes.filter((todo) => todo.documentId !== documentId);
+                setTodoes(updatedTodoes);
+                setInfoModal({
+                  isActive: true,
+                  message: "Задача успешно удалена.",
+                  type: "success",
+                });
+              }
+            })
+            .catch((e) => {
+              setInfoModal({
+                isActive: true,
+                message: "Не удалось удалить задачу, попробуйте заново",
+                type: "error",
+              });
+              console.log(e);
+            });
+        }
+      })
+      .finally(() => (document.body.style.overflowY = "visible"));
   }
 
   return (
     <main className={styles.task_list_section}>
+      {updateModalState.isActive && (
+        <UpdateTaskModal
+          modalState={updateModalState}
+          setModalState={setUpdateModalState}
+          todoes={todoes}
+          setTodoes={setTodoes}
+        />
+      )}
+      {infoModal.isActive && <InfoModal modalState={infoModal} setModalState={setInfoModal} />}
       {isTaskFormActive ? (
-        <AddTaskFrom todoes={todoes} setTodoes={setTodoes} setAddTaskActive={setIsTaskFormActive} />
+        <AddTaskFrom
+          setInfoModal={setInfoModal}
+          todoes={todoes}
+          setTodoes={setTodoes}
+          setAddTaskActive={setIsTaskFormActive}
+        />
       ) : (
         <div
           onClick={() => setIsTaskFormActive(true)}
@@ -149,7 +194,7 @@ const TaskList = () => {
                             ? styles.completed
                             : ""
                         }
-                        onClick={() => handleTaskComplete(todo.documentId, ind)}
+                        onClick={() => handleTaskComplete(todo.documentId, ind, todo.isCompleted)}
                       >
                         <span
                           className={
@@ -160,8 +205,9 @@ const TaskList = () => {
                         </span>
                       </button>
                     </td>
-                    <td className={styles.body_data}>
+                    <td className={`${styles.body_data} ${styles.body_data_name}`}>
                       {todo.isCompleted ? <s>{todo.subject}</s> : todo.subject}
+                      {categoryIcons[todo.category] ?? ""}
                     </td>
                     <td className={styles.body_data}>
                       {todo.deadline && dottedDayFormat(todo.deadline)}
@@ -173,7 +219,15 @@ const TaskList = () => {
                       </div>
                     </td>
                     <td className={styles.actions_cell}>
-                      <button className={styles.edit_btn}>
+                      <button
+                        className={styles.edit_btn}
+                        onClick={() =>
+                          setUpdateModalState((prev) => ({
+                            isActive: !prev.isActive,
+                            index: ind,
+                          }))
+                        }
+                      >
                         <ModeEditIcon />
                       </button>
                       <button

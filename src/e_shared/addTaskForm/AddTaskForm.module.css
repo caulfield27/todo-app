@@ -65,7 +65,7 @@
     gap: 5px;
     padding: 5px;
     border-radius: 8px;
-    border: 1px solid gainsboro;
+    border: 1px solid #dcdcdc;
     justify-content: center;
     align-items: center;
 }

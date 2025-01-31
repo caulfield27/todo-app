@@ -7,7 +7,13 @@ export function parseDay(date: string){
 }
 
 export function dottedDayFormat(date: string){
+    const today = new Date().toDateString().split(" ");
     const array = date.split("-");
+
+    if(array[0] === today[3] && array[1] === monthNumeric[today[1]] && array[2] === today[2]){
+        return "Сегодня"
+    }
+    
     return array.reverse().join('.');
 }
 

@@ -41,14 +41,21 @@ interface Props {
   setAddTaskActive: Dispatch<SetStateAction<boolean>>;
   todoes: ITodoResponse[] | [];
   setTodoes: Dispatch<SetStateAction<ITodoResponse[] | []>>;
+  setInfoModal: Dispatch<
+    SetStateAction<{
+      isActive: boolean;
+      message: string;
+      type: "success" | "error";
+    }>
+  >;
 }
 
-const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes }: Props) => {
+const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes, setInfoModal }: Props) => {
   const [formData, setFormData] = useState<IFormData>({
     subject: "",
     isExpired: false,
     isCompleted: false,
-    deadline: null,
+    deadline: dayjs(new Date()),
     userId: null,
     priority: 1,
     category: {
@@ -101,10 +108,24 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes }: Props) => {
         );
       })
       .then((res) => {
-        setTodoes([...todoes, res.data.data]);
+        if (res.data?.data?.deadline !== parseDay(new Date().toString())) {
+          setInfoModal({
+            isActive: true,
+            message: `Задача успешно добавлена в "Предстоящие"`,
+            type: "success",
+          });
+        } else {
+          setTodoes([...todoes, res.data.data]);
+          setInfoModal({ isActive: true, message: "Задача успешно добавлена.", type: "success" });
+        }
       })
       .catch((e) => {
         console.log(e);
+        setInfoModal({
+          isActive: true,
+          message: "Не удалось добавить задачу, попробуйте ещё раз.",
+          type: "error",
+        });
       })
       .finally(() => {
         setAddTaskActive(false);

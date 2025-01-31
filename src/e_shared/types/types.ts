@@ -19,6 +19,7 @@ interface ITodoResponse{
     isCompleted: boolean,
     deadline: null | string,
     priority: number,
+    category: CategoryType
     createdAt: string,
     updatedAt: string,
     publishedAt: string,

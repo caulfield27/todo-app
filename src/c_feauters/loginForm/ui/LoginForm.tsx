@@ -84,6 +84,10 @@ export default function LoginForm() {
     strapi.post(apiUrl.login, {
       identifier: userData.email,
       password: userData.password,
+    }, {
+      headers: {
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_AUTH_STATIC_TOKEN}`
+      }
     }).then((response) => {
       const user: IUserData = response?.data?.user;
       const jwt = response?.data?.jwt;

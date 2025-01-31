@@ -66,6 +66,10 @@ const ConfirmEmail = ({ email, name, password }: Props) => {
               username: name,
               email,
               password,
+            }, {
+              headers: {
+                Authorization: `Bearer ${process.env.NEXT_PUBLIC_AUTH_STATIC_TOKEN}`
+              }
             })
             .then((response) => {
               if (response?.status === 200) {

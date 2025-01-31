@@ -61,3 +61,16 @@ export const categoryList: ICategoryList[] = [
     value: "others",
   },
 ];
+
+export const categoryIcons: {[key: string] : ReactElement} = {
+  "home": <HomeIcon style={{color: "grey", width: "18px"}}/>,
+  "work": <WorkIcon style={{color: "grey", width: "18px"}}/>,
+  "sport": <SportsSoccerIcon style={{color: "grey", width: "18px"}}/>,
+  "study": <LocalLibraryIcon style={{color: "grey", width: "18px"}}/>,
+  "self-development": <SelfImprovementIcon style={{color: "grey", width: "18px"}}/>,
+  "health" : <FavoriteIcon style={{color: "grey", width: "18px"}}/>,
+  "finance" : <PaidIcon style={{color: "grey", width: "18px"}}/>,
+  "trips" : <LocalAirportIcon style={{color: "grey", width: "18px"}}/>,
+  "rest" : <SpaIcon style={{color: "grey", width: "18px"}}/>,
+  "others" : <InterestsIcon style={{color: "grey", width: "18px"}}/>
+}

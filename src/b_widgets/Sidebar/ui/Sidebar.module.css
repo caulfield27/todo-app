@@ -57,6 +57,7 @@
 .active_link{
     background: rgb(255, 213, 213);
     color: var(--secondaryRed);
+    pointer-events: none;
 }
 
 .link_item:hover{
