@@ -62,15 +62,15 @@ export const categoryList: ICategoryList[] = [
   },
 ];
 
-export const categoryIcons: {[key: string] : ReactElement} = {
-  "home": <HomeIcon style={{color: "grey", width: "18px"}}/>,
-  "work": <WorkIcon style={{color: "grey", width: "18px"}}/>,
-  "sport": <SportsSoccerIcon style={{color: "grey", width: "18px"}}/>,
-  "study": <LocalLibraryIcon style={{color: "grey", width: "18px"}}/>,
-  "self-development": <SelfImprovementIcon style={{color: "grey", width: "18px"}}/>,
-  "health" : <FavoriteIcon style={{color: "grey", width: "18px"}}/>,
-  "finance" : <PaidIcon style={{color: "grey", width: "18px"}}/>,
-  "trips" : <LocalAirportIcon style={{color: "grey", width: "18px"}}/>,
-  "rest" : <SpaIcon style={{color: "grey", width: "18px"}}/>,
-  "others" : <InterestsIcon style={{color: "grey", width: "18px"}}/>
+export const categoryIcons: {[key: string] : [ReactElement, string]} = {
+  "home": [<HomeIcon style={{color: "grey", width: "18px"}}/>,'Дом'],
+  "work": [<WorkIcon style={{color: "grey", width: "18px"}}/>,'Работа'],
+  "sport": [<SportsSoccerIcon style={{color: "grey", width: "18px"}}/>,'Спорт'],
+  "study": [<LocalLibraryIcon style={{color: "grey", width: "18px"}}/>,'Учёба'],
+  "self-development": [<SelfImprovementIcon style={{color: "grey", width: "18px"}}/>,'Саморазвитие'],
+  "health" : [<FavoriteIcon style={{color: "grey", width: "18px"}}/>, 'Здоровье'],
+  "finance" : [<PaidIcon style={{color: "grey", width: "18px"}}/>,'Финансы'],
+  "trips" : [<LocalAirportIcon style={{color: "grey", width: "18px"}}/>,'Путешевствия'],
+  "rest" : [<SpaIcon style={{color: "grey", width: "18px"}}/>,'Отдых'], 
+  "others" : [<InterestsIcon style={{color: "grey", width: "18px"}}/>,'Другое']
 }

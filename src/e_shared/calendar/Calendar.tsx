@@ -23,7 +23,8 @@ export default function Calendar({ handleChange, value, setIsOpen, classes}: Pro
     return validDays < today;
   };
   const calendarRef = useRef<HTMLDivElement | null>(null);
-  useEffect(() => {
+  
+  useEffect(() => { 
     const handleClickOutside = (e: any) => {
       if (calendarRef.current && !calendarRef.current.contains(e.target as Node)) {
         setIsOpen(prev => ({isOpen: false, isSelected: prev.isSelected}));
@@ -43,7 +44,7 @@ export default function Calendar({ handleChange, value, setIsOpen, classes}: Pro
         shouldDisableDate={shouldDisabledDate}
         value={value}
         onChange={handleChange}
-        className={classes ?? ""}
+        className={`${styles.calendar_container} ${classes ?? ""}`}
       />
     </LocalizationProvider>
   );

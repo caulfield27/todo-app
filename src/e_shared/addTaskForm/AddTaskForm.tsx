@@ -21,6 +21,7 @@ import CategoryIcon from "@/icons/categoryIcon/CategoryIcon";
 import CategoryModal from "@/modals/categoryModal/CategoryModal";
 import { ICategoryList } from "../constants/categories";
 import InterestsIcon from "@mui/icons-material/Interests";
+import DefaultButton from "../defaultButton/DefaultButton";
 
 interface IFormData {
   subject: string;
@@ -289,16 +290,8 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes, setInfoModal }: Prop
           </div>
         </div>
         <div className={styles.controll_buttons_wrapper}>
-          <button
-            disabled={loading}
-            className={styles.cancel_btn}
-            onClick={() => setAddTaskActive(false)}
-          >
-            Отмена
-          </button>
-          <button disabled={!formData.subject} className={styles.submit_btn} type="submit">
-            {loading ? <Loader size="xs" color="secondary" /> : "Добавить"}
-          </button>
+          <DefaultButton disabled={loading} label="Отмена" handleClick={()=> setAddTaskActive(false)} type="cancel"/>
+          <DefaultButton disabled={!formData.subject} label="Добавить" type="submit" loading={loading}/>
         </div>
       </div>
     </form>

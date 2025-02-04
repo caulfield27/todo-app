@@ -6,6 +6,9 @@
     list-style-type: none;
     height: 150px;
     overflow-y: scroll;
+    box-shadow: var(--default-box-shadow);
+    border-radius: 8px;
+    background: white;
 }
 
 .category_dropdown_container::-webkit-scrollbar{
@@ -37,6 +40,7 @@
 .active{
     background: rgb(255, 98, 98);
     color: #ffffff;
+    pointer-events: none;
 }
 
 .color{

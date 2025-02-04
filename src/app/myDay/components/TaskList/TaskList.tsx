@@ -207,7 +207,7 @@ const TaskList = () => {
                     </td>
                     <td className={`${styles.body_data} ${styles.body_data_name}`}>
                       {todo.isCompleted ? <s>{todo.subject}</s> : todo.subject}
-                      {categoryIcons[todo.category] ?? ""}
+                      {categoryIcons[todo.category][0] ?? ""}
                     </td>
                     <td className={styles.body_data}>
                       {todo.deadline && dottedDayFormat(todo.deadline)}

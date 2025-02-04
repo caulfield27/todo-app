@@ -1,0 +1,5 @@
+.calendar_container{
+    background: white;
+    box-shadow: var(--default-box-shadow);
+    border-radius: 8px;
+}
