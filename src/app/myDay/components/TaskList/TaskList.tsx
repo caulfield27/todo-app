@@ -143,6 +143,7 @@ const TaskList = () => {
     <main className={styles.task_list_section}>
       {updateModalState.isActive && (
         <UpdateTaskModal
+          setInfoModal={setInfoModal}
           modalState={updateModalState}
           setModalState={setUpdateModalState}
           todoes={todoes}
