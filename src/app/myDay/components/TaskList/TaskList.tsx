@@ -19,6 +19,7 @@ import InfoModal from "@/modals/infoModal/InfoModal";
 import { useInfoModalState } from "@/hooks/useInfoModalState";
 import { categoryIcons } from "@/e_shared/constants/categories";
 import UpdateTaskModal from "@/modals/updateTaskModal/UpdateTaskModal";
+import SwapVertIcon from "@mui/icons-material/SwapVert";
 
 const TaskList = () => {
   const [isTaskFormActive, setIsTaskFormActive] = useState(false);
@@ -159,13 +160,21 @@ const TaskList = () => {
           setAddTaskActive={setIsTaskFormActive}
         />
       ) : (
-        <div
-          onClick={() => setIsTaskFormActive(true)}
-          className={styles.add_task_btn}
-          role="button"
-        >
-          <AddIcon className={styles.add_sign} fontSize="medium" />
-          <span className={styles.add_span}>Добавить задачу</span>
+        <div className={styles.taskList_header_wrapper}>
+          <div
+            onClick={() => setIsTaskFormActive(true)}
+            className={styles.add_task_btn}
+            role="button"
+          >
+            <AddIcon className={styles.add_sign} fontSize="medium" />
+            <span className={styles.add_span}>Добавить задачу</span>
+          </div>
+          <button className={styles.sorting_btn}>
+            
+              <SwapVertIcon fontSize="medium" />
+              <span className={styles.sorting_container}>Cортировка</span>
+            
+          </button>
         </div>
       )}
       <section className={styles.table_container}>

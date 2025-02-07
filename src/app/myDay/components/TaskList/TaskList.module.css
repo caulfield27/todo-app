@@ -2,6 +2,32 @@
     padding: 20px 0;
 }
 
+.taskList_header_wrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.taskList_header_wrapper button{
+    border: none;
+    outline: none;
+    background: transparent;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 16px;
+    padding: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s linear;
+}
+
+
+.taskList_header_wrapper button:hover{
+    background: gainsboro;
+    color: #353535;
+}
 
 .add_task_btn{
     display: flex;

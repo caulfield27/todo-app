@@ -1,46 +1,23 @@
 .header_grid{
     max-width: 100%;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(2, auto);
-    gap: 8px;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .my_day_span{
     font-size: 24px;
     font-weight: 500;
     color: rgb(0, 0, 0);
-    grid-column: 1;
-    grid-row: 1;
 }
 
 .date_span{
     font-size: 14px;
     color: gray;
-    grid-column: 1;
-    grid-row: 2;
 }
 
-.sorting_container{
-    grid-row: 1;
-    grid-column: 5;
-    justify-self: end;
-}
-
-@media screen and (max-width: 980px) {
-    .my_day_span, .date_span{
-        grid-column: 1/3;
-    }
-}
 
 @media screen and (max-width: 400px) {
     .my_day_span{
         font-size: 20px;
-        grid-column: 1/4;
-    }
-
-    .date_span{
-        grid-column: 1/4;
     }
 }
