@@ -19,7 +19,7 @@ import InfoModal from "@/modals/infoModal/InfoModal";
 import { useInfoModalState } from "@/hooks/useInfoModalState";
 import { categoryIcons } from "@/e_shared/constants/categories";
 import UpdateTaskModal from "@/modals/updateTaskModal/UpdateTaskModal";
-import SwapVertIcon from "@mui/icons-material/SwapVert";
+import Sorting from "@/e_shared/sorting/Sorting";
 
 const TaskList = () => {
   const [isTaskFormActive, setIsTaskFormActive] = useState(false);
@@ -169,12 +169,7 @@ const TaskList = () => {
             <AddIcon className={styles.add_sign} fontSize="medium" />
             <span className={styles.add_span}>Добавить задачу</span>
           </div>
-          <button className={styles.sorting_btn}>
-            
-              <SwapVertIcon fontSize="medium" />
-              <span className={styles.sorting_container}>Cортировка</span>
-            
-          </button>
+          <Sorting token={token} setLoading={setLoading} todoes={todoes} setTodoes={setTodoes}/>
         </div>
       )}
       <section className={styles.table_container}>

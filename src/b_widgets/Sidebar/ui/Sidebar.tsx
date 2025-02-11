@@ -93,7 +93,7 @@ export default function Sidebar() {
             {sidebarLinks.map((elem, ind) => {
               const isActive = elem.path === currentPage;
               return (
-                <a
+                <Link
                   key={elem.id}
                   href={elem.path}
                   className={
@@ -104,7 +104,7 @@ export default function Sidebar() {
                     {icons[ind]}
                     {elem.label}
                   </div>
-                </a>
+                </Link>
               );
             })}
           </nav>
