@@ -7,7 +7,7 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 export interface ISortingOptions{
     label: string,
     icon: React.ReactElement,
-    value: string
+    value: SortValuesType
 }
 
 export const sortingOptions: ISortingOptions[] = [
@@ -38,4 +38,4 @@ export const sortingOptions: ISortingOptions[] = [
     }
 ]
 
-export type SortValuesType = (typeof sortingOptions)[number]['value']
+export type SortValuesType = "importance" | "alphabet" | "createDate" | "executionDate" | "reset";

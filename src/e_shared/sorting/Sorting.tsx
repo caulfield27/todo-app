@@ -4,6 +4,7 @@ import styles from "./Sorting.module.css";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { ITodoResponse } from "../types/types";
 import { strapi } from "../api";
+import { quickSort } from "@/utils/sort";
 
 interface Props {
   todoes: ITodoResponse[];
@@ -26,6 +27,7 @@ const Sorting = ({ todoes, setTodoes, setLoading, token }: Props) => {
       setOption({ value: "default", label: "Сортировка" });
       
     } else {
+      quickSort(todoes, option.value)
       setOption({ value: option.value, label: option.label });
     }
     setOpen((prev) => !prev);
