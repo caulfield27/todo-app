@@ -1,8 +1,11 @@
-"use client"
-import { useDebounse } from "@/hooks/useDebounce";
 import PagesContainer from "@/layouts/pagesContainer/pagesContainer"
 import Wrapper from "@/layouts/wrappepr/wrapper";
+import { Metadata } from "next";
 
+export const metadata: Metadata ={
+    title: "Todo-app | Выполненные",
+    description: "Следи за своим прогрессом по выполнению задач"
+  }
 
 const Completed = () => {
 

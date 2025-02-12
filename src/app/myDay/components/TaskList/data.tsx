@@ -1,14 +1,8 @@
 import PriorityIcon from "@/icons/priorityIcon/PriorityIcon";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import EditCalendarIcon from '@mui/icons-material/EditCalendar';
-import EventIcon from '@mui/icons-material/Event';
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import { ISortingOptions } from "@/e_shared/sorting/types";
 
-export interface ISortingOptions{
-    label: string,
-    icon: React.ReactElement,
-    value: SortValuesType
-}
 
 export const sortingOptions: ISortingOptions[] = [
     {
@@ -25,17 +19,5 @@ export const sortingOptions: ISortingOptions[] = [
         label: "Дата создания",
         icon: <EditCalendarIcon style={{color: "blue"}}/>,
         value: "createDate"
-    },
-    {
-        label: "Дата выполнения",
-        icon: <EventIcon style={{color: "gray"}}/>,
-        value: "executionDate"
-    },
-    {
-        label: "Сбросить",
-        icon: <RestartAltIcon/>,
-        value: "reset"
     }
 ]
-
-export type SortValuesType = "importance" | "alphabet" | "createDate" | "executionDate" | "reset";

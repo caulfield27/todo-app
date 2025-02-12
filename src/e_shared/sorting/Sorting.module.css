@@ -15,8 +15,34 @@
 
 .sort_wrapper{
     position: relative;
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
 }
 
+.sort_order_wrapper{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    background: #ebeaea;
+    padding: 6px;
+    border-radius: 10px;
+}
+
+.sort_order_chip{
+    padding: 4px 6px;
+    border-radius: 10px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.sort_order_chip_active{
+    background: #2c2c30;
+    color: #ffffff;
+    pointer-events: none;
+}
 
 .sorting_btn:hover{
     background: gainsboro;
@@ -51,6 +77,11 @@
     color: #000000;
     cursor: pointer;
     margin: 0 8px;
+}
+
+.list_item_active{
+    pointer-events: none;
+    background: gainsboro;
 }
 
 .list_item:hover{

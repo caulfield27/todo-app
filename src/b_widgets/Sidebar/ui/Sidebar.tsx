@@ -9,18 +9,20 @@ import TodayIcon from "@mui/icons-material/Today";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSidebarStore } from "@/store/sidebar/sidebar";
 import { ProfileDropdown } from "@/c_feauters/profileDropdown";
 import axios from "axios";
 import { IUserData } from "@/e_shared/types/types";
-import { json } from "stream/consumers";
 import AddTaskModal from "@/modals/addTaskModal/AddTaskModal";
+import { useGlobalStore } from "@/store/global/global";
 
 const icons = [<TodayIcon />, <CalendarMonthIcon />, <StarsIcon />, <AddTaskIcon />];
 
 export default function Sidebar() {
   const { showSidebar, setSidebar } = useSidebarStore();
+  const sidebarRef = useRef<HTMLElement | null>(null);
+  const { setSidebarWidth, sidebarWidth, isMobile } = useGlobalStore();
   const [userDropdown, setUserDropdown] = useState(false);
   const currentPage = usePathname();
   const router = useRouter();
@@ -39,6 +41,12 @@ export default function Sidebar() {
     );
   }, []);
 
+  useEffect(() => {
+    if (sidebarRef.current) {
+      setSidebarWidth(sidebarRef.current.offsetWidth);
+    }
+  }, [isMobile]);
+
   function handleLogout() {
     axios.post("/api/logout").then((response) => {
       if (response.status === 200) {
@@ -51,7 +59,11 @@ export default function Sidebar() {
   return (
     <>
       <AddTaskModal isOpen={isOpen} />
-      <aside className={showSidebar ? styles.hide_sidebar : styles.sidebar_container}>
+      <aside
+        ref={sidebarRef}
+        style={showSidebar ? { marginLeft: -sidebarWidth } : {}}
+        className={showSidebar ? styles.hide_sidebar : styles.sidebar_container}
+      >
         <header className={styles.sidebar_header}>
           <div className={styles.user_wrapper}>
             <article
@@ -65,15 +77,20 @@ export default function Sidebar() {
                 >
                   <span>{typeof user === "object" ? user?.username[0] : "U"}</span>
                 </button>
-                <span className={styles.userName}>
-                  {typeof user === "object" ? user.username : "Unknown"}
-                </span>
+                {!isMobile && (
+                  <span className={styles.userName}>
+                    {typeof user === "object" ? user.username : "Unknown"}
+                  </span>
+                )}
               </div>
-              <button className={`${styles.not_btn} ${styles.header_btn}`}>
-                <img src="/notification.png" alt="notification" />
-              </button>
+              {!isMobile && (
+                <button className={`${styles.not_btn} ${styles.header_btn}`}>
+                  <img src="/notification.png" alt="notification" />
+                </button>
+              )}
             </article>
             <button
+              style={isMobile ? {display: "none"} : showSidebar ? { left: sidebarWidth+20 } : {}}
               className={
                 showSidebar
                   ? `${styles.openArrow} ${styles.header_btn}`
@@ -86,7 +103,7 @@ export default function Sidebar() {
           </div>
         </header>
         <div className={styles.sidebar_content}>
-          <div onClick={() => setIsOpen(prev => !prev)} className={styles.add}>
+          <div onClick={() => setIsOpen((prev) => !prev)} className={styles.add}>
             <AddTaskButton />
           </div>
           <nav className={styles.navigation_container}>
@@ -102,7 +119,7 @@ export default function Sidebar() {
                 >
                   <div className={styles.link_text}>
                     {icons[ind]}
-                    {elem.label}
+                    {!isMobile && elem.label}
                   </div>
                 </Link>
               );

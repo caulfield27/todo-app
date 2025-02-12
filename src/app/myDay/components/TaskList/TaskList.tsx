@@ -1,3 +1,4 @@
+"use client"
 import AddTaskFrom from "@/e_shared/addTaskForm/AddTaskForm";
 import styles from "./TaskList.module.css";
 import "../../../globals.css";
@@ -20,6 +21,7 @@ import { useInfoModalState } from "@/hooks/useInfoModalState";
 import { categoryIcons } from "@/e_shared/constants/categories";
 import UpdateTaskModal from "@/modals/updateTaskModal/UpdateTaskModal";
 import Sorting from "@/e_shared/sorting/Sorting";
+import { sortingOptions } from "./data";
 
 const TaskList = () => {
   const [isTaskFormActive, setIsTaskFormActive] = useState(false);
@@ -169,7 +171,15 @@ const TaskList = () => {
             <AddIcon className={styles.add_sign} fontSize="medium" />
             <span className={styles.add_span}>Добавить задачу</span>
           </div>
-          <Sorting token={token} setLoading={setLoading} todoes={todoes} setTodoes={setTodoes}/>
+          {todoes && todoes.length > 1 && (
+            <Sorting
+              options={sortingOptions}
+              token={token}
+              setLoading={setLoading}
+              todoes={todoes}
+              setTodoes={setTodoes}
+            />
+          )}
         </div>
       )}
       <section className={styles.table_container}>

@@ -20,11 +20,13 @@
 
 
 .add_task_btn:hover .add_span {
-    color: var(--primaryRed);
+    /* color: var(--primaryRed); */
+    color: #23e0c7;
 }
 
 .add_task_btn:hover .add_sign {
-    color: var(--primaryRed);
+    color: #23e0c7;
+    /* color: var(--primaryRed); */
 }
 
 .table_container{

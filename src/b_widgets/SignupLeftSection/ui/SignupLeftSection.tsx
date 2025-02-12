@@ -1,3 +1,4 @@
+"use client"
 import SignupForm from './signupForm/SignupForm'
 import styles from '../../LoginLeftSection/ui/AuthLeftSection.module.css'
 import Logo from '@/e_shared/logo/logo'

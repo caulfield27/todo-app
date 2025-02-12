@@ -1,37 +1,45 @@
-import { Dispatch, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
-import { ISortingOptions, sortingOptions } from "./data";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { ISortingOptions, SortValuesType } from "./types";
 import styles from "./Sorting.module.css";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { ITodoResponse } from "../types/types";
-import { strapi } from "../api";
-import { quickSort } from "@/utils/sort";
+import { quickSort } from "@/utils/sorting";
 
 interface Props {
   todoes: ITodoResponse[];
   setTodoes: Dispatch<SetStateAction<ITodoResponse[]>>;
   setLoading: Dispatch<SetStateAction<boolean>>;
-  token: string
+  token: string;
+  options: ISortingOptions[];
 }
 
-const Sorting = ({ todoes, setTodoes, setLoading, token }: Props) => {  
-  const [open, setOpen] = useState(false);
-  const [option, setOption] = useState({
-      value: "default",
-      label: "Сортировка",
-    }
-  );
-  const dropdownRef = useRef<HTMLUListElement | null>(null);
+interface ISortOrder {
+  label: "По возрастанию" | "По убыванию";
+  value: "asc" | "desc";
+}
 
-  function handleOptionChange(option: ISortingOptions) {
-    if (option.value === "reset") {
-      setOption({ value: "default", label: "Сортировка" });
-      
-    } else {
-      quickSort(todoes, option.value)
-      setOption({ value: option.value, label: option.label });
-    }
-    setOpen((prev) => !prev);
-  }
+const sortOrder: ISortOrder[] = [
+  {
+    label: "По возрастанию",
+    value: "asc",
+  },
+  {
+    label: "По убыванию",
+    value: "desc",
+  },
+];
+
+const Sorting = ({ todoes, setTodoes, setLoading, token, options }: Props) => {
+  const [open, setOpen] = useState(false);
+  const [orderValue, setOrderValue] = useState<ISortOrder>(sortOrder[0]);
+  const [option, setOption] = useState<{
+    value: SortValuesType | "default";
+    label: string;
+  }>({
+    value: "default",
+    label: "Сортировка",
+  });
+  const dropdownRef = useRef<HTMLUListElement | null>(null);
 
   useEffect(() => {
     if (open) {
@@ -47,25 +55,58 @@ const Sorting = ({ todoes, setTodoes, setLoading, token }: Props) => {
     }
   }, [open]);
 
+  function handleOptionChange(sortOption: ISortingOptions) {
+    setTodoes(quickSort(todoes, sortOption.value, orderValue.value));
+    setOption({ value: sortOption.value, label: sortOption.label });
+    setOpen((prev) => !prev);
+  }
+
+  function handleSortOrderChange(order: ISortOrder) {
+    setOrderValue(order);
+    if (option.value === "default") return;
+    setTodoes(quickSort(todoes, option.value, order.value));
+  }
+
   return (
     <div className={styles.sort_wrapper}>
       <button onClick={() => setOpen((prev) => !prev)} className={styles.sorting_btn}>
         <SwapVertIcon fontSize="medium" />
         <span className={styles.sorting_container}>{option.label}</span>
       </button>
+      <div className={styles.sort_order_wrapper}>
+        <div
+          role="button"
+          onClick={() => handleSortOrderChange(sortOrder[0])}
+          className={`${styles.sort_order_chip} ${
+            sortOrder[0].value === orderValue.value ? styles.sort_order_chip_active : ""
+          }`}
+        >
+          {sortOrder[0].label}
+        </div>
+        <div
+          role="button"
+          onClick={() => handleSortOrderChange(sortOrder[1])}
+          className={`${styles.sort_order_chip} ${
+            sortOrder[1].value === orderValue.value ? styles.sort_order_chip_active : ""
+          }`}
+        >
+          {sortOrder[1].label}
+        </div>
+      </div>
       {open && (
         <ul ref={dropdownRef} className={styles.dropdown}>
           <span className={styles.title}>Порядок сортировки</span>
           <hr style={{ border: "1px solid gainsboro" }} />
-          {sortingOptions.map((option) => {
+          {options.map((elem) => {
+            const activeClass = elem.value === option.value ? styles["list_item_active"] : "";
             return (
               <li
-                onClick={() => handleOptionChange(option)}
-                className={styles.list_item}
-                key={option.value}
+                onClick={() => handleOptionChange(elem)}
+                className={`${styles.list_item} ${activeClass}`}
+                key={elem.value}
               >
-                {option.icon}
-                <span>{option.label}</span>
+                {elem.icon}
+                <span>{elem.label}</span>
               </li>
             );
           })}

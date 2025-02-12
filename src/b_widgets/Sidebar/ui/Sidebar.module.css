@@ -1,6 +1,6 @@
 .sidebar_container{
     position: fixed;
-    width: var(--sidebarWidth);
+    width: 280px;
     height: 100%;
     border-right: 1px solid gainsboro;
     padding: 15px 20px 15px 20px;
@@ -10,12 +10,12 @@
 
 .hide_sidebar{
     position: fixed;
-    width: var(--sidebarWidth);
+    width: 280px;
     height: 100%;
     border-right: 1px solid gainsboro;
     padding: 15px 20px 15px 20px;
     transition: all 0.3s ease-in;
-    margin-left: var(--hideSidebar);
+
 }
 
 .sidebar_header{
@@ -31,7 +31,6 @@
 .openArrow{
     position: absolute;
     top: 0;
-    left: var(--sidebarWidth);
 }
 
 .sidebar_content{
@@ -71,12 +70,6 @@
     align-items: center;
     justify-content: space-between;
 }
-
-/* .arrow{
-    position: absolute;
-    top: 10px;
-    left: 20px;
-} */
 
 .user_wrapper img{
     width: 24px;
@@ -150,4 +143,10 @@
     font-size: 18px;
     color: black;
     font-weight: 500;
+}
+
+@media screen and (max-width: 768px) {
+    .sidebar_container, .hide_sidebar{
+        width: max-content;
+    }
 }

@@ -1,12 +1,10 @@
 .pages_container{
-    margin-left: var(--sidebarWidth);
     height: 100vb;
     background: var(--container-bg);
     transition: all 0.3s ease-in;
 }
 
 .hiden_sidebar_container{
-    margin-left: 0;
     height: 100vb;
     background: var(--container-bg);
     transition: all 0.3s ease-in;
