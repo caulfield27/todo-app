@@ -8,13 +8,14 @@ import { useGlobalStore } from "@/store/global/global";
 
 const PagesContainer = ({ children }: { children: ReactNode }) => {
   const showSidebar = useSidebarStore((state) => state.showSidebar);
-  const { sidebarWidth } = useGlobalStore();
+  const { sidebarWidth, isMobile } = useGlobalStore();
+  
   return (
     <>
-      {/* <Sidebar /> */}
+      <Sidebar />
       <div
-        style={!showSidebar ? { marginLeft: sidebarWidth } : { marginLeft: 0 }}
-        className={showSidebar ? styles.hiden_sidebar_container : styles.pages_container}
+        style={showSidebar && !isMobile ? { marginLeft: sidebarWidth } : { marginLeft: 0 }}
+        className={styles.pages_container}
       >
         {children}
       </div>

@@ -4,11 +4,11 @@ import { useGlobalStore } from "@/store/global/global";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 const AddTaskButton = () => {
-  const { isMobile } = useGlobalStore();
+  const { isTablet } = useGlobalStore();
   return (
     <div className={styles.add_task_btn_wrap}>
       <AddCircleIcon style={{color: "#23e0c7", fontSize: "30px"}}/>
-      {!isMobile && <span>Добавить задачу</span>}
+      {!isTablet && <span>Добавить задачу</span>}
     </div>
   );
 };

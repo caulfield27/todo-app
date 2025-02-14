@@ -22,7 +22,8 @@ const icons = [<TodayIcon />, <CalendarMonthIcon />, <StarsIcon />, <AddTaskIcon
 export default function Sidebar() {
   const { showSidebar, setSidebar } = useSidebarStore();
   const sidebarRef = useRef<HTMLElement | null>(null);
-  const { setSidebarWidth, sidebarWidth, isMobile } = useGlobalStore();
+  const { setSidebarWidth, sidebarWidth, isMobile, setIsMobile, isTablet, setIsTablet } =
+    useGlobalStore();
   const [userDropdown, setUserDropdown] = useState(false);
   const currentPage = usePathname();
   const router = useRouter();
@@ -44,8 +45,44 @@ export default function Sidebar() {
   useEffect(() => {
     if (sidebarRef.current) {
       setSidebarWidth(sidebarRef.current.offsetWidth);
+      sidebarRef.current.style.display = "block"
     }
-  }, [isMobile]);
+
+    function handleResize() {
+      setIsTablet(window.innerWidth < 768 && window.innerWidth >= 425);
+      setIsMobile(window.innerWidth < 425);
+
+      if (window.innerWidth < 425) {
+        setSidebar(false);
+      } else {
+        setSidebar(true);
+      }
+    }
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [isTablet, isMobile]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: any) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(e.target)) {
+        setSidebar(false);
+      }
+    };
+    if (isMobile && showSidebar) {
+      document.body.style.overflow = "hidden";
+      document.addEventListener("click", handleClickOutside);
+    } else {
+      document.body.style.overflowY = "scroll";
+    }
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [showSidebar]);
 
   function handleLogout() {
     axios.post("/api/logout").then((response) => {
@@ -61,8 +98,8 @@ export default function Sidebar() {
       <AddTaskModal isOpen={isOpen} />
       <aside
         ref={sidebarRef}
-        style={showSidebar ? { marginLeft: -sidebarWidth } : {}}
-        className={showSidebar ? styles.hide_sidebar : styles.sidebar_container}
+        style={!showSidebar ? { marginLeft: -sidebarWidth} : {}}
+        className={styles.sidebar_container}
       >
         <header className={styles.sidebar_header}>
           <div className={styles.user_wrapper}>
@@ -77,28 +114,34 @@ export default function Sidebar() {
                 >
                   <span>{typeof user === "object" ? user?.username[0] : "U"}</span>
                 </button>
-                {!isMobile && (
+                {!isTablet && (
                   <span className={styles.userName}>
-                    {typeof user === "object" ? user.username : "Unknown"}
+                    {typeof user === "object" ? user.username : "User"}
                   </span>
                 )}
               </div>
-              {!isMobile && (
+              {!isTablet && (
                 <button className={`${styles.not_btn} ${styles.header_btn}`}>
                   <img src="/notification.png" alt="notification" />
                 </button>
               )}
             </article>
             <button
-              style={isMobile ? {display: "none"} : showSidebar ? { left: sidebarWidth+20 } : {}}
+              style={
+                isTablet
+                  ? { display: "none" }
+                  : !showSidebar
+                  ? { left: sidebarWidth - 15}
+                  : {}
+              }
               className={
-                showSidebar
+                !showSidebar
                   ? `${styles.openArrow} ${styles.header_btn}`
                   : `${styles.closedArrow} ${styles.header_btn}`
               }
-              onClick={() => setSidebar()}
+              onClick={() => setSidebar(!showSidebar)}
             >
-              <img src={showSidebar ? "/sidebarClosed.svg" : "/sidebarOpen.svg"} alt="hide icon" />
+              <img src={!showSidebar ? "/sidebarClosed.svg" : "/sidebarOpen.svg"} alt="hide icon" />
             </button>
           </div>
         </header>
@@ -119,7 +162,7 @@ export default function Sidebar() {
                 >
                   <div className={styles.link_text}>
                     {icons[ind]}
-                    {!isMobile && elem.label}
+                    {!isTablet && elem.label}
                   </div>
                 </Link>
               );

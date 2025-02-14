@@ -6,16 +6,9 @@
     padding: 15px 20px 15px 20px;
     transition: all 0.3s ease-in;
     scroll-behavior: auto;
-}
-
-.hide_sidebar{
-    position: fixed;
-    width: 280px;
-    height: 100%;
-    border-right: 1px solid gainsboro;
-    padding: 15px 20px 15px 20px;
-    transition: all 0.3s ease-in;
-
+    z-index: 1;
+    background: #ffffff;
+    display: none;
 }
 
 .sidebar_header{
@@ -145,7 +138,7 @@
     font-weight: 500;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 768px) and (min-width: 425px) {
     .sidebar_container, .hide_sidebar{
         width: max-content;
     }

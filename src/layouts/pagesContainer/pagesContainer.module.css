@@ -3,9 +3,3 @@
     background: var(--container-bg);
     transition: all 0.3s ease-in;
 }
-
-.hiden_sidebar_container{
-    height: 100vb;
-    background: var(--container-bg);
-    transition: all 0.3s ease-in;
-}

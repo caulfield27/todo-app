@@ -3,10 +3,10 @@ import { create } from "zustand";
 
 export interface ISidebarStates{
     showSidebar:boolean,
-    setSidebar:()=> void
+    setSidebar:(payload: boolean)=> void
 }
 
 export const useSidebarStore = create<ISidebarStates>((set)=>({
-    showSidebar: false,
-    setSidebar: ()=> set((state)=> ({showSidebar: !state.showSidebar})) 
+    showSidebar: true,
+    setSidebar: (payload: boolean)=> set((state)=> ({showSidebar: payload})) 
 }))
