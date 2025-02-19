@@ -39,6 +39,7 @@ const MyDayHeader = () => {
     const cron = localStorage.getItem("cron");
     if(cron){
       clearInterval(JSON.parse(cron));
+      localStorage.removeItem("cron");
     }
   }
 
