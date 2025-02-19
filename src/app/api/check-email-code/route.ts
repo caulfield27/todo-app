@@ -1,5 +1,5 @@
-import nodemailer from "nodemailer";
 import { NextRequest, NextResponse } from "next/server";
+import { createTransport } from "@/utils/createTransport";
 
 const emailCods = new Map();
 
@@ -29,20 +29,14 @@ export async function POST(request: NextRequest) {
     try {
       const generatedCode = generateCode();
       emailCods.set(email, generatedCode);
-      const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: process.env.EMAIL_SENDER,
-          pass: process.env.EMAIL_SENDER_PW,
-        },
-      });
+      const transporter = createTransport();
       const mailResponse = await transporter.sendMail({
         from: "ToDo-app",
         to: email,
         subject: "Подтверждение кода",
         html: ` <html>
-                        <body>
-                            <h2>Никому не сообщайте этот код: ${generatedCode}</h2>
+                        <body style="background-color: lightblue">
+                            <h2 style="coloe: white">Никому не сообщайте этот код: ${generatedCode}</h2>
                         </body>
                     </html>`,
       });

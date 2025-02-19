@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useValidation } from "@/hooks/useValidation";
 import ConfirmEmail from "../confirmEmail/ConfirmEmail";
 import { useSignupStore } from "../../model/store";
-
+import Swal from "sweetalert2";
 
 interface ISIgnupData {
   name: string;
@@ -29,7 +29,7 @@ const isBtnDisabled = (
 };
 
 export default function SignupForm() {
-  const { setCurrentComponent } = useSignupStore()
+  const { setCurrentComponent } = useSignupStore();
   const [userData, setUserData] = useState<ISIgnupData>({
     name: "",
     email: "",
@@ -43,34 +43,51 @@ export default function SignupForm() {
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     setUserData((prevUserData) => ({ ...prevUserData, [name]: value }));
-    if (name === 'password' && value.length < 6) {
-      setPasswordValidation({ isError: true, message: "Длина пароля должна быть больше 5 символов" })
+    if (name === "password" && value.length < 6) {
+      setPasswordValidation({
+        isError: true,
+        message: "Длина пароля должна быть больше 5 символов",
+      });
     } else {
-      setPasswordValidation({ isError: false, message: "" })
+      setPasswordValidation({ isError: false, message: "" });
     }
   }
 
   function handleSubmit() {
     setLoading(true);
-    axios.post('/api/check-email-code', { email: userData.email, type: "send" })
+    axios
+      .post("/api/check-email-code", { email: userData.email, type: "send" })
       .then((res) => {
         if (res.status === 200) {
-          setCurrentComponent(<ConfirmEmail {...userData}/>);
+          setCurrentComponent(<ConfirmEmail {...userData} />);
+        } else if (res.status === 400) {
+          setEmailValidation({
+            message: res.data.message ?? "неверный адресс почты",
+            isError: true,
+          });
         } else {
-          setEmailValidation(
-            {
-              message: res.data.message ?? "неверный адресс почты",
-              isError: true
-            })
+          Swal.fire({
+            icon: "error",
+            title: "Ошибка сервера",
+            text: "Повторите попытку позже",
+          });
         }
-      }).catch((err) => {
-        setEmailValidation(
-          {
+      })
+      .catch((err) => {
+        if (err?.response?.status === 400) {
+          setEmailValidation({
             message: "неверный адресс почты",
-            isError: true
-          })
-        console.log(err);
-      }).finally(() => setLoading(false))
+            isError: true,
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Ошибка сервера",
+            text: "Повторите попытку позже",
+          });
+        }
+      })
+      .finally(() => setLoading(false));
   }
 
   function handleBlur(e: React.FocusEvent<HTMLInputElement>) {
