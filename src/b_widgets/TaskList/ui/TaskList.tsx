@@ -1,7 +1,7 @@
-"use client"
+"use client";
 import AddTaskFrom from "@/e_shared/addTaskForm/AddTaskForm";
 import styles from "./TaskList.module.css";
-import "../../../globals.css";
+import "../../../app/globals.css";
 import { useEffect, useState } from "react";
 import { ITodoResponse } from "@/e_shared/types/types";
 import { strapi } from "@/e_shared/api";
@@ -21,9 +21,22 @@ import { useInfoModalState } from "@/hooks/useInfoModalState";
 import { categoryIcons } from "@/e_shared/constants/categories";
 import UpdateTaskModal from "@/modals/updateTaskModal/UpdateTaskModal";
 import Sorting from "@/e_shared/sorting/Sorting";
-import { sortingOptions } from "./data";
+import { allSortingOptions, sortingOptions } from "../config";
+import { sliceRest } from "@/utils/parseString";
 
-const TaskList = () => {
+interface Props {
+  type: "today" | "upcoming" | "completed" | "important" | "all";
+}
+
+const getTodoes = {
+  today: (id: number | string, day: string) => apiUrl.getTodayTodoes(id, day),
+  upcoming: (id: number | string, day: string) => apiUrl.getUpcomingTodoes(id, day),
+  completed: (id: number | string, day: string) => apiUrl.getCompletedTodoes(id, day),
+  important: (id: number | string, day: string) => apiUrl.getImportantTodoes(id, day),
+  all: apiUrl.todoes,
+};
+
+const TaskList = ({ type }: Props) => {
   const [isTaskFormActive, setIsTaskFormActive] = useState(false);
   const [todoes, setTodoes] = useState<ITodoResponse[] | []>([]);
   const [loading, setLoading] = useState(false);
@@ -45,7 +58,9 @@ const TaskList = () => {
         if (token) {
           setToken(token);
           return strapi.get(
-            apiUrl.getTodayTodoes(getUserAttribute("id"), parseDay(new Date().toDateString())),
+            type === "all"
+              ? getTodoes[type]
+              : getTodoes[type](getUserAttribute("id"), parseDay(new Date().toDateString())),
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -146,6 +161,7 @@ const TaskList = () => {
     <main className={styles.task_list_section}>
       {updateModalState.isActive && (
         <UpdateTaskModal
+          type={type}
           setInfoModal={setInfoModal}
           modalState={updateModalState}
           setModalState={setUpdateModalState}
@@ -156,6 +172,7 @@ const TaskList = () => {
       {infoModal.isActive && <InfoModal modalState={infoModal} setModalState={setInfoModal} />}
       {isTaskFormActive ? (
         <AddTaskFrom
+          type={type}
           setInfoModal={setInfoModal}
           todoes={todoes}
           setTodoes={setTodoes}
@@ -173,7 +190,7 @@ const TaskList = () => {
           </div>
           {todoes && todoes.length > 1 && (
             <Sorting
-              options={sortingOptions}
+              options={type === "today" ? sortingOptions : allSortingOptions}
               token={token}
               setLoading={setLoading}
               todoes={todoes}
@@ -191,13 +208,14 @@ const TaskList = () => {
               <tr>
                 <td className={styles.btn_cell}></td>
                 <td className={styles.header_cell}>Название задачи</td>
-                <td className={styles.header_cell}>Срок выполнения</td>
-                <td className={styles.header_cell}>Приоритет</td>
+                <td className={`${styles.header_cell} ${styles.adaptive_view}`}>Срок выполнения</td>
+                <td className={`${styles.header_cell} ${styles.adaptive_view}`}>Приоритет</td>
                 <td className={styles.actions_cell}>Действия</td>
               </tr>
             </thead>
             <tbody className={styles.table_body}>
               {todoes.map((todo, ind) => {
+                const slicedTask = sliceRest(todo.subject, 20);
                 return (
                   <tr key={todo.id}>
                     <td className={styles.btn_cell}>
@@ -221,13 +239,13 @@ const TaskList = () => {
                       </button>
                     </td>
                     <td className={`${styles.body_data} ${styles.body_data_name}`}>
-                      {todo.isCompleted ? <s>{todo.subject}</s> : todo.subject}
+                      {todo.isCompleted ? <s>{slicedTask}</s> : slicedTask}
                       {categoryIcons[todo.category][0] ?? ""}
                     </td>
-                    <td className={styles.body_data}>
+                    <td className={`${styles.body_data} ${styles.adaptive_view}`}>
                       {todo.deadline && dottedDayFormat(todo.deadline)}
                     </td>
-                    <td className={styles.body_data}>
+                    <td className={`${styles.body_data} ${styles.adaptive_view}`}>
                       <div className={styles.priority_cell}>
                         {<PriorityIcon color={priorityColors[todo.priority]} />}{" "}
                         <span>{todo.priority}</span>

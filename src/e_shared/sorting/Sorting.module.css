@@ -96,3 +96,18 @@
     justify-content: center;
     align-items: center;
 }
+
+@media screen and (max-width: 890px) {
+    .dropdown{
+        left: 0;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .sort_wrapper{
+        flex-direction: column;
+        gap: 8px;
+        justify-content: center;
+        align-items: flex-start;
+    }
+}

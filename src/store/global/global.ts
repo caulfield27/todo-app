@@ -1,5 +1,6 @@
 import {create} from "zustand"
 
+
 interface IStates{
     sidebarWidth: number,
     isTablet: boolean,

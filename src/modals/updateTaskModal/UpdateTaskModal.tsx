@@ -35,6 +35,7 @@ interface Props {
     }>
   >;
   setTodoes: Dispatch<SetStateAction<ITodoResponse[]>>;
+  type: "today" | "upcoming" | "completed" | "important" | "all";
 }
 
 type Picked = Pick<ITodoResponse, "category" | "subject" | "isExpired" | "priority">;
@@ -42,7 +43,14 @@ interface IUpdatedTodo extends Picked {
   deadline: string | Dayjs;
 }
 
-const UpdateTaskModal = ({ setInfoModal, todoes, modalState, setModalState, setTodoes }: Props) => {
+const UpdateTaskModal = ({
+  setInfoModal,
+  todoes,
+  modalState,
+  setModalState,
+  setTodoes,
+  type,
+}: Props) => {
   const currentTodo = todoes[modalState.index];
   const [loading, setLoading] = useState(false);
   const [calendarState, setCalendarState] = useState({
@@ -85,38 +93,55 @@ const UpdateTaskModal = ({ setInfoModal, todoes, modalState, setModalState, setT
     setLoading(true);
     getToken()
       .then((token) => {
-        return strapi.put(
-          apiUrl.updateTodo(currentTodo.documentId),payload,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        return strapi.put(apiUrl.updateTodo(currentTodo.documentId), payload, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
       })
       .then((res) => {
         const newData = [...todoes];
         if (res.data?.data?.deadline !== parseDay(new Date().toString())) {
-          newData.splice(modalState.index,1);
-          setTodoes(newData)
-          setInfoModal({
-            isActive: true,
-            message: `Задача успешно обновлена и перенесена в "Предстоящие"`,
-            type: "success",
-          });
+          if (type === "today") {
+            newData.splice(modalState.index, 1);
+            setTodoes(newData);
+            setInfoModal({
+              isActive: true,
+              message: `Задача успешно обновлена и перенесена в "Предстоящие"`,
+              type: "success",
+            });
+          } else {
+            newData[modalState.index] = { ...newData[modalState.index], ...res.data.data };
+            setTodoes(newData);
+            setInfoModal({ isActive: true, message: "Задача успешно обновлена.", type: "success" });
+          }
         } else {
-          newData[modalState.index] = {...newData[modalState.index], ...res.data.data}
-          setTodoes(newData);
-          setInfoModal({ isActive: true, message: "Задача успешно обноалена.", type: "success" })
+          if (type === "upcoming") {
+            newData.splice(modalState.index, 1);
+            setTodoes(newData);
+            setInfoModal({
+              isActive: true,
+              message: `Задача успешно обновлена и перенесена в "Мой день"`,
+              type: "success",
+            });
+          } else {
+            newData[modalState.index] = { ...newData[modalState.index], ...res.data.data };
+            setTodoes(newData);
+            setInfoModal({ isActive: true, message: "Задача успешно обноалена.", type: "success" });
+          }
         }
       })
-      .catch((e) =>{
+      .catch((e) => {
         console.log(e);
-        setInfoModal({isActive: true, message: "Ошибка, не удалось обновить задачу", type: "error"});
+        setInfoModal({
+          isActive: true,
+          message: "Ошибка, не удалось обновить задачу",
+          type: "error",
+        });
       })
       .finally(() => {
-        setModalState(prev=> ({...prev, isActive: false}))
-        setLoading(false)
+        setModalState((prev) => ({ ...prev, isActive: false }));
+        setLoading(false);
       });
   };
 

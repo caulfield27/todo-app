@@ -1,6 +1,5 @@
 .sidebar_container{
     position: fixed;
-    width: 280px;
     height: 100%;
     border-right: 1px solid gainsboro;
     padding: 15px 20px 15px 20px;
@@ -39,6 +38,7 @@
 }
 
 .link_item{
+    position: relative;
     text-decoration: none;
     color: var(--defaultColor);
     padding: 5px 10px 5px 10px;
@@ -138,8 +138,7 @@
     font-weight: 500;
 }
 
-@media screen and (max-width: 768px) and (min-width: 425px) {
-    .sidebar_container, .hide_sidebar{
-        width: max-content;
-    }
+.popover_position{
+    left: 50px;
+    top: 0;
 }

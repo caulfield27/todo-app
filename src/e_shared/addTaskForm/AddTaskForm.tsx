@@ -49,9 +49,10 @@ interface Props {
       type: "success" | "error";
     }>
   >;
+  type: "today" | "upcoming" | "completed" | "important" | "all";
 }
 
-const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes, setInfoModal }: Props) => {
+const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes, setInfoModal, type }: Props) => {
   const [formData, setFormData] = useState<IFormData>({
     subject: "",
     isExpired: false,
@@ -110,14 +111,27 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes, setInfoModal }: Prop
       })
       .then((res) => {
         if (res.data?.data?.deadline !== parseDay(new Date().toString())) {
-          setInfoModal({
-            isActive: true,
-            message: `Задача успешно добавлена в "Предстоящие"`,
-            type: "success",
-          });
+          if (type === "today") {
+            setInfoModal({
+              isActive: true,
+              message: `Задача успешно добавлена в "Предстоящие"`,
+              type: "success",
+            });
+          } else {
+            setTodoes([...todoes, res.data.data]);
+            setInfoModal({ isActive: true, message: "Задача успешно добавлена.", type: "success" });
+          }
         } else {
-          setTodoes([...todoes, res.data.data]);
-          setInfoModal({ isActive: true, message: "Задача успешно добавлена.", type: "success" });
+          if (type === "upcoming") {
+            setInfoModal({
+              isActive: true,
+              message: `Задача успешно добавлена в "Мой день"`,
+              type: "success",
+            });
+          } else {
+            setTodoes([...todoes, res.data.data]);
+            setInfoModal({ isActive: true, message: "Задача успешно добавлена.", type: "success" });
+          }
         }
       })
       .catch((e) => {
@@ -189,7 +203,12 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes, setInfoModal }: Prop
               )}
 
               {!calendarState.isSelected && !calendarState.isOpen && (
-                <Popover bg="black" content="Добавить дату выполнения" />
+                <Popover
+                  arrow="top"
+                  classes={styles["popover_position"]}
+                  bg="black"
+                  content="Добавить дату выполнения"
+                />
               )}
             </div>
             {calendarState.isOpen && (
@@ -228,7 +247,12 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes, setInfoModal }: Prop
                 />
               )}
               {!priorityState.isSelected && !priorityState.isOpen && (
-                <Popover bg="black" content="Добавить приоритет" />
+                <Popover
+                  classes={styles["popover_position"]}
+                  arrow="top"
+                  bg="black"
+                  content="Добавить приоритет"
+                />
               )}
             </div>
             {priorityState.isOpen && (
@@ -275,7 +299,12 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes, setInfoModal }: Prop
                   }
                 />
                 {!categoryState.isSelected && !categoryState.isOpen && (
-                  <Popover bg="black" content="Добавить категорию задачи" />
+                  <Popover
+                    classes={styles["popover_position"]}
+                    arrow="top"
+                    bg="black"
+                    content="Добавить категорию задачи"
+                  />
                 )}
               </div>
             )}
@@ -290,8 +319,18 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes, setInfoModal }: Prop
           </div>
         </div>
         <div className={styles.controll_buttons_wrapper}>
-          <DefaultButton disabled={loading} label="Отмена" handleClick={()=> setAddTaskActive(false)} type="cancel"/>
-          <DefaultButton disabled={!formData.subject} label="Добавить" type="submit" loading={loading}/>
+          <DefaultButton
+            disabled={loading}
+            label="Отмена"
+            handleClick={() => setAddTaskActive(false)}
+            type="cancel"
+          />
+          <DefaultButton
+            disabled={!formData.subject}
+            label="Добавить"
+            type="submit"
+            loading={loading}
+          />
         </div>
       </div>
     </form>

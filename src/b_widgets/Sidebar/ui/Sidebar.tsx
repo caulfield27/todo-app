@@ -16,6 +16,7 @@ import axios from "axios";
 import { IUserData } from "@/e_shared/types/types";
 import AddTaskModal from "@/modals/addTaskModal/AddTaskModal";
 import { useGlobalStore } from "@/store/global/global";
+import Popover from "@/e_shared/popover/Popover";
 
 const icons = [<TodayIcon />, <CalendarMonthIcon />, <StarsIcon />, <AddTaskIcon />];
 
@@ -45,7 +46,7 @@ export default function Sidebar() {
   useEffect(() => {
     if (sidebarRef.current) {
       setSidebarWidth(sidebarRef.current.offsetWidth);
-      sidebarRef.current.style.display = "block"
+      sidebarRef.current.style.display = "block";
     }
 
     function handleResize() {
@@ -98,7 +99,13 @@ export default function Sidebar() {
       <AddTaskModal isOpen={isOpen} />
       <aside
         ref={sidebarRef}
-        style={!showSidebar ? { marginLeft: -sidebarWidth} : {}}
+        style={
+          !showSidebar
+            ? { marginLeft: -sidebarWidth }
+            : isTablet
+            ? { width: "max-content" }
+            : { width: "280px" }
+        }
         className={styles.sidebar_container}
       >
         <header className={styles.sidebar_header}>
@@ -128,11 +135,7 @@ export default function Sidebar() {
             </article>
             <button
               style={
-                isTablet
-                  ? { display: "none" }
-                  : !showSidebar
-                  ? { left: sidebarWidth - 15}
-                  : {}
+                isTablet ? { display: "none" } : !showSidebar ? { left: sidebarWidth - 15 } : {}
               }
               className={
                 !showSidebar
@@ -164,6 +167,13 @@ export default function Sidebar() {
                     {icons[ind]}
                     {!isTablet && elem.label}
                   </div>
+                  {isTablet && (
+                    <Popover
+                      arrow="left"
+                      classes={styles["popover_position"]}
+                      content={elem.label}
+                    />
+                  )}
                 </Link>
               );
             })}

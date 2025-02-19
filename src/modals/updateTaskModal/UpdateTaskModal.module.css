@@ -123,3 +123,11 @@
     border-radius: 8px;
 }
 
+
+@media screen and (max-width: 935px) {
+    .calendar{
+        top: -100px;
+        left: -20px;
+        width: 300px;
+    }
+}

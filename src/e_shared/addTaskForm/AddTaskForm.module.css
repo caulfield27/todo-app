@@ -33,8 +33,9 @@
     display: flex;
     flex-direction: row;
     gap: 20px;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .calendar_wrapper, .priority_wrapper, .category_wrapepr{
@@ -109,4 +110,34 @@
     min-width: fit-content;
     outline: none;
     cursor: pointer;
+}
+
+.popover_position{
+    top: 40px;
+    left: -75px;
+}
+
+@media screen and (max-width: 980px) {
+    .options_wrapper{
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 20px;
+    }
+}
+
+@media screen and (max-width: 525px) {
+    .calendar{
+        left: -25px;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .calendar{
+        left:-34px;
+    }
+
+    .category_dropdown{
+        left: 0;
+    }
 }

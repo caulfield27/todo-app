@@ -1,7 +1,16 @@
 .popover{
     position: absolute;
-    top: 40px;
-    left: -75px;
+    padding: 10px;
+    box-shadow: var(--default-box-shadow);
+    border-radius: 4px;
+    animation: popover 0.4s linear;
+    z-index: 2;
+    display: none;
+    width: 175px;
+}
+
+.no_arrow_popover{
+    position: absolute;
     padding: 10px;
     box-shadow: var(--default-box-shadow);
     border-radius: 4px;
@@ -22,12 +31,36 @@
     }
 }
 
-.popover p{
+.popover p,.no_arrow_popover p{
     text-align: center;
     font-size: 12px;
 }
 
-.popover::before{
+.left::before{
+    position: absolute;
+    content: "";
+    border-top: 10px solid transparent;
+    border-left: 10px solid transparent;
+    border-right: 10px solid var(--triangle-color);
+    border-bottom: 10px solid transparent;
+    top: 50%;
+    left: -19px;
+    transform: translateY(-50%);
+}
+
+.right::before{
+    position: absolute;
+    content: "";
+    border-top: 10px solid transparent;
+    border-left: 10px solid var(--triangle-color);
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    top: 50%;
+    right: -19px;
+    transform: translateY(-50%);
+}
+
+.top::before{
     position: absolute;
     content: "";
     border-top: 10px solid transparent;
@@ -38,4 +71,17 @@
     left: 50%;
     transform: translateX(-50%);
 }
+
+.bottom::before{
+    position: absolute;
+    content: "";
+    border-top: 10px solid var(--triangle-color);;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    top: 37px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 

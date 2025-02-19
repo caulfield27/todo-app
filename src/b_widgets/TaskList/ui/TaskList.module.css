@@ -2,6 +2,7 @@
     padding: 20px 0;
 }
 
+
 .taskList_header_wrapper{
     display: flex;
     flex-direction: row;
@@ -171,4 +172,19 @@
     gap: 12px;
     align-items: center;
     max-width: 250px;
+}
+
+@media screen and (max-width: 890px) {
+    .taskList_header_wrapper{
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 16px;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .adaptive_view{
+        display: none;
+    }
 }

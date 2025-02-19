@@ -1,7 +1,7 @@
 import PagesContainer from "@/layouts/pagesContainer/pagesContainer";
 import Wrapper from "@/layouts/wrappepr/wrapper";
 import MyDayHeader from "./components/MyDayHeader/MyDayHeader";
-import TaskList from "./components/TaskList/TaskList";
+import { TaskList } from "@/b_widgets/TaskList";
 import { Metadata } from "next";
 
 export const metadata: Metadata ={
@@ -16,7 +16,7 @@ const Page = () => {
       <PagesContainer>
         <Wrapper>
           <MyDayHeader />
-          <TaskList />
+          <TaskList type="today"/>
         </Wrapper>
       </PagesContainer>
     </>
