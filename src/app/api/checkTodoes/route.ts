@@ -1,10 +1,74 @@
+import { strapi } from "@/e_shared/api";
+import { ITodoResponse } from "@/e_shared/types/types";
+import { apiUrl } from "@/routes";
 import { createTransport } from "@/utils/createTransport";
+import { generalDaySeconds } from "@/utils/getDate";
+import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
-    const {email, token} = await request.json();
+    const {email, token, userId} = await request.json();
     try{
-        console.log(email, token);
+        const todoResponse = (await strapi.get(apiUrl.getTodoes(userId), {
+            headers:{
+                Authorization: `Bearer ${token}`
+            }
+        })).data;
+        const todaySeconds = generalDaySeconds(new Date());
+        const todoes: ITodoResponse[] = todoResponse?.data;
+        let hasTodayTask = false;
+        const todayTasks = [];
+
+        if(todoes?.length){
+            for(let i = 0; i < todoes.length; i++){
+                const curDeadlienTime = new Date(todoes[i].deadline ?? "").getTime();
+                console.log(todoes[i].deadline);
+                
+                if(curDeadlienTime < todaySeconds && !todoes[i].isExpired){
+                    const data = {
+                        data:{
+                            isExpired: true
+                        }
+                    }
+                    strapi.put(apiUrl.updateTodo(todoes[i].documentId), data,{
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }).then((res)=>{
+                        console.log('expired update response: ', res.status);
+                    }).catch((e)=>{
+                        console.log('expired update error: ', e);
+                    });
+                }else if(todaySeconds === curDeadlienTime){
+                    console.log('case 1');
+                    
+                    hasTodayTask = true;
+                    todayTasks.push(todoes[i]);
+                }
+            }
+        }
+
+        if(hasTodayTask){
+            const transport = createTransport();
+            const taskList = todayTasks.map((task)=> `
+                <li>${task.subject}</li>
+            `).join("");
+            console.log('taskList: ', taskList);
+            
+            // transport.sendMail({
+            //     from: "Todo-App",
+            //     to: email,
+            //     subject: "Не пропустите выполнить задачи на сегодня",
+            //     html: ` <html>
+            //             <body>
+            //                 <h2>У вас ${todayTasks.length} активных задач на сегодня, не пропустите их!</h2>
+            //                 <ul>
+            //                     ${taskList}
+            //                 </ul>
+            //             </body>
+            //         </html>`
+            // })
+        }
         return NextResponse.json({message: "успешно"}, {status: 200});
     }catch(e){
         return NextResponse.json({error: e}, {status: 500})

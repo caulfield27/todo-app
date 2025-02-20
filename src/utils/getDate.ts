@@ -78,3 +78,7 @@ export function parseDeadlineToReadable(day: string) {
     return `Срок: ${weeksShorted[array[0]]}, ${array[2]} ${parseMonth[array[1]]}`;
   }
 }
+
+export function generalDaySeconds(day: Date){
+  return new Date(day.getFullYear(), day.getMonth(), day.getDate()).getTime();
+}

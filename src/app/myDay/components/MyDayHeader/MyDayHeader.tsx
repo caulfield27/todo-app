@@ -10,36 +10,30 @@ const MyDayHeader = () => {
   const currentDay = new Date();
   const [token, setToken] = useState("");
   const [email, setEmail] = useState("");
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     getToken().then((token) => {
       const userEmail = getUserAttribute("email");
-      if (token && userEmail) {
+      const userId = getUserAttribute("id");
+      if (token && userEmail && userId) {
         setToken(token);
         setEmail(userEmail);
+        setUserId(userId);
       }
     });
   }, []);
 
   function handleStart() {
-    if (token && email) {
-      const interval = setInterval(()=>{
-        axios.post("/api/checkTodoes", {email, token})
-        .then((res)=>{
+    if (token && email && userId) {
+      axios
+        .post("/api/checkTodoes", { email, token, userId })
+        .then((res) => {
           console.log(res);
-        }).catch((e)=>{
-          console.log(e);
         })
-      },60000)
-      localStorage.setItem("cron",JSON.stringify(interval));
-    }
-  }
-
-  function handleStop() {
-    const cron = localStorage.getItem("cron");
-    if(cron){
-      clearInterval(JSON.parse(cron));
-      localStorage.removeItem("cron");
+        .catch((e) => {
+          console.log(e);
+        });
     }
   }
 
@@ -47,7 +41,6 @@ const MyDayHeader = () => {
     <header className={styles.header_grid}>
       <div>
         <button onClick={handleStart}>Запустить cron задачу</button>
-        <button onClick={handleStop}>Остановить крон задачу</button>
       </div>
       <span className={styles.my_day_span}>Мой день</span>
       <span className={styles.date_span}>{parseDateToReadable(currentDay.toString(), false)}</span>

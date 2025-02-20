@@ -92,7 +92,7 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes, setInfoModal, type }
       .then((token) => {
         setLoading(true);
         return strapi.post(
-          apiUrl.todoes,
+          apiUrl.postTodoes,
           {
             data: {
               ...formData,

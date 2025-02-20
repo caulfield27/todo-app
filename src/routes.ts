@@ -1,7 +1,8 @@
 export const apiUrl = {
   login: "/auth/local",
   signUp: "/auth/local/register",
-  todoes: "/todoes?populate=*",
+  getTodoes: (id: number | string)=> `/todoes?populate=*&filters[userId][id]=${id}`,
+  postTodoes: '/todoes?populate=*',
   getTodayTodoes: (id: number | string, day: string) =>
     `/todoes?populate=*&filters[userId][id]=${id}&filters[deadline]=${day}&filters[isCompleted]=false`,
   getCompletedTodoes: (id:number | string, day: string)=> `/todoes?populate=*&filters[userId][id]=${id}&filters[isCompleted]=true`,

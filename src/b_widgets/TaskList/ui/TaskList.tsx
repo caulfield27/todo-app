@@ -33,7 +33,7 @@ const getTodoes = {
   upcoming: (id: number | string, day: string) => apiUrl.getUpcomingTodoes(id, day),
   completed: (id: number | string, day: string) => apiUrl.getCompletedTodoes(id, day),
   important: (id: number | string, day: string) => apiUrl.getImportantTodoes(id, day),
-  all: apiUrl.todoes,
+  all: (id: number | string, day: string)=> apiUrl.getTodoes(id),
 };
 
 const TaskList = ({ type }: Props) => {
@@ -57,10 +57,7 @@ const TaskList = ({ type }: Props) => {
       .then((token) => {
         if (token) {
           setToken(token);
-          return strapi.get(
-            type === "all"
-              ? getTodoes[type]
-              : getTodoes[type](getUserAttribute("id"), parseDay(new Date().toDateString())),
+          return strapi.get(getTodoes[type](getUserAttribute("id"), parseDay(new Date().toDateString())),
             {
               headers: {
                 Authorization: `Bearer ${token}`,
