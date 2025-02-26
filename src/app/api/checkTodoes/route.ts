@@ -3,7 +3,6 @@ import { ITodoResponse } from "@/e_shared/types/types";
 import { apiUrl } from "@/routes";
 import { createTransport } from "@/utils/createTransport";
 import { generalDaySeconds } from "@/utils/getDate";
-import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {

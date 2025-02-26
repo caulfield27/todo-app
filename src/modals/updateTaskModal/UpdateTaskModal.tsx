@@ -75,6 +75,14 @@ const UpdateTaskModal = ({
     category: currentTodo.category,
   });
 
+  useEffect(()=>{
+    document.body.style.overflow = "hidden";
+    
+    return ()=>{
+      document.body.style.overflow = "auto";
+    }
+  },[])
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const updatedTodoCopy = { ...updatedTodo };

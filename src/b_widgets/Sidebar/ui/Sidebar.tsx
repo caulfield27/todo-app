@@ -135,7 +135,7 @@ export default function Sidebar() {
             </article>
             <button
               style={
-                isTablet ? { display: "none" } : !showSidebar ? { left: sidebarWidth - 15 } : {}
+                isTablet ? { display: "none" } : !showSidebar ? { left: sidebarWidth - 28 } : {}
               }
               className={
                 !showSidebar
