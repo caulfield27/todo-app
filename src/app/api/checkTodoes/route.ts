@@ -52,21 +52,20 @@ export async function POST(request: NextRequest) {
             const taskList = todayTasks.map((task)=> `
                 <li>${task.subject}</li>
             `).join("");
-            console.log('taskList: ', taskList);
             
-            // transport.sendMail({
-            //     from: "Todo-App",
-            //     to: email,
-            //     subject: "Не пропустите выполнить задачи на сегодня",
-            //     html: ` <html>
-            //             <body>
-            //                 <h2>У вас ${todayTasks.length} активных задач на сегодня, не пропустите их!</h2>
-            //                 <ul>
-            //                     ${taskList}
-            //                 </ul>
-            //             </body>
-            //         </html>`
-            // })
+            transport.sendMail({
+                from: "Todo-App",
+                to: email,
+                subject: "Не пропустите выполнить задачи на сегодня",
+                html: ` <html>
+                        <body>
+                            <h2>У вас ${todayTasks.length} активных задач на сегодня, не пропустите их!</h2>
+                            <ul>
+                                ${taskList}
+                            </ul>
+                        </body>
+                    </html>`
+            })
         }
         return NextResponse.json({message: "успешно"}, {status: 200});
     }catch(e){

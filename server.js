@@ -1,20 +1,26 @@
 import { strapi } from "@/e_shared/api";
 import { apiUrl } from "@/routes";
+import axios from "axios";
 import { error } from "console";
 import cron from "node-cron";
 
 //86400000
 
-export async function startCron() {
-  const cronId = cron.schedule("0 18 * * *", () => {
+export async function startCron(email, userId, token) {
+  const cronId = cron.schedule("40 16 * * *", () => {
     try {
       const intervalId = setInterval(() => {
-        console.log("sup");
+        axios.post('/api/checkTodoes',{email, userId, token}).then((res)=>{
+          console.log(res);
+        }).catch((e)=>{
+          console.log('check todoes error: ', e);
+        })
       }, 5000);
       
       const payload =  {
         data: {
           cronId: intervalId,
+          email
         }
       };
       
@@ -27,7 +33,7 @@ export async function startCron() {
       );
       cronId.stop();
     } catch (e) {
-      console.log("start cron err: ", error);
+      console.log("cron err: ", error);
     }
   });
 }
