@@ -37,7 +37,7 @@ const generateStyle = (size: string, color: string | undefined) => {
 const Loader = ({ size, color }: Props) => {
   return (
     <div className={styles.loader_wrapper}>
-      <div style={generateStyle(size, color)} className={styles.loader} />;
+      <div style={generateStyle(size, color)} className={styles.loader} />
     </div>
   );
 };

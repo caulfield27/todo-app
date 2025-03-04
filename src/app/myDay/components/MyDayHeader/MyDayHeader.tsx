@@ -5,29 +5,52 @@ import axios from "axios";
 import { getUserAttribute } from "@/utils/getUser";
 import { getToken } from "@/utils/getToken";
 import { strapi } from "@/e_shared/api";
+import { useEffect, useState } from "react";
+import { startCron } from "../../../../../server";
 
 const MyDayHeader = () => {
   const currentDay = new Date();
+  const [token, setToken] = useState("");
 
-  function handleStart(){
+  useEffect(() => {
+    getToken()
+      .then((res) => {
+        if (res) {
+          setToken(res);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, []);
+
+  function handleStart() {
     const email = getUserAttribute("email");
     const userId = getUserAttribute("id");
-    getToken().then((token)=>{
-      if(email && userId && token){
-        axios.post('/api/cron/start', {email, userId, token});
-      }
-    })
+    if (email && userId && token) {
+      axios.post("/api/cron/start", { email, userId, token });
+    }
   }
 
-  function stopCron(){
+  function stopCron() {
     const email = getUserAttribute("email");
     if(email){
-      strapi.get(`cron-tasks?filters[email]=${email}`).then((res)=>{
-        console.log(res);
-      }).catch((e)=>{
-        console.log(e);
-      })
+      axios.post("/api/cron/stop", {email});
     }
+    // if (email && token) {
+    //   strapi
+    //     .get(`cron-tasks?filters[email]=${email}`, {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //     })
+    //     .then((res) => {
+    //       console.log(res);
+    //     })
+    //     .catch((e) => {
+    //       console.log(e);
+    //     });
+    // }
   }
 
   return (
