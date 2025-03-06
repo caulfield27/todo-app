@@ -25,16 +25,21 @@ export default function Calendar({ handleChange, value, setIsOpen, classes}: Pro
   const calendarRef = useRef<HTMLDivElement | null>(null);
   
   useEffect(() => { 
-    const handleClickOutside = (e: any) => {
-      if (calendarRef.current && !calendarRef.current.contains(e.target as Node)) {
-        setIsOpen(prev => ({isOpen: false, isSelected: prev.isSelected}));
-      }
-    };
-    
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
+    const timeOut = setTimeout(() => {
+      const handleClickOutside = (e: MouseEvent) => {
+        if (calendarRef.current && !calendarRef.current.contains(e.target as Node)) {    
+          setIsOpen(prev => ({isOpen: false, isSelected: prev.isSelected}));
+        }
+      };
+      document.addEventListener("click", handleClickOutside);
+      return () => {
+        document.removeEventListener("click", handleClickOutside);
+      };
+    }, 0);
+
+    return ()=>{
+      clearTimeout(timeOut);
+    }
   }, []);
 
   return (

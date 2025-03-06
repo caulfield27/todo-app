@@ -20,9 +20,7 @@ export async function POST(request: NextRequest) {
 
         if(todoes?.length){
             for(let i = 0; i < todoes.length; i++){
-                const curDeadlienTime = new Date(todoes[i].deadline ?? "").getTime();
-                console.log(todoes[i].deadline);
-                
+                const curDeadlienTime = new Date(todoes[i].deadline ?? "").getTime();                
                 if(curDeadlienTime < todaySeconds && !todoes[i].isExpired){
                     const data = {
                         data:{

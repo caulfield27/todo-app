@@ -9,6 +9,17 @@
     background: white;
 }
 
+.modal_form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: fit-content;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: var(--default-box-shadow);
+    background: white;
+}
+
 .input{
     width: 100%;
     padding: 5px;
@@ -27,6 +38,14 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+}
+
+.options_wrapper_modal{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 50px;
 }
 
 .options_container{

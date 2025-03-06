@@ -50,10 +50,10 @@ export default function Sidebar() {
     }
 
     function handleResize() {
-      setIsTablet(window.innerWidth < 768 && window.innerWidth >= 425);
-      setIsMobile(window.innerWidth < 425);
+      setIsTablet(window.outerWidth < 768 && window.outerWidth >= 425);
+      setIsMobile(window.outerWidth < 425);
 
-      if (window.innerWidth < 425) {
+      if (window.outerWidth < 425) {
         setSidebar(false);
       } else {
         setSidebar(true);
@@ -68,8 +68,9 @@ export default function Sidebar() {
   }, [isTablet, isMobile]);
 
   useEffect(() => {
-    const handleClickOutside = (e: any) => {
-      if (sidebarRef.current && !sidebarRef.current.contains(e.target)) {
+    const handleClickOutside = (e: MouseEvent) => {
+      e.stopPropagation();
+      if (sidebarRef.current && !sidebarRef.current.contains(e.target as Node)) {
         setSidebar(false);
       }
     };
@@ -96,7 +97,7 @@ export default function Sidebar() {
 
   return (
     <>
-      <AddTaskModal isOpen={isOpen} />
+      <AddTaskModal isOpen={isOpen} setOpen={setIsOpen}/>
       <aside
         ref={sidebarRef}
         style={
@@ -135,7 +136,11 @@ export default function Sidebar() {
             </article>
             <button
               style={
-                isTablet ? { display: "none" } : !showSidebar ? { left: sidebarWidth - 28 } : {}
+                isTablet
+                  ? { display: "none" }
+                  : !showSidebar
+                  ? { left: sidebarWidth - (isMobile ? 25 : 10) }
+                  : {}
               }
               className={
                 !showSidebar

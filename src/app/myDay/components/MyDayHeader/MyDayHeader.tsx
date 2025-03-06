@@ -34,8 +34,8 @@ const MyDayHeader = () => {
 
   function stopCron() {
     const email = getUserAttribute("email");
-    if(email){
-      axios.post("/api/cron/stop", {email});
+    if(email && token){
+      axios.post("/api/cron/stop", {email, token});
     }
     // if (email && token) {
     //   strapi

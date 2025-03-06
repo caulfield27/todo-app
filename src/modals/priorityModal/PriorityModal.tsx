@@ -19,15 +19,21 @@ const PriorityModal = ({ value, handleChange, setIsOpen, classes }: Props) => {
   const priorityRef = useRef<HTMLUListElement | null>(null);
 
   useEffect(() => {
-    const handleOutsideClick = (e: any) => {
-      if (priorityRef.current && !priorityRef.current.contains(e.target)) {
-        setIsOpen((prev) => ({ isOpen: false, isSelected: prev.isSelected }));
-      }
-    };
-    document.addEventListener("click", handleOutsideClick);
-    return () => {
-      document.removeEventListener("click", handleOutsideClick);
-    };
+    const timeOut = setTimeout(()=>{
+      const handleOutsideClick = (e: MouseEvent) => {
+        if (priorityRef.current && !priorityRef.current.contains(e.target as Node)) {
+          setIsOpen((prev) => ({ isOpen: false, isSelected: prev.isSelected }));
+        }
+      };
+      document.addEventListener("click", handleOutsideClick);
+      return () => {
+        document.removeEventListener("click", handleOutsideClick);
+      };
+    },0)
+
+    return ()=>{
+      clearTimeout(timeOut);
+    }
   }, []);
 
   return (

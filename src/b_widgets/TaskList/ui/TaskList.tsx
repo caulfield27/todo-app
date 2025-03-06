@@ -169,6 +169,7 @@ const TaskList = ({ type }: Props) => {
       {infoModal.isActive && <InfoModal modalState={infoModal} setModalState={setInfoModal} />}
       {isTaskFormActive ? (
         <AddTaskFrom
+          isModal={false}
           type={type}
           setInfoModal={setInfoModal}
           todoes={todoes}

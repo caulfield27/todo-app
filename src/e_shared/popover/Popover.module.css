@@ -4,7 +4,7 @@
     box-shadow: var(--default-box-shadow);
     border-radius: 4px;
     animation: popover 0.4s linear;
-    z-index: 2;
+    z-index: 1000;
     display: none;
     width: 175px;
 }

@@ -20,8 +20,8 @@ const InfoModal = ({ modalState, setModalState }: Props) => {
       setModalState({ isActive: false, message: "", type: "success" });
     }, 8000);
 
-    const handleClickOutside = (e: any) => {
-      if (ref.current && !ref.current.contains(e.target)) {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
         setModalState({ isActive: false, message: "", type: "success" });
       }
     };

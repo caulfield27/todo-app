@@ -1,11 +1,22 @@
+.background_container{
+    background-color: #00000066;
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
 .modal_container{
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: black;
-    width: 500px;
-    height: 500px;
     border-radius: 24px;
     animation: openModal 0.3s linear;
 }

@@ -1,11 +1,11 @@
 "use client";
 import { getUserAttribute } from "@/utils/getUser";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import styles from "./AddTaskForm.module.css";
 import "../../app/globals.css";
 import Calendar from "../calendar/Calendar";
 import dayjs, { Dayjs } from "dayjs";
-import { parseDateToReadable, parseDay, parseDeadlineToReadable } from "@/utils/getDate";
+import { parseDay, parseDeadlineToReadable } from "@/utils/getDate";
 import { CalendarIcon } from "@/icons/calendarIcon/CalendarIcon";
 import PriorityStatic from "@/icons/priorityIcon/PriorityStatic";
 import PriorityModal from "@/modals/priorityModal/PriorityModal";
@@ -14,8 +14,7 @@ import PriorityIcon from "@/icons/priorityIcon/PriorityIcon";
 import { getToken } from "@/utils/getToken";
 import { strapi } from "../api";
 import { apiUrl } from "@/routes";
-import { CategoryType, ITodoResponse } from "../types/types";
-import Loader from "../loader/Loader";
+import { ITodoResponse } from "../types/types";
 import { priorityColors } from "../constants/priority";
 import CategoryIcon from "@/icons/categoryIcon/CategoryIcon";
 import CategoryModal from "@/modals/categoryModal/CategoryModal";
@@ -39,9 +38,10 @@ interface IOptionsState {
 }
 
 interface Props {
+  isModal: boolean,
   setAddTaskActive: Dispatch<SetStateAction<boolean>>;
-  todoes: ITodoResponse[] | [];
-  setTodoes: Dispatch<SetStateAction<ITodoResponse[] | []>>;
+  todoes?: ITodoResponse[] | [];
+  setTodoes?: Dispatch<SetStateAction<ITodoResponse[] | []>>;
   setInfoModal: Dispatch<
     SetStateAction<{
       isActive: boolean;
@@ -52,7 +52,7 @@ interface Props {
   type: "today" | "upcoming" | "completed" | "important" | "all";
 }
 
-const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes, setInfoModal, type }: Props) => {
+const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes, setInfoModal, type, isModal }: Props) => {
   const [formData, setFormData] = useState<IFormData>({
     subject: "",
     isExpired: false,
@@ -118,7 +118,9 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes, setInfoModal, type }
               type: "success",
             });
           } else {
-            setTodoes([...todoes, res.data.data]);
+            if(setTodoes && todoes){
+              setTodoes([...todoes, res.data.data]);
+            }
             setInfoModal({ isActive: true, message: "Задача успешно добавлена.", type: "success" });
           }
         } else {
@@ -129,7 +131,9 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes, setInfoModal, type }
               type: "success",
             });
           } else {
-            setTodoes([...todoes, res.data.data]);
+            if(setTodoes && todoes){
+              setTodoes([...todoes, res.data.data]);
+            }
             setInfoModal({ isActive: true, message: "Задача успешно добавлена.", type: "success" });
           }
         }
@@ -163,8 +167,9 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes, setInfoModal, type }
     setCategoryState({ isOpen: false, isSelected: true });
   };
 
+  
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form className={isModal ? styles.modal_form : styles.form} onSubmit={handleSubmit}>
       <input
         autoFocus
         className={styles.input}
@@ -174,7 +179,7 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes, setInfoModal, type }
           setFormData({ ...formData, subject: e.target.value })
         }
       />
-      <div className={styles.options_wrapper}>
+      <div className={isModal ? styles.options_wrapper_modal : styles.options_wrapper}>
         <div className={styles.options_container}>
           <div className={styles.calendar_wrapper}>
             <div className={styles.options_icon_container}>

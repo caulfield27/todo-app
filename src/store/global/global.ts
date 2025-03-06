@@ -14,7 +14,7 @@ type Actions = {
 }
 
 export const useGlobalStore = create<IStates & Actions>((set)=>({
-    sidebarWidth: 280,
+    sidebarWidth: 0,
     isMobile: false,
     isTablet: false,
     setIsTablet: (payload: boolean) => set(()=> ({isTablet: payload})),

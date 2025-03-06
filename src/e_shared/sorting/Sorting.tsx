@@ -43,8 +43,8 @@ const Sorting = ({ todoes, setTodoes, setLoading, token, options }: Props) => {
 
   useEffect(() => {
     if (open) {
-      const handleClickOutside = (e: any) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      const handleClickOutside = (e: MouseEvent) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
           setOpen((prev) => !prev);
         }
       };

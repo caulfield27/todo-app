@@ -20,16 +20,23 @@ const CategoryModal = ({ value, classes, setCategoryState, handleChange }: Props
   const categoryRef = useRef<HTMLUListElement | null>(null);
 
   useEffect(() => {
-    const handleCLickOutside = (e: any) => {
-      if (categoryRef.current && !categoryRef.current.contains(e.target)) {
-        setCategoryState((prev) => ({ isOpen: false, isSelected: prev.isSelected }));
-      }
-    };
+    const timeOut = setTimeout(() => {
+      const handleCLickOutside = (e: MouseEvent) => {
+        e.stopPropagation();
+        if (categoryRef.current && !categoryRef.current.contains(e.target as Node)) {
+          setCategoryState((prev) => ({ isOpen: false, isSelected: prev.isSelected }));
+        }
+      };
 
-    document.addEventListener("click", handleCLickOutside);
-    return () => {
-      document.removeEventListener("click", handleCLickOutside);
-    };
+      document.addEventListener("click", handleCLickOutside);
+      return () => {
+        document.removeEventListener("click", handleCLickOutside);
+      };
+    }, 0);
+
+    return ()=>{
+      clearTimeout(timeOut);
+    }
   }, []);
 
   return (
