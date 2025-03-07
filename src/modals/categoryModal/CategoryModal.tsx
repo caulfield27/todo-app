@@ -3,6 +3,7 @@ import styles from "./CategoryModal.module.css";
 import "../../app/globals.css";
 import { Dispatch, SetStateAction, useEffect, useRef } from "react";
 import { CategoryType } from "@/e_shared/types/types";
+import { useAddTaskForm } from "@/store/addTaskForm/addTaskForm";
 
 interface Props {
   classes?: string;
@@ -18,8 +19,12 @@ interface Props {
 
 const CategoryModal = ({ value, classes, setCategoryState, handleChange }: Props) => {
   const categoryRef = useRef<HTMLUListElement | null>(null);
+  const setRefs = useAddTaskForm((state)=> state.setRefs);
 
   useEffect(() => {
+    if(categoryRef.current){
+      setRefs(categoryRef.current);
+    }
     const timeOut = setTimeout(() => {
       const handleCLickOutside = (e: MouseEvent) => {
         e.stopPropagation();

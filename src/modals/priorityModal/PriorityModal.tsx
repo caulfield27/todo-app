@@ -2,6 +2,7 @@ import PriorityIcon from "@/icons/priorityIcon/PriorityIcon";
 import styles from "./PriorityModal.module.css";
 import "../../app/globals.css";
 import { Dispatch, SetStateAction, useEffect, useRef } from "react";
+import { useAddTaskForm } from "@/store/addTaskForm/addTaskForm";
 
 interface Props {
   value?: number;
@@ -17,9 +18,12 @@ interface Props {
 
 const PriorityModal = ({ value, handleChange, setIsOpen, classes }: Props) => {
   const priorityRef = useRef<HTMLUListElement | null>(null);
-
+  const setRefs = useAddTaskForm((state) => state.setRefs);
   useEffect(() => {
-    const timeOut = setTimeout(()=>{
+    if (priorityRef.current) {
+      setRefs(priorityRef.current);
+    }
+    const timeOut = setTimeout(() => {
       const handleOutsideClick = (e: MouseEvent) => {
         if (priorityRef.current && !priorityRef.current.contains(e.target as Node)) {
           setIsOpen((prev) => ({ isOpen: false, isSelected: prev.isSelected }));
@@ -29,11 +33,11 @@ const PriorityModal = ({ value, handleChange, setIsOpen, classes }: Props) => {
       return () => {
         document.removeEventListener("click", handleOutsideClick);
       };
-    },0)
+    }, 0);
 
-    return ()=>{
+    return () => {
       clearTimeout(timeOut);
-    }
+    };
   }, []);
 
   return (

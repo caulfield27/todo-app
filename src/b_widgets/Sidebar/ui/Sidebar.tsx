@@ -97,7 +97,7 @@ export default function Sidebar() {
 
   return (
     <>
-      <AddTaskModal isOpen={isOpen} setOpen={setIsOpen}/>
+      {isOpen && <AddTaskModal isOpen={isOpen} setOpen={setIsOpen}/>}
       <aside
         ref={sidebarRef}
         style={

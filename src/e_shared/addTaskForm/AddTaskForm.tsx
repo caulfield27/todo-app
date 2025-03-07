@@ -38,7 +38,7 @@ interface IOptionsState {
 }
 
 interface Props {
-  isModal: boolean,
+  isModal: boolean;
   setAddTaskActive: Dispatch<SetStateAction<boolean>>;
   todoes?: ITodoResponse[] | [];
   setTodoes?: Dispatch<SetStateAction<ITodoResponse[] | []>>;
@@ -52,7 +52,14 @@ interface Props {
   type: "today" | "upcoming" | "completed" | "important" | "all";
 }
 
-const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes, setInfoModal, type, isModal }: Props) => {
+const AddTaskFrom = ({
+  setAddTaskActive,
+  todoes,
+  setTodoes,
+  setInfoModal,
+  type,
+  isModal,
+}: Props) => {
   const [formData, setFormData] = useState<IFormData>({
     subject: "",
     isExpired: false,
@@ -118,7 +125,7 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes, setInfoModal, type, 
               type: "success",
             });
           } else {
-            if(setTodoes && todoes){
+            if (setTodoes && todoes) {
               setTodoes([...todoes, res.data.data]);
             }
             setInfoModal({ isActive: true, message: "Задача успешно добавлена.", type: "success" });
@@ -131,7 +138,7 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes, setInfoModal, type, 
               type: "success",
             });
           } else {
-            if(setTodoes && todoes){
+            if (setTodoes && todoes) {
               setTodoes([...todoes, res.data.data]);
             }
             setInfoModal({ isActive: true, message: "Задача успешно добавлена.", type: "success" });
@@ -149,6 +156,9 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes, setInfoModal, type, 
       .finally(() => {
         setAddTaskActive(false);
         setLoading(false);
+        if(isModal){
+          document.body.style.overflowY = "scroll";
+        }
       });
   };
 
@@ -167,9 +177,12 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes, setInfoModal, type, 
     setCategoryState({ isOpen: false, isSelected: true });
   };
 
-  
   return (
-    <form className={isModal ? styles.modal_form : styles.form} onSubmit={handleSubmit}>
+    <form
+      style={isModal ? { width: "300px" } : { width: "100%" }}
+      className={styles.form}
+      onSubmit={handleSubmit}
+    >
       <input
         autoFocus
         className={styles.input}
@@ -221,7 +234,7 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes, setInfoModal, type, 
                 setIsOpen={setCalendarState}
                 handleChange={handleDeadlineChnage}
                 value={formData.deadline ?? dayjs(parseDay(new Date().toString()))}
-                classes={styles["calendar"]}
+                classes={isModal ? styles["modal_calendar"] : styles["calendar"]}
               />
             )}
           </div>
@@ -323,7 +336,11 @@ const AddTaskFrom = ({ setAddTaskActive, todoes, setTodoes, setInfoModal, type, 
             )}
           </div>
         </div>
-        <div className={styles.controll_buttons_wrapper}>
+        <div
+          className={
+            isModal ? styles.controll_buttons_wrapper_modal : styles.controll_buttons_wrapper
+          }
+        >
           <DefaultButton
             disabled={loading}
             label="Отмена"
