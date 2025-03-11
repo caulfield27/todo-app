@@ -14,19 +14,14 @@ import CategoryModal from "../categoryModal/CategoryModal";
 import { getToken } from "@/utils/getToken";
 import { strapi } from "@/e_shared/api";
 import { apiUrl } from "@/routes";
+import { ISnackBar } from "@/store/global/global";
 
 interface Props {
   modalState: {
     isActive: boolean;
     index: number;
   };
-  setInfoModal: Dispatch<
-    SetStateAction<{
-      isActive: boolean;
-      message: string;
-      type: "success" | "error";
-    }>
-  >;
+  setSnackbar: (info: ISnackBar)=> void
   todoes: ITodoResponse[];
   setModalState: Dispatch<
     SetStateAction<{
@@ -44,7 +39,7 @@ interface IUpdatedTodo extends Picked {
 }
 
 const UpdateTaskModal = ({
-  setInfoModal,
+  setSnackbar,
   todoes,
   modalState,
   setModalState,
@@ -113,7 +108,7 @@ const UpdateTaskModal = ({
           if (type === "today") {
             newData.splice(modalState.index, 1);
             setTodoes(newData);
-            setInfoModal({
+            setSnackbar({
               isActive: true,
               message: `Задача успешно обновлена и перенесена в "Предстоящие"`,
               type: "success",
@@ -121,13 +116,13 @@ const UpdateTaskModal = ({
           } else {
             newData[modalState.index] = { ...newData[modalState.index], ...res.data.data };
             setTodoes(newData);
-            setInfoModal({ isActive: true, message: "Задача успешно обновлена.", type: "success" });
+            setSnackbar({ isActive: true, message: "Задача успешно обновлена.", type: "success" });
           }
         } else {
           if (type === "upcoming") {
             newData.splice(modalState.index, 1);
             setTodoes(newData);
-            setInfoModal({
+            setSnackbar({
               isActive: true,
               message: `Задача успешно обновлена и перенесена в "Мой день"`,
               type: "success",
@@ -135,13 +130,13 @@ const UpdateTaskModal = ({
           } else {
             newData[modalState.index] = { ...newData[modalState.index], ...res.data.data };
             setTodoes(newData);
-            setInfoModal({ isActive: true, message: "Задача успешно обноалена.", type: "success" });
+            setSnackbar({ isActive: true, message: "Задача успешно обноалена.", type: "success" });
           }
         }
       })
       .catch((e) => {
         console.log(e);
-        setInfoModal({
+        setSnackbar({
           isActive: true,
           message: "Ошибка, не удалось обновить задачу",
           type: "error",

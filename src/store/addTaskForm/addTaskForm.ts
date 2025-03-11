@@ -1,20 +1,16 @@
 import { create } from "zustand";
 
 interface IStates {
-  refs: HTMLElement[];
+  refs: Set<HTMLElement>
 }
 
 type Actions = {
-  setRefs: (ref: HTMLElement)=> void,
-  isContain: (target: Node)=> boolean
+  setRefs: (ref: HTMLElement)=> void
 };
 
 export const useAddTaskForm = create<IStates & Actions>((set) => ({
-  refs: [],
+  refs: new Set(),
   setRefs(ref){
-    set((state)=> ({refs: [...state.refs, ref]}))
-  },
-  isContain(target){
-    return this.refs.every((ref)=> !ref.contains(target));
+    set((state)=> ({refs: new Set(state.refs).add(ref)}))
   }
 }));

@@ -1,16 +1,11 @@
 import { createPortal } from "react-dom";
 import styles from "./InfoModal.module.css";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { ISnackBar } from "@/store/global/global";
 
 interface Props {
   modalState: { isActive: boolean; message: string; type: "success" | "error" };
-  setModalState: Dispatch<
-    SetStateAction<{
-      isActive: boolean;
-      message: string;
-      type: "success" | "error";
-    }>
-  >;
+  setModalState: (info: ISnackBar)=> void
 }
 
 const InfoModal = ({ modalState, setModalState }: Props) => {

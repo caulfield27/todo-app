@@ -1,6 +1,6 @@
 "use client";
 import { getUserAttribute } from "@/utils/getUser";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import styles from "./AddTaskForm.module.css";
 import "../../app/globals.css";
 import Calendar from "../calendar/Calendar";
@@ -21,6 +21,8 @@ import CategoryModal from "@/modals/categoryModal/CategoryModal";
 import { ICategoryList } from "../constants/categories";
 import InterestsIcon from "@mui/icons-material/Interests";
 import DefaultButton from "../defaultButton/DefaultButton";
+import { useAddTaskForm } from "@/store/addTaskForm/addTaskForm";
+import { ISnackBar, useGlobalStore } from "@/store/global/global";
 
 interface IFormData {
   subject: string;
@@ -42,13 +44,7 @@ interface Props {
   setAddTaskActive: Dispatch<SetStateAction<boolean>>;
   todoes?: ITodoResponse[] | [];
   setTodoes?: Dispatch<SetStateAction<ITodoResponse[] | []>>;
-  setInfoModal: Dispatch<
-    SetStateAction<{
-      isActive: boolean;
-      message: string;
-      type: "success" | "error";
-    }>
-  >;
+  setSnackbar: (info: ISnackBar) => void;
   type: "today" | "upcoming" | "completed" | "important" | "all";
 }
 
@@ -56,7 +52,7 @@ const AddTaskFrom = ({
   setAddTaskActive,
   todoes,
   setTodoes,
-  setInfoModal,
+  setSnackbar,
   type,
   isModal,
 }: Props) => {
@@ -88,10 +84,29 @@ const AddTaskFrom = ({
     isOpen: false,
     isSelected: false,
   });
+  const [calCloseRef, priorityCloseRef, categoryCloseRef] = [
+    useRef(null),
+    useRef(null),
+    useRef(null),
+  ];
+  const setRefs = useAddTaskForm((state) => state.setRefs);
 
   useEffect(() => {
     setFormData({ ...formData, userId: getUserAttribute("id") });
   }, []);
+
+  useEffect(() => {
+    if (isModal && calCloseRef.current) {
+      setRefs(calCloseRef.current);
+    }
+    if (isModal && priorityCloseRef.current) {
+      setRefs(priorityCloseRef.current);
+    }
+
+    if (isModal && categoryCloseRef.current) {
+      setRefs(categoryCloseRef.current);
+    }
+  }, [calendarState.isSelected, priorityState.isSelected, categoryState.isSelected]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -119,7 +134,7 @@ const AddTaskFrom = ({
       .then((res) => {
         if (res.data?.data?.deadline !== parseDay(new Date().toString())) {
           if (type === "today") {
-            setInfoModal({
+            setSnackbar({
               isActive: true,
               message: `Задача успешно добавлена в "Предстоящие"`,
               type: "success",
@@ -128,11 +143,11 @@ const AddTaskFrom = ({
             if (setTodoes && todoes) {
               setTodoes([...todoes, res.data.data]);
             }
-            setInfoModal({ isActive: true, message: "Задача успешно добавлена.", type: "success" });
+            setSnackbar({ isActive: true, message: "Задача успешно добавлена.", type: "success" });
           }
         } else {
           if (type === "upcoming") {
-            setInfoModal({
+            setSnackbar({
               isActive: true,
               message: `Задача успешно добавлена в "Мой день"`,
               type: "success",
@@ -141,13 +156,13 @@ const AddTaskFrom = ({
             if (setTodoes && todoes) {
               setTodoes([...todoes, res.data.data]);
             }
-            setInfoModal({ isActive: true, message: "Задача успешно добавлена.", type: "success" });
+            setSnackbar({ isActive: true, message: "Задача успешно добавлена.", type: "success" });
           }
         }
       })
       .catch((e) => {
         console.log(e);
-        setInfoModal({
+        setSnackbar({
           isActive: true,
           message: "Не удалось добавить задачу, попробуйте ещё раз.",
           type: "error",
@@ -156,7 +171,7 @@ const AddTaskFrom = ({
       .finally(() => {
         setAddTaskActive(false);
         setLoading(false);
-        if(isModal){
+        if (isModal) {
           document.body.style.overflowY = "scroll";
         }
       });
@@ -203,6 +218,7 @@ const AddTaskFrom = ({
                     {parseDeadlineToReadable(formData.deadline?.toDate().toString() ?? "")}
                   </span>
                   <button
+                    ref={calCloseRef}
                     onClick={() => {
                       setCalendarState({ isOpen: false, isSelected: false });
                       setFormData({ ...formData, deadline: null });
@@ -248,6 +264,7 @@ const AddTaskFrom = ({
                     {formData.priority}
                   </span>
                   <button
+                    ref={priorityCloseRef}
                     onClick={() => {
                       setPriorityState({ isOpen: false, isSelected: false });
                       setFormData({ ...formData, priority: 1 });
@@ -288,6 +305,7 @@ const AddTaskFrom = ({
                 {formData.category.label.icon()}
                 <span>{formData.category.label.text}</span>
                 <button
+                  ref={categoryCloseRef}
                   onClick={() => {
                     setCategoryState({ isOpen: false, isSelected: false });
                     setFormData({

@@ -151,18 +151,14 @@
     }
 }
 
-@media screen and (max-width: 525px) {
-    .calendar{
-        left: -25px;
+@media screen and (max-width: 768px) {
+    .priority_modal, .category_dropdown{
+        left: -95px;
     }
 }
 
-@media screen and (max-width: 425px) {
-    .calendar{
-        left:-34px;
-    }
-
-    .category_dropdown{
-        left: 0;
+@media screen and (max-width: 525px) {
+    .calendar, .modal_calendar{
+        left: -20px;
     }
 }

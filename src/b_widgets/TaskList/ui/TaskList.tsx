@@ -17,12 +17,13 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Swal from "sweetalert2";
 import InfoModal from "@/modals/infoModal/InfoModal";
-import { useInfoModalState } from "@/hooks/useInfoModalState";
 import { categoryIcons } from "@/e_shared/constants/categories";
 import UpdateTaskModal from "@/modals/updateTaskModal/UpdateTaskModal";
 import Sorting from "@/e_shared/sorting/Sorting";
 import { allSortingOptions, sortingOptions } from "../config";
 import { sliceRest } from "@/utils/parseString";
+import { useGlobalStore } from "@/store/global/global";
+import Filters from "@/e_shared/filters/Filters";
 
 interface Props {
   type: "today" | "upcoming" | "completed" | "important" | "all";
@@ -40,7 +41,6 @@ const TaskList = ({ type }: Props) => {
   const [isTaskFormActive, setIsTaskFormActive] = useState(false);
   const [todoes, setTodoes] = useState<ITodoResponse[] | []>([]);
   const [loading, setLoading] = useState(false);
-  const [infoModal, setInfoModal] = useInfoModalState();
   const [updateModalState, setUpdateModalState] = useState({
     isActive: false,
     index: 0,
@@ -50,6 +50,7 @@ const TaskList = ({ type }: Props) => {
     id: "",
   });
   const [token, setToken] = useState("");
+  const {snackBar, setSnackBar} = useGlobalStore()
 
   useEffect(() => {
     setLoading(true);
@@ -96,7 +97,7 @@ const TaskList = ({ type }: Props) => {
           const newTodoes = [...todoes];
           newTodoes[index] = { ...newTodoes[index], ...res.data.data };
           setTodoes(newTodoes);
-          setInfoModal({
+          setSnackBar({
             isActive: true,
             message: isCompleted ? "Задача снова активна!" : "Поздравляю, Вы выполнили задачу!",
             type: "success",
@@ -104,7 +105,7 @@ const TaskList = ({ type }: Props) => {
         }
       })
       .catch((e) => {
-        setInfoModal({ isActive: true, message: "Ошибка!", type: "error" });
+        setSnackBar({ isActive: true, message: "Ошибка!", type: "error" });
         console.log(e);
       })
       .finally(() => {
@@ -134,7 +135,7 @@ const TaskList = ({ type }: Props) => {
               if (res.status === 204) {
                 const updatedTodoes = todoes.filter((todo) => todo.documentId !== documentId);
                 setTodoes(updatedTodoes);
-                setInfoModal({
+                setSnackBar({
                   isActive: true,
                   message: "Задача успешно удалена.",
                   type: "success",
@@ -142,7 +143,7 @@ const TaskList = ({ type }: Props) => {
               }
             })
             .catch((e) => {
-              setInfoModal({
+              setSnackBar({
                 isActive: true,
                 message: "Не удалось удалить задачу, попробуйте заново",
                 type: "error",
@@ -159,19 +160,19 @@ const TaskList = ({ type }: Props) => {
       {updateModalState.isActive && (
         <UpdateTaskModal
           type={type}
-          setInfoModal={setInfoModal}
+          setSnackbar={setSnackBar}
           modalState={updateModalState}
           setModalState={setUpdateModalState}
           todoes={todoes}
           setTodoes={setTodoes}
         />
       )}
-      {infoModal.isActive && <InfoModal modalState={infoModal} setModalState={setInfoModal} />}
+      {snackBar.isActive && <InfoModal modalState={snackBar} setModalState={setSnackBar} />}
       {isTaskFormActive ? (
         <AddTaskFrom
           isModal={false}
           type={type}
-          setInfoModal={setInfoModal}
+          setSnackbar={setSnackBar}
           todoes={todoes}
           setTodoes={setTodoes}
           setAddTaskActive={setIsTaskFormActive}
@@ -187,13 +188,16 @@ const TaskList = ({ type }: Props) => {
             <span className={styles.add_span}>Добавить задачу</span>
           </div>
           {todoes && todoes.length > 1 && (
-            <Sorting
+            <div className={styles.filters_wrapper}>
+              <Filters/>
+              <Sorting
               options={type === "today" ? sortingOptions : allSortingOptions}
               token={token}
               setLoading={setLoading}
               todoes={todoes}
               setTodoes={setTodoes}
             />
+            </div>
           )}
         </div>
       )}
@@ -206,7 +210,7 @@ const TaskList = ({ type }: Props) => {
               <tr>
                 <td className={styles.btn_cell}></td>
                 <td className={styles.header_cell}>Название задачи</td>
-                <td className={`${styles.header_cell} ${styles.adaptive_view}`}>Срок выполнения</td>
+                <td className={`${styles.header_cell} ${styles.adaptive_view}`}>Дедлайн</td>
                 <td className={`${styles.header_cell} ${styles.adaptive_view}`}>Приоритет</td>
                 <td className={styles.actions_cell}>Действия</td>
               </tr>

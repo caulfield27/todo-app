@@ -17,14 +17,23 @@ import { IUserData } from "@/e_shared/types/types";
 import AddTaskModal from "@/modals/addTaskModal/AddTaskModal";
 import { useGlobalStore } from "@/store/global/global";
 import Popover from "@/e_shared/popover/Popover";
+import InfoModal from "@/modals/infoModal/InfoModal";
 
 const icons = [<TodayIcon />, <CalendarMonthIcon />, <StarsIcon />, <AddTaskIcon />];
 
 export default function Sidebar() {
   const { showSidebar, setSidebar } = useSidebarStore();
   const sidebarRef = useRef<HTMLElement | null>(null);
-  const { setSidebarWidth, sidebarWidth, isMobile, setIsMobile, isTablet, setIsTablet } =
-    useGlobalStore();
+  const {
+    setSidebarWidth,
+    sidebarWidth,
+    isMobile,
+    setIsMobile,
+    isTablet,
+    setIsTablet,
+    snackBar,
+    setSnackBar,
+  } = useGlobalStore();
   const [userDropdown, setUserDropdown] = useState(false);
   const currentPage = usePathname();
   const router = useRouter();
@@ -97,7 +106,8 @@ export default function Sidebar() {
 
   return (
     <>
-      {isOpen && <AddTaskModal isOpen={isOpen} setOpen={setIsOpen}/>}
+      {snackBar.isActive && <InfoModal modalState={snackBar} setModalState={setSnackBar} />}
+      {isOpen && <AddTaskModal isOpen={isOpen} setOpen={setIsOpen} />}
       <aside
         ref={sidebarRef}
         style={
