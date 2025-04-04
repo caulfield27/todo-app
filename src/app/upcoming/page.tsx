@@ -1,15 +1,17 @@
+"use client";
+
 import { TaskList } from "@/b_widgets/TaskList";
 import PagesContainer from "@/layouts/pagesContainer/pagesContainer";
 import Wrapper from "@/layouts/wrappepr/wrapper";
-import { Metadata } from "next";
 import styles from "./page.module.css";
-
-export const metadata: Metadata = {
-  title: "Todo-app | Предстоящие",
-  description: "Планируй свои задачи наперед!",
-};
+import { useEffect } from "react";
 
 const Upcoming = () => {
+
+  useEffect(()=>{
+    document.title = "Todo-app | Предстоящие";
+  })
+
   return (
     <PagesContainer>
       <Wrapper>

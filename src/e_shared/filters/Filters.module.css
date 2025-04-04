@@ -1,5 +1,9 @@
 .filters_container{
     position: relative;
+}
+
+.filters_btn{
+    font-size: 16px;
     display: flex;
     flex-direction: row;
     gap: 5px;
@@ -11,8 +15,75 @@
     transition: all 0.3s linear;
     background: transparent;
     cursor: pointer;
+    outline: none;
+    border: 1px solid grey;
 }
 
-.filters_container:hover{
+.filters_btn:hover{
     background: gainsboro;
+}
+
+.non_active_dropdown{
+    display: none;
+}
+
+.filters_dropdown{
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    position: absolute;
+    left: 0;
+    top: 40px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: var(--default-box-shadow);
+    z-index: 2;
+    width: max-content;
+    padding: 8px;
+}
+
+.hide_dropdown{
+    display: none;
+}
+
+.list_item{
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.list_item_options{
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    background: transparent;
+    border-radius: 4px;
+    padding: 5px 5px 5px 2px;
+    justify-content: flex-start;
+    align-items: center;
+    cursor: pointer;
+}
+
+.list_item_options:hover{
+    background: gainsboro;
+}
+
+.options{
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out;
+};
+
+.calendar_options{
+    position: relative;
+}
+
+.filters_calendar{
+    position: absolute;
+    top: -50px;
+    left: 0;
 }

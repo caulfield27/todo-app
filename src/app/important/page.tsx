@@ -1,15 +1,18 @@
+"use client";
 import PagesContainer from "@/layouts/pagesContainer/pagesContainer";
 import Wrapper from "@/layouts/wrappepr/wrapper";
-import { Metadata } from "next";
 import styles from "./page.module.css";
 import { TaskList } from "@/b_widgets/TaskList";
+import { useEffect } from "react";
 
-export const metadata: Metadata = {
-  title: "Todo-app | Важные",
-  description: "Не пропусти выжные задачи, и повыси свою производительность",
-};
+
 
 const Important = () => {
+  
+  useEffect(()=>{
+    document.title = "Todo-app | Важные";
+  })
+  
   return (
     <PagesContainer>
       <Wrapper>

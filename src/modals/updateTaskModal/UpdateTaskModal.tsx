@@ -219,6 +219,7 @@ const UpdateTaskModal = ({
                   setCalendarState({ isOpen: false, isSelected: true });
                 }}
                 setIsOpen={setCalendarState}
+                disablePrevDates={true}
               />
             )}
           </div>

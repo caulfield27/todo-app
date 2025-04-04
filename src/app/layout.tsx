@@ -1,5 +1,5 @@
 "use client";
-import { Sidebar } from "@/b_widgets/Sidebar";
+
 import "./globals.css";
 import { ReactNode, useEffect, useLayoutEffect } from "react";
 import { useGlobalStore } from "@/store/global/global";

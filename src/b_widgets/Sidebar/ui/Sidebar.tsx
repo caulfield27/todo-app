@@ -39,7 +39,7 @@ export default function Sidebar() {
   const router = useRouter();
   const [user, setUser] = useState<IUserData | "">("");
   const [isOpen, setIsOpen] = useState(false);
-
+  
   useEffect(() => {
     const getUserFromStorage = localStorage.getItem("user");
     setUser(
@@ -172,6 +172,7 @@ export default function Sidebar() {
               const isActive = elem.path === currentPage;
               return (
                 <Link
+                  prefetch={true}
                   key={elem.id}
                   href={elem.path}
                   className={

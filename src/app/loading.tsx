@@ -1,3 +1,5 @@
+"use client";
+
 const Loading = () => {
     return <h1>Загрузка...</h1>;
 }

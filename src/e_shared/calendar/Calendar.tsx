@@ -14,6 +14,7 @@ interface Props {
     isSelected: boolean
   }>>;
   classes?: string
+  disablePrevDates?: boolean
 }
 
 const shouldDisabledDate = (day: Dayjs) => {
@@ -23,10 +24,13 @@ const shouldDisabledDate = (day: Dayjs) => {
   return validDays < today;
 };
 
-export default function Calendar({ handleChange, value, setIsOpen, classes}: Props) {
+export default function Calendar({ handleChange, value, setIsOpen, classes, disablePrevDates}: Props) {
 
   const calendarRef = useRef<HTMLDivElement | null>(null);
   const setRefs = useAddTaskForm((state)=> state.setRefs);
+  const disableDateProps = disablePrevDates ? {
+    shouldDisableDate: shouldDisabledDate
+  } : {};
   
   useEffect(() => { 
     if(calendarRef.current){
@@ -53,7 +57,7 @@ export default function Calendar({ handleChange, value, setIsOpen, classes}: Pro
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateCalendar
         ref={calendarRef}
-        shouldDisableDate={shouldDisabledDate}
+        {...disableDateProps}
         value={value}
         onChange={handleChange}
         className={`${styles.calendar_container} ${classes ?? ""}`}

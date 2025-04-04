@@ -10,7 +10,7 @@ export const apiUrl = {
     `/todoes?populate=*&filters[userId][id]=${id}&filters[deadline]=${day}&filters[isCompleted]=false`,
   getCompletedTodoes: (id:number | string, day: string)=> `/todoes?populate=*&filters[userId][id]=${id}&filters[isCompleted]=true`,
   getImportantTodoes: (id: number | string, dat: string)=> `/todoes?populate=*&filters[isCompleted]=false&filters[priority][$gt]=2`,
-  getUpcomingTodoes: (id: number | string, today: string)=> `/todoes?populate=*&filters[userId][id]=${id}&filters[deadline][$ne]=${today}&filters[isCompleted]=false`,
+  getUpcomingTodoes: (id: number | string, today: string)=> `/todoes?populate=*&filters[userId][id]=${id}&filters[deadline][$gt]=${today}&filters[isCompleted]=false`,
   getSortedTodoes: (userId: number | string, day: string, key: string, type: "asc" | "desc") =>
     `/todoes?populate=*&filters[userId][id]=${userId}&filters[deadline]=${day}&filters[isCompleted]=false&sort[${key}]=${type}`,
   updateTodo: (docId: number | string) => `/todoes/${docId}`,

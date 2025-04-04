@@ -1,3 +1,3 @@
-import SignupLeftSection from './SignupLeftSection.tsx'
+import SignupLeftSection from "./SignupLeftSection"
 
 export { SignupLeftSection }

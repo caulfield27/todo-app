@@ -1,3 +1,3 @@
-import ProfileDropdown from "./Profiledropdown"
+import ProfileDropdown from "./ProfileDropdown"
 
 export { ProfileDropdown }

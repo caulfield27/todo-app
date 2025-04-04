@@ -251,6 +251,7 @@ const AddTaskFrom = ({
                 handleChange={handleDeadlineChnage}
                 value={formData.deadline ?? dayjs(parseDay(new Date().toString()))}
                 classes={isModal ? styles["modal_calendar"] : styles["calendar"]}
+                disablePrevDates={true}
               />
             )}
           </div>

@@ -1,5 +1,5 @@
 .sorting_btn{
-    border: none;
+    border: 1px solid gray;
     outline: none;
     background: transparent;
     display: flex;
