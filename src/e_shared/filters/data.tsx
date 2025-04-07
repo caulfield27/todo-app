@@ -25,11 +25,6 @@ interface ICategoryList{
     value: string;
 }
 
-interface IDateList{
-    label: string;
-    icon: ReactElement;
-}
-
 export const priorityList: IPriorityList[] = [
   {
     value: 1,
@@ -89,16 +84,5 @@ export const categoryList: ICategoryList[] = [
   {
     label: { text: "Другое", icon: () => <InterestsIcon /> },
     value: "others",
-  },
-];
-
-export const dateList: IDateList[] = [
-  {
-    label: "Начало даты",
-    icon: <CalendarIcon />,
-  },
-  {
-    label: "Конец даты",
-    icon: <CalendarIcon />,
   },
 ];

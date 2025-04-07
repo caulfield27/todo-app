@@ -25,7 +25,6 @@ const shouldDisabledDate = (day: Dayjs) => {
 };
 
 export default function Calendar({ handleChange, value, setIsOpen, classes, disablePrevDates}: Props) {
-
   const calendarRef = useRef<HTMLDivElement | null>(null);
   const setRefs = useAddTaskForm((state)=> state.setRefs);
   const disableDateProps = disablePrevDates ? {

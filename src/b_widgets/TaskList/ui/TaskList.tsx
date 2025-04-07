@@ -34,7 +34,7 @@ const getTodoes = {
   upcoming: (id: number | string, day: string) => apiUrl.getUpcomingTodoes(id, day),
   completed: (id: number | string, day: string) => apiUrl.getCompletedTodoes(id, day),
   important: (id: number | string, day: string) => apiUrl.getImportantTodoes(id, day),
-  all: (id: number | string, day: string)=> apiUrl.getTodoes(id),
+  all: (id: number | string, day: string) => apiUrl.getTodoes(id),
 };
 
 const TaskList = ({ type }: Props) => {
@@ -50,7 +50,7 @@ const TaskList = ({ type }: Props) => {
     id: "",
   });
   const [token, setToken] = useState("");
-  const {snackBar, setSnackBar} = useGlobalStore()
+  const { snackBar, setSnackBar } = useGlobalStore()
 
   useEffect(() => {
     setLoading(true);
@@ -155,6 +155,37 @@ const TaskList = ({ type }: Props) => {
       .finally(() => (document.body.style.overflowY = "visible"));
   }
 
+  const handleFiltersChange = (query: string | { from: string, to: string }, type: "category" | "deadline" | "priority") => {
+    setLoading(true);
+    let responseQuery;
+    switch (type) {
+      case "category":
+        responseQuery = `filters[category]=${query}`;
+        break;
+      case "priority":
+        responseQuery = `filters[priority]=${query}`;
+        break;
+      case "deadline":
+        if (typeof query === "object") {
+          responseQuery = `filters[deadline][$gt]=${query.from}&filters[deadline][$lt]=${query.to}`
+        }
+    }
+
+    strapi.get(apiUrl.getFilteredTodoes(responseQuery ?? "", getUserAttribute("id")), {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).
+      then((res) => {
+        if (res?.data?.data) {
+          setTodoes(res?.data?.data)
+        }
+      }).catch((e) => {
+        console.log(e);
+        setSnackBar({ isActive: true, type: "error", message: "Не удалось применить фильтр." })
+      }).finally(()=> {setLoading(false)});
+  }
+
   return (
     <main className={styles.task_list_section}>
       {updateModalState.isActive && (
@@ -187,16 +218,16 @@ const TaskList = ({ type }: Props) => {
             <AddIcon className={styles.add_sign} fontSize="medium" />
             <span className={styles.add_span}>Добавить задачу</span>
           </div>
-          {todoes && todoes.length > 1 && (
+          {todoes.length && (
             <div className={styles.filters_wrapper}>
-              <Filters/>
+              <Filters onChange={handleFiltersChange} type={type}/>
               <Sorting
-              options={type === "today" ? sortingOptions : allSortingOptions}
-              token={token}
-              setLoading={setLoading}
-              todoes={todoes}
-              setTodoes={setTodoes}
-            />
+                options={type === "today" ? sortingOptions : allSortingOptions}
+                token={token}
+                setLoading={setLoading}
+                todoes={todoes}
+                setTodoes={setTodoes}
+              />
             </div>
           )}
         </div>
@@ -226,8 +257,8 @@ const TaskList = ({ type }: Props) => {
                           completeLoding.loading && completeLoding.id === todo.documentId
                             ? styles.loading
                             : todo.isCompleted
-                            ? styles.completed
-                            : ""
+                              ? styles.completed
+                              : ""
                         }
                         onClick={() => handleTaskComplete(todo.documentId, ind, todo.isCompleted)}
                       >
