@@ -1,4 +1,5 @@
 import { strapi } from "@/e_shared/api";
+import { BASE_URL } from "@/e_shared/get-env";
 import { ITodoResponse } from "@/e_shared/types/types";
 import { apiUrl } from "@/routes";
 import { createTransport } from "@/utils/createTransport";
@@ -8,11 +9,11 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
     const {email, token, userId} = await request.json();
     try{
-        const todoResponse = (await strapi.get(apiUrl.getTodoes(userId), {
+        const todoResponse = await fetch(`${BASE_URL}/api${apiUrl.getTodoes(userId)}`, {
             headers:{
                 Authorization: `Bearer ${token}`
             }
-        })).data;
+        }).then((res)=> res.json());
         const todaySeconds = generalDaySeconds(new Date());
         const todoes: ITodoResponse[] = todoResponse?.data;
         let hasTodayTask = false;
@@ -20,16 +21,19 @@ export async function POST(request: NextRequest) {
 
         if(todoes?.length){
             for(let i = 0; i < todoes.length; i++){
-                const curDeadlienTime = new Date(todoes[i].deadline ?? "").getTime();                
+                const curDeadlienTime = new Date(todoes[i].deadline ?? "").getTime();            
                 if(curDeadlienTime < todaySeconds && !todoes[i].isExpired){
                     const data = {
                         data:{
                             isExpired: true
                         }
                     }
-                    strapi.put(apiUrl.updateTodo(todoes[i].documentId), data,{
+                    fetch(`${BASE_URL}/api${apiUrl.updateTodo(todoes[i].documentId)}`,{
+                        method: "PUT",
+                        body: JSON.stringify(data),
                         headers: {
-                            Authorization: `Bearer ${token}`
+                            Authorization: `Bearer ${token}`,
+                            "Content-Type" : "application/json"
                         }
                     }).then((res)=>{
                         console.log('expired update response: ', res.status);
@@ -37,8 +41,6 @@ export async function POST(request: NextRequest) {
                         console.log('expired update error: ', e);
                     });
                 }else if(todaySeconds === curDeadlienTime){
-                    console.log('case 1');
-                    
                     hasTodayTask = true;
                     todayTasks.push(todoes[i]);
                 }
@@ -50,7 +52,7 @@ export async function POST(request: NextRequest) {
             const taskList = todayTasks.map((task)=> `
                 <li>${task.subject}</li>
             `).join("");
-            
+
             transport.sendMail({
                 from: "Todo-App",
                 to: email,
@@ -68,7 +70,5 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({message: "успешно"}, {status: 200});
     }catch(e){
         return NextResponse.json({error: e}, {status: 500})
-    }
-
-    
+    }    
 }

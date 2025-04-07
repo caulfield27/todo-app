@@ -1,7 +1,9 @@
 "use client";
 
+import { LogoLoader } from "@/e_shared/logoLoader/LogoLoader";
+
 const Loading = () => {
-    return <h1>Загрузка...</h1>;
+    return <LogoLoader/>
 }
  
 export default Loading;

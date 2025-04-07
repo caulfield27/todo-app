@@ -5,7 +5,7 @@ import '../../app/globals.css'
 
 const Wrapper = ({children} : {children: ReactNode}) => {
     return (
-        <div className={styles.wrapper}>
+        <div id="wrapper" className={styles.wrapper}>
             {children}
         </div> 
 

@@ -12,12 +12,14 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useSidebarStore } from "@/store/sidebar/sidebar";
 import { ProfileDropdown } from "@/c_feauters/profileDropdown";
-import axios from "axios";
 import { IUserData } from "@/e_shared/types/types";
 import AddTaskModal from "@/modals/addTaskModal/AddTaskModal";
 import { useGlobalStore } from "@/store/global/global";
 import Popover from "@/e_shared/popover/Popover";
 import InfoModal from "@/modals/infoModal/InfoModal";
+import { handleDisableEvents } from "@/utils/handleDisableEvents";
+import { getUserAttribute } from "@/utils/getUser";
+import axios from "axios";
 
 const icons = [<TodayIcon />, <CalendarMonthIcon />, <StarsIcon />, <AddTaskIcon />];
 
@@ -39,7 +41,7 @@ export default function Sidebar() {
   const router = useRouter();
   const [user, setUser] = useState<IUserData | "">("");
   const [isOpen, setIsOpen] = useState(false);
-  
+
   useEffect(() => {
     const getUserFromStorage = localStorage.getItem("user");
     setUser(
@@ -77,30 +79,33 @@ export default function Sidebar() {
   }, [isTablet, isMobile]);
 
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      e.stopPropagation();
-      if (sidebarRef.current && !sidebarRef.current.contains(e.target as Node)) {
-        setSidebar(false);
+    if (isMobile) {
+      const handleClickOutside = (e: MouseEvent) => {
+        e.stopPropagation();
+        if (sidebarRef.current && !sidebarRef.current.contains(e.target as Node)) {
+          setSidebar(false);
+        }
+      };
+      if (showSidebar) {
+        document.body.style.overflow = "hidden";
+        document.addEventListener("click", handleClickOutside);
+        handleDisableEvents(true);
+      } else {
+        handleDisableEvents(false);
+        document.body.style.overflowY = "scroll";
       }
-    };
-    if (isMobile && showSidebar) {
-      document.body.style.overflow = "hidden";
-      document.addEventListener("click", handleClickOutside);
-    } else {
-      document.body.style.overflowY = "scroll";
-    }
 
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
+      return () => {
+        document.removeEventListener("click", handleClickOutside);
+      };
+    }
   }, [showSidebar]);
 
-  function handleLogout() {
-    axios.post("/api/logout").then((response) => {
-      if (response.status === 200) {
-        localStorage.removeItem("user");
-        router.push("/auth/login");
-      }
+  const logout = ()=>{
+    const email = getUserAttribute("email");
+    localStorage.removeItem("user");
+    axios.post("/api/logout", {email}).then(()=>{
+      window.location.reload();
     });
   }
 
@@ -124,7 +129,7 @@ export default function Sidebar() {
             <article
               style={{ display: "flex", alignItems: "center", gap: "12px", position: "relative" }}
             >
-              <ProfileDropdown active={userDropdown} handleClick={handleLogout} />
+              <ProfileDropdown active={userDropdown} handleClick={logout} />
               <div className={styles.user}>
                 <button
                   className={styles.user_btn}

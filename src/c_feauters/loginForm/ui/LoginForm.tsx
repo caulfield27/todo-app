@@ -10,6 +10,7 @@ import { useValidation } from "@/hooks/useValidation"
 import Swal from "sweetalert2"
 import { strapi } from "@/e_shared/api"
 import { apiUrl } from "@/routes"
+import { getUserAttribute } from "@/utils/getUser"
 
 interface IUserLoginData {
   email: string,
@@ -42,6 +43,7 @@ export default function LoginForm() {
   const [emailValidation, setEmailValidation] = useValidation();
   const [passwordValidation, setPasswordValidation] = useValidation();
   const [loading, setLoading] = useState(false);
+  let token = "";
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     let { value, name } = e.target
@@ -91,6 +93,7 @@ export default function LoginForm() {
     }).then((response) => {
       const user: IUserData = response?.data?.user;
       const jwt = response?.data?.jwt;
+      token = jwt;
       if (user && jwt) {
         localStorage.setItem("user", JSON.stringify(user));
         return axios.post("/api/set-cookies", { jwt });
@@ -104,6 +107,13 @@ export default function LoginForm() {
       }
     }).then((res) => {
       if (res?.status === 200) {
+        axios.post("/api/cron/start", {
+          email: userData.email,
+          userId: getUserAttribute("id"),
+          token
+        }).
+        then((res)=> console.log(res.data)).
+        catch((err)=> console.log(err));
         router.push("/myDay");
       }else{
         setLoading(false);

@@ -8,9 +8,8 @@ import { quickSort } from "@/utils/sorting";
 interface Props {
   todoes: ITodoResponse[];
   setTodoes: Dispatch<SetStateAction<ITodoResponse[]>>;
-  setLoading: Dispatch<SetStateAction<boolean>>;
-  token: string;
   options: ISortingOptions[];
+  onReset: () => void;
 }
 
 interface ISortOrder {
@@ -29,7 +28,7 @@ const sortOrder: ISortOrder[] = [
   },
 ];
 
-const Sorting = ({ todoes, setTodoes, setLoading, token, options }: Props) => {
+const Sorting = ({ todoes, setTodoes, options, onReset }: Props) => {
   const [open, setOpen] = useState(false);
   const [orderValue, setOrderValue] = useState<ISortOrder>(sortOrder[0]);
   const [option, setOption] = useState<{
@@ -73,8 +72,12 @@ const Sorting = ({ todoes, setTodoes, setLoading, token, options }: Props) => {
         <SwapVertIcon fontSize="medium" />
         <span className={styles.sorting_container}>{option.label}</span>
       </button>
-      <div className={styles.sort_order_wrapper}>
+      <div
+        style={option.value === "default" ? { opacity: "0.6" } : {}}
+        className={styles.sort_order_wrapper}
+      >
         <div
+          style={option.value === "default" ? { pointerEvents: "none" } : {}}
           role="button"
           onClick={() => handleSortOrderChange(sortOrder[0])}
           className={`${styles.sort_order_chip} ${
@@ -84,6 +87,7 @@ const Sorting = ({ todoes, setTodoes, setLoading, token, options }: Props) => {
           {sortOrder[0].label}
         </div>
         <div
+          style={option.value === "default" ? { pointerEvents: "none" } : {}}
           role="button"
           onClick={() => handleSortOrderChange(sortOrder[1])}
           className={`${styles.sort_order_chip} ${
@@ -110,6 +114,20 @@ const Sorting = ({ todoes, setTodoes, setLoading, token, options }: Props) => {
               </li>
             );
           })}
+          <hr style={{ border: "1px solid gainsboro" }} />
+          <li
+            onClick={() => {
+              setOpen(false);
+              setOption({
+                value: "default",
+                label: "Сортировка",
+              });
+              onReset();
+            }}
+            className={styles.list_item}
+          >
+            Сбросить сортировку
+          </li>
         </ul>
       )}
     </div>

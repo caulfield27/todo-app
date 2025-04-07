@@ -19,6 +19,13 @@
     border: 1px solid grey;
 }
 
+.filters_btn span{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
 .filters_btn:hover{
     background: gainsboro;
 }
@@ -32,7 +39,7 @@
     flex-direction: column;
     list-style-type: none;
     position: absolute;
-    left: 0;
+    left: -40px;
     top: 40px;
     background: white;
     border-radius: 8px;
@@ -86,4 +93,16 @@
     position: absolute;
     top: -50px;
     left: 0;
+}
+
+@media screen and (max-width: 1033px) {
+    .filters_dropdown{
+        left: 0;
+    }
+}
+
+@media screen and (max-width: 460px) and (min-width: 425px){
+    .filters_calendar{
+        left: -20px;
+    }
 }

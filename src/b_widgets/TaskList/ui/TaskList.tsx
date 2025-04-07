@@ -24,18 +24,11 @@ import { allSortingOptions, sortingOptions } from "../config";
 import { sliceRest } from "@/utils/parseString";
 import { useGlobalStore } from "@/store/global/global";
 import Filters from "@/e_shared/filters/Filters";
+import { getTodoes } from "../api";
 
 interface Props {
   type: "today" | "upcoming" | "completed" | "important" | "all";
 }
-
-const getTodoes = {
-  today: (id: number | string, day: string) => apiUrl.getTodayTodoes(id, day),
-  upcoming: (id: number | string, day: string) => apiUrl.getUpcomingTodoes(id, day),
-  completed: (id: number | string, day: string) => apiUrl.getCompletedTodoes(id, day),
-  important: (id: number | string, day: string) => apiUrl.getImportantTodoes(id, day),
-  all: (id: number | string, day: string) => apiUrl.getTodoes(id),
-};
 
 const TaskList = ({ type }: Props) => {
   const [isTaskFormActive, setIsTaskFormActive] = useState(false);
@@ -50,7 +43,7 @@ const TaskList = ({ type }: Props) => {
     id: "",
   });
   const [token, setToken] = useState("");
-  const { snackBar, setSnackBar } = useGlobalStore()
+  const { snackBar, setSnackBar } = useGlobalStore();
 
   useEffect(() => {
     setLoading(true);
@@ -58,23 +51,11 @@ const TaskList = ({ type }: Props) => {
       .then((token) => {
         if (token) {
           setToken(token);
-          return strapi.get(getTodoes[type](getUserAttribute("id"), parseDay(new Date().toDateString())),
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
+          getTodoes(token, type, setTodoes, setLoading);
         }
-      })
-      .then((res) => {
-        setTodoes(res?.data?.data);
       })
       .catch((err) => {
         console.log(err);
-      })
-      .finally(() => {
-        setLoading(false);
       });
   }, []);
 
@@ -155,36 +136,50 @@ const TaskList = ({ type }: Props) => {
       .finally(() => (document.body.style.overflowY = "visible"));
   }
 
-  const handleFiltersChange = (query: string | { from: string, to: string }, type: "category" | "deadline" | "priority") => {
+  const handleFiltersChange = (
+    query: string | { from: string; to: string },
+    filterType: "category" | "deadline" | "priority"
+  ) => {
     setLoading(true);
     let responseQuery;
-    switch (type) {
+    switch (filterType) {
       case "category":
-        responseQuery = `filters[category]=${query}`;
+        responseQuery = `&filters[category]=${query}`;
         break;
       case "priority":
-        responseQuery = `filters[priority]=${query}`;
+        responseQuery = `&filters[priority]=${query}`;
         break;
       case "deadline":
         if (typeof query === "object") {
-          responseQuery = `filters[deadline][$gt]=${query.from}&filters[deadline][$lt]=${query.to}`
+          responseQuery = `&filters[deadline][$gt]=${query.from}&filters[deadline][$lt]=${query.to}`;
         }
     }
-
-    strapi.get(apiUrl.getFilteredTodoes(responseQuery ?? "", getUserAttribute("id")), {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    }).
-      then((res) => {
+    const curDay = parseDay(new Date().toDateString());
+    const deadlineQuery = `${
+      type !== "completed" ? "&filters[isCompleted]=false" : "&filters[isCompleted]=true"
+    }${type === "today" ? "&filters[deadline]=" + curDay : ""}${
+      type === "upcoming" ? "&filters[deadline][$gt]=" + curDay : ""
+    }`;
+    const res = deadlineQuery.concat(responseQuery ?? "");
+    strapi
+      .get(apiUrl.getFilteredTodoes(res, getUserAttribute("id")), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
         if (res?.data?.data) {
-          setTodoes(res?.data?.data)
+          setTodoes(res?.data?.data);
         }
-      }).catch((e) => {
+      })
+      .catch((e) => {
         console.log(e);
-        setSnackBar({ isActive: true, type: "error", message: "Не удалось применить фильтр." })
-      }).finally(()=> {setLoading(false)});
-  }
+        setSnackBar({ isActive: true, type: "error", message: "Не удалось применить фильтр." });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   return (
     <main className={styles.task_list_section}>
@@ -218,18 +213,21 @@ const TaskList = ({ type }: Props) => {
             <AddIcon className={styles.add_sign} fontSize="medium" />
             <span className={styles.add_span}>Добавить задачу</span>
           </div>
-          {todoes.length && (
-            <div className={styles.filters_wrapper}>
-              <Filters onChange={handleFiltersChange} type={type}/>
+          <div className={styles.filters_wrapper}>
+            <Filters
+              onReset={() => getTodoes(token, type, setTodoes, setLoading)}
+              onChange={handleFiltersChange}
+              type={type}
+            />
+            {todoes.length ? (
               <Sorting
                 options={type === "today" ? sortingOptions : allSortingOptions}
-                token={token}
-                setLoading={setLoading}
                 todoes={todoes}
                 setTodoes={setTodoes}
+                onReset={() => getTodoes(token, type, setTodoes, setLoading)}
               />
-            </div>
-          )}
+            ) : null}
+          </div>
         </div>
       )}
       <section className={styles.table_container}>
@@ -257,8 +255,10 @@ const TaskList = ({ type }: Props) => {
                           completeLoding.loading && completeLoding.id === todo.documentId
                             ? styles.loading
                             : todo.isCompleted
-                              ? styles.completed
-                              : ""
+                            ? styles.completed
+                            : todo.isExpired
+                            ? styles.expired_state
+                            : ""
                         }
                         onClick={() => handleTaskComplete(todo.documentId, ind, todo.isCompleted)}
                       >
@@ -272,8 +272,17 @@ const TaskList = ({ type }: Props) => {
                       </button>
                     </td>
                     <td className={`${styles.body_data} ${styles.body_data_name}`}>
-                      {todo.isCompleted ? <s>{slicedTask}</s> : slicedTask}
+                      {todo.isCompleted || todo.isExpired ? (
+                        <s style={!todo.isCompleted && todo.isExpired ? { color: "red" } : {}}>
+                          {slicedTask}
+                        </s>
+                      ) : (
+                        slicedTask
+                      )}
                       {categoryIcons[todo.category][0] ?? ""}
+                      {!todo.isCompleted && todo.isExpired ? (
+                        <span className={styles.expired_span}>просрочено</span>
+                      ) : null}
                     </td>
                     <td className={`${styles.body_data} ${styles.adaptive_view}`}>
                       {todo.deadline && dottedDayFormat(todo.deadline)}

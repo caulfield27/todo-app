@@ -80,5 +80,5 @@ export function parseDeadlineToReadable(day: string) {
 }
 
 export function generalDaySeconds(day: Date){
-  return new Date(day.getFullYear(), day.getMonth(), day.getDate()).getTime();
+  return Date.UTC(day.getFullYear(), day.getMonth(), day.getDate());
 }

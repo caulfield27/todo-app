@@ -1,0 +1,15 @@
+.logo{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: loader 0.5s infinite alternate;
+}
+
+@keyframes loader {
+    from{
+        scale: 1;
+    }to{
+        scale: 1.07;
+    }
+}

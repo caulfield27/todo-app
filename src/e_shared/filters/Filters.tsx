@@ -3,19 +3,25 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import styles from "./Filters.module.css";
 import { useEffect, useRef, useState } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { categoryList, priorityList } from "./data";
+import { categoryList, priorityColors, priorityList } from "./data";
 import Calendar from "../calendar/Calendar";
 import dayjs, { Dayjs } from "dayjs";
 import { parseDay } from "@/utils/getDate";
 import { CalendarIcon } from "@/icons/calendarIcon/CalendarIcon";
 import { useTimeoutState } from "@/hooks/useTimeoutState";
+import PriorityIcon from "@/icons/priorityIcon/PriorityIcon";
+import { isDate } from "util/types";
 
 interface Props {
-  onChange: (query: string | { from: string, to: string }, type: "priority" | "category" | "deadline") => void;
+  onChange: (
+    query: string | { from: string; to: string },
+    type: "priority" | "category" | "deadline"
+  ) => void;
   type: "today" | "upcoming" | "completed" | "important" | "all";
+  onReset: () => void;
 }
 
-const Filters = ({ onChange, type }: Props) => {
+const Filters = ({ onChange, type, onReset }: Props) => {
   const [isActive, setIsActive] = useState(false);
   const [isPriorityOptionsOpen, setIsPriorityOptionsOpen] = useState(false);
   const [isCategoryOptionsOpen, setIsCategoryOptionsOpen] = useState(false);
@@ -24,10 +30,13 @@ const Filters = ({ onChange, type }: Props) => {
   const priorityOptionsRef = useRef<HTMLUListElement | null>(null);
   const categoryOptionsRef = useRef<HTMLUListElement | null>(null);
   const dateOptionsRef = useRef<HTMLUListElement | null>(null);
-  const [filterValue, setFilterValue] = useState("");
+  const [filter, setFilter] = useState({
+    value: "",
+    label: "",
+  });
   const [calendarState, setCalendarState] = useTimeoutState<{
-    isOpen: boolean,
-    isSelected: boolean
+    isOpen: boolean;
+    isSelected: boolean;
   }>({
     isOpen: false,
     isSelected: false,
@@ -54,19 +63,23 @@ const Filters = ({ onChange, type }: Props) => {
   }, [isActive]);
 
   useEffect(() => {
-    if (priorityOptionsRef.current && categoryOptionsRef.current && dateOptionsRef.current) {
+    if (priorityOptionsRef.current) {
       if (isPriorityOptionsOpen) {
         priorityOptionsRef.current.style.maxHeight = `${priorityOptionsRef.current.scrollHeight}px`;
       } else {
         priorityOptionsRef.current.style.maxHeight = `0`;
       }
-
+    }
+    
+    if (categoryOptionsRef.current) {
       if (isCategoryOptionsOpen) {
         categoryOptionsRef.current.style.maxHeight = `${categoryOptionsRef.current.scrollHeight}px`;
       } else {
         categoryOptionsRef.current.style.maxHeight = `0`;
       }
+    }
 
+    if (dateOptionsRef.current) {
       if (isDateOptionsOpen) {
         dateOptionsRef.current.style.maxHeight = `${dateOptionsRef.current.scrollHeight}px`;
       } else {
@@ -75,10 +88,21 @@ const Filters = ({ onChange, type }: Props) => {
     }
   }, [isPriorityOptionsOpen, isCategoryOptionsOpen, isDateOptionsOpen]);
 
-  const handleFilterChange = (value: string, type: "priority" | "category" | "deadline") => {
-    setFilterValue(value);
-    onChange(value, type)
+  const closeDropdowns = () => {
     setIsActive(false);
+    setIsCategoryOptionsOpen(false);
+    setIsDateOptionsOpen(false);
+    setIsPriorityOptionsOpen(false);
+  };
+
+  const handleFilterChange = (
+    value: string,
+    type: "priority" | "category" | "deadline",
+    label?: string | undefined
+  ) => {
+    setFilter({ value, label: label ?? value });
+    onChange(value, type);
+    closeDropdowns();
   };
 
   const handleCalendarChange = (newValue: Dayjs) => {
@@ -91,8 +115,8 @@ const Filters = ({ onChange, type }: Props) => {
       }
       const from = date.fromValue ? date.fromValue : parsedDay;
       const to = date.toValue ? date.toValue : parsedDay;
-      setIsActive(false);
-      setFilterValue(`от ${from} до ${to}`);
+      closeDropdowns();
+      setFilter({ value: "", label: `от ${from} до ${to}` });
       onChange({ from, to }, "deadline");
     } else {
       if (date.from) {
@@ -108,34 +132,49 @@ const Filters = ({ onChange, type }: Props) => {
     <div className={styles.filters_container}>
       <button className={styles.filters_btn} onClick={() => setIsActive((prev) => !prev)}>
         <FilterAltIcon />
-        <span>{filterValue ? filterValue : "Фильтры"}</span>
+        <span>
+          {!filter.value ? (
+            "Фильтры"
+          ) : +filter.value ? (
+            <>
+              {filter.value}
+              {<PriorityIcon color={priorityColors[filter.value]} />}
+            </>
+          ) : (
+            filter.label
+          )}
+        </span>
       </button>
       <ul ref={dropDownRef} className={isActive ? styles.filters_dropdown : styles.hide_dropdown}>
-        {type !== "important" && <>
-          <li
-            className={styles.list_item}
-            onClick={() => {
-              setIsPriorityOptionsOpen((prev) => !prev);
-              setIsCategoryOptionsOpen(false);
-              setIsDateOptionsOpen(false);
-            }}
-          >
-            Приоритет
-           <ExpandMoreIcon style={isPriorityOptionsOpen ? {transform: "rotate(180deg)"} : {}} />
-          </li>
-          <ul ref={priorityOptionsRef} className={styles.options}>
-            {priorityList.map((elem) => (
-              <li
-                onClick={() => handleFilterChange(String(elem.value), "priority")}
-                className={styles.list_item_options}
-                key={elem.value}
-              >
-                {elem.value}
-                {elem.icon}
-              </li>
-            ))}
-          </ul>
-        </>}
+        {type !== "important" ? (
+          <>
+            <li
+              className={styles.list_item}
+              onClick={() => {
+                setIsPriorityOptionsOpen((prev) => !prev);
+                setIsCategoryOptionsOpen(false);
+                setIsDateOptionsOpen(false);
+              }}
+            >
+              Приоритет
+              <ExpandMoreIcon
+                style={isPriorityOptionsOpen ? { transform: "rotate(180deg)" } : {}}
+              />
+            </li>
+            <ul ref={priorityOptionsRef} className={styles.options}>
+              {priorityList.map((elem) => (
+                <li
+                  onClick={() => handleFilterChange(String(elem.value), "priority")}
+                  className={styles.list_item_options}
+                  key={elem.value}
+                >
+                  {elem.value}
+                  {elem.icon}
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : null}
         <li
           className={styles.list_item}
           onClick={() => {
@@ -145,12 +184,12 @@ const Filters = ({ onChange, type }: Props) => {
           }}
         >
           Категория
-          <ExpandMoreIcon style={isCategoryOptionsOpen ? {transform: "rotate(180deg)"} : {}}/>
+          <ExpandMoreIcon style={isCategoryOptionsOpen ? { transform: "rotate(180deg)" } : {}} />
         </li>
         <ul ref={categoryOptionsRef} className={styles.options}>
           {categoryList.map((elem) => (
             <li
-              onClick={() => handleFilterChange(elem.value, "category")}
+              onClick={() => handleFilterChange(elem.value, "category", elem.label.text)}
               className={styles.list_item_options}
               key={elem.value}
             >
@@ -159,61 +198,76 @@ const Filters = ({ onChange, type }: Props) => {
             </li>
           ))}
         </ul>
-        {type !== "today" && <>
-          <li
-            className={styles.list_item}
-            onClick={() => {
-              setIsDateOptionsOpen((prev) => !prev);
-              setIsCategoryOptionsOpen(false);
-              setIsPriorityOptionsOpen(false);
-            }}
-          >
-            Срок
-            <ExpandMoreIcon style={isDateOptionsOpen ? {transform: "rotate(180deg)"} : {}}/>
-          </li>
-          <ul ref={dateOptionsRef} className={`${styles.options} ${styles.calendar_options}`}>
+        {type !== "today" ? (
+          <>
             <li
+              className={styles.list_item}
               onClick={() => {
-                setDate((prev) => ({ ...prev, to: false, from: true }));
-                setCalendarState((prev) => ({ ...prev, isOpen: true }));
+                setIsDateOptionsOpen((prev) => !prev);
+                setIsCategoryOptionsOpen(false);
+                setIsPriorityOptionsOpen(false);
               }}
-              className={styles.list_item_options}
             >
-              {date.fromValue ? (
-                `от ${date.fromValue}`
-              ) : (
-                <>
-                  Начало даты <CalendarIcon />
-                </>
-              )}
+              Срок
+              <ExpandMoreIcon style={isDateOptionsOpen ? { transform: "rotate(180deg)" } : {}} />
             </li>
-            <li
-              onClick={() => {
-                setDate((prev) => ({ ...prev, to: true, from: false }));
-                setCalendarState((prev) => ({ ...prev, isOpen: true }));
-              }}
-              className={styles.list_item_options}
-            >
-              {date.toValue ? (
-                `до ${date.toValue}`
-              ) : (
-                <>
-                  Конец даты <CalendarIcon />
-                </>
+            <ul ref={dateOptionsRef} className={`${styles.options} ${styles.calendar_options}`}>
+              <li
+                onClick={() => {
+                  setDate((prev) => ({ ...prev, to: false, from: true }));
+                  setCalendarState((prev) => ({ ...prev, isOpen: true }));
+                }}
+                className={styles.list_item_options}
+              >
+                {date.fromValue ? (
+                  `от ${date.fromValue}`
+                ) : (
+                  <>
+                    Начало даты <CalendarIcon />
+                  </>
+                )}
+              </li>
+              <li
+                onClick={() => {
+                  setDate((prev) => ({ ...prev, to: true, from: false }));
+                  setCalendarState((prev) => ({ ...prev, isOpen: true }));
+                }}
+                className={styles.list_item_options}
+              >
+                {date.toValue ? (
+                  `до ${date.toValue}`
+                ) : (
+                  <>
+                    Конец даты <CalendarIcon />
+                  </>
+                )}
+              </li>
+              {calendarState.isOpen && (
+                <Calendar
+                  classes={styles.filters_calendar}
+                  handleChange={handleCalendarChange}
+                  value={dayjs(new Date())}
+                  setIsOpen={setCalendarState}
+                  disablePrevDates={type === "upcoming"}
+                />
               )}
-            </li>
-            {calendarState.isOpen && (
-              <Calendar
-                classes={styles.filters_calendar}
-                handleChange={handleCalendarChange}
-                value={dayjs(new Date())}
-                setIsOpen={setCalendarState}
-                disablePrevDates={type === "upcoming"}
-              />
-            )}
-          </ul>
-        </>}
-
+            </ul>
+          </>
+        ) : null}
+        <hr />
+        <li
+          className={styles.list_item}
+          onClick={() => {
+            setIsActive(false);
+            setFilter({
+              value: "",
+              label: "",
+            });
+            onReset();
+          }}
+        >
+          Сбросить фильтр
+        </li>
       </ul>
     </div>
   );
