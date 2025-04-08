@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import styles from "./pagesContainer.module.css";
 import "../../app/globals.css";
 import { Sidebar } from "@/b_widgets/Sidebar";

@@ -56,7 +56,7 @@ export default function Sidebar() {
 
   useEffect(() => {
     if (sidebarRef.current) {
-      setSidebarWidth(sidebarRef.current.offsetWidth);
+      setSidebarWidth(280);
       sidebarRef.current.style.display = "block";
     }
 
