@@ -56,7 +56,7 @@ export default function Sidebar() {
 
   useEffect(() => {
     if (sidebarRef.current) {
-      setSidebarWidth(280);
+      setSidebarWidth(isTablet ? sidebarRef.current.offsetWidth : 280);
       sidebarRef.current.style.display = "block";
     }
 
@@ -101,13 +101,13 @@ export default function Sidebar() {
     }
   }, [showSidebar]);
 
-  const logout = ()=>{
+  const logout = () => {
     const email = getUserAttribute("email");
     localStorage.removeItem("user");
-    axios.post("/api/logout", {email}).then(()=>{
+    axios.post("/api/logout", { email }).then(() => {
       window.location.reload();
     });
-  }
+  };
 
   return (
     <>
