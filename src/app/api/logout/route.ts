@@ -12,5 +12,5 @@ export async function POST(request: NextRequest){
         cookiesStore.delete("authToken");
     };
     stopCron(email, token);
-    return NextResponse.redirect(new URL("/auth/login", request.url));
+    return NextResponse.json({message: "Успешный выход"}, {status: 200});
 }

@@ -38,6 +38,7 @@ export default function Sidebar() {
   } = useGlobalStore();
   const [userDropdown, setUserDropdown] = useState(false);
   const currentPage = usePathname();
+  const navigate = useRouter();
   const [user, setUser] = useState<IUserData | "">("");
   const [isOpen, setIsOpen] = useState(false);
   const [logoutLoading, setLogoutLoading] = useState(false);
@@ -108,7 +109,7 @@ export default function Sidebar() {
     axios
       .post("/api/logout", { email })
       .then(() => {
-        window.location.href = "/auth/login";
+        navigate.push("auth/login");
       })
       .catch(() => {
         setSnackBar({
@@ -116,10 +117,8 @@ export default function Sidebar() {
           isActive: true,
           message: "Не удалось выйти с приложения, попробуйте еще раз.",
         });
-      })
-      .finally(() => {
         setLogoutLoading(false);
-      });
+      })
   };
 
   return (
