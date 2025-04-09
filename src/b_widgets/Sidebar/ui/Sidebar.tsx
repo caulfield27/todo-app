@@ -38,9 +38,9 @@ export default function Sidebar() {
   } = useGlobalStore();
   const [userDropdown, setUserDropdown] = useState(false);
   const currentPage = usePathname();
-  const router = useRouter();
   const [user, setUser] = useState<IUserData | "">("");
   const [isOpen, setIsOpen] = useState(false);
+  const [logoutLoading, setLogoutLoading] = useState(false);
 
   useEffect(() => {
     const getUserFromStorage = localStorage.getItem("user");
@@ -104,9 +104,22 @@ export default function Sidebar() {
   const logout = () => {
     const email = getUserAttribute("email");
     localStorage.removeItem("user");
-    axios.post("/api/logout", { email }).then(() => {
-      window.location.reload();
-    });
+    setLogoutLoading(true);
+    axios
+      .post("/api/logout", { email })
+      .then(() => {
+        window.location.href = "/auth/login";
+      })
+      .catch(() => {
+        setSnackBar({
+          type: "error",
+          isActive: true,
+          message: "Не удалось выйти с приложения, попробуйте еще раз.",
+        });
+      })
+      .finally(() => {
+        setLogoutLoading(false);
+      });
   };
 
   return (
@@ -129,7 +142,7 @@ export default function Sidebar() {
             <article
               style={{ display: "flex", alignItems: "center", gap: "12px", position: "relative" }}
             >
-              <ProfileDropdown active={userDropdown} handleClick={logout} />
+              <ProfileDropdown loading={logoutLoading} active={userDropdown} handleClick={logout} />
               <div className={styles.user}>
                 <button
                   className={styles.user_btn}

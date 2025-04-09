@@ -9,7 +9,7 @@ import { useEffect } from "react";
 const Upcoming = () => {
 
   useEffect(()=>{
-    document.title = "Todo-app | Предстоящие";
+    document.title = "DailyDo | Предстоящие";
   })
 
   return (

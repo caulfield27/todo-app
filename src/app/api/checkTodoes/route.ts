@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
             `).join("");
 
             transport.sendMail({
-                from: "Todo-App",
+                from: "DailyDo",
                 to: email,
                 subject: "Не пропустите выполнить задачи на сегодня",
                 html: ` <html>

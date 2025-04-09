@@ -7,7 +7,7 @@ import { useEffect } from "react";
 const Login = () => {
 
     useEffect(()=>{
-        document.title = "Todo-app | Вход";
+        document.title = "DailyDo | Вход";
     },[])
 
     return (

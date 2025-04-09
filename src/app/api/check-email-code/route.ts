@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
       emailCods.set(email, generatedCode);
       const transporter = createTransport();
       const mailResponse = await transporter.sendMail({
-        from: "ToDo-app",
+        from: "DailyDo",
         to: email,
         subject: "Подтверждение кода",
         html: ` <html>

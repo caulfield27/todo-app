@@ -10,7 +10,7 @@ import { useEffect } from "react";
 const Important = () => {
   
   useEffect(()=>{
-    document.title = "Todo-app | Важные";
+    document.title = "DailyDo | Важные";
   })
   
   return (

@@ -116,7 +116,7 @@ const Filters = ({ onChange, type, onReset }: Props) => {
       const from = date.fromValue ? date.fromValue : parsedDay;
       const to = date.toValue ? date.toValue : parsedDay;
       closeDropdowns();
-      setFilter({ value: "", label: `от ${from} до ${to}` });
+      setFilter({ value: `от ${from} до ${to}`, label: `от ${from} до ${to}` });
       onChange({ from, to }, "deadline");
     } else {
       if (date.from) {

@@ -9,7 +9,7 @@ import { useEffect } from "react";
 const Page = () => {
 
   useEffect(()=>{
-    document.title = "Todo-app | Мой день";
+    document.title = "DailyDo | Мой день";
   })
 
   return (

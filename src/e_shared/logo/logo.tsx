@@ -4,7 +4,7 @@ const Logo = () => {
     return ( 
         <header className={styles.logo_wrap}>
             <img className={styles.logo_img} src="/logo.png" alt="logo"/>
-            <h2>My Todo</h2>
+            <h2>DailyDo</h2>
         </header>
      );
 }

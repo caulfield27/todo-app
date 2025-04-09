@@ -9,7 +9,7 @@ import { useEffect } from "react";
 const Completed = () => {
 
   useEffect(()=>{
-    document.title = "Todo-app | Выполненные";
+    document.title = "DailyDo | Выполненные";
   })
 
   return (

@@ -33,3 +33,57 @@
     border-radius: 8px;
     background: rgb(229, 229, 229);
 }
+
+.dots{
+    margin-top: 8px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 4px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.dot_1, .dot_2, .dot_3{
+    border: 2px solid #000;
+    border-radius: 50%;
+}
+
+.dot_1{
+    animation: first_dot 1s ease-in-out infinite;
+}
+
+.dot_2{
+    animation: second_dot 1.2s ease-in-out infinite;
+}
+
+.dot_3{
+    animation: third_dot 1.4s ease-in-out infinite;
+}
+
+@keyframes first_dot {
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+
+@keyframes second_dot {
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+
+@keyframes third_dot {
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
