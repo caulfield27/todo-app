@@ -218,21 +218,21 @@ const TaskList = ({ type }: Props) => {
               onReset={() => getTodoes(token, type, setTodoes, setLoading)}
               onChange={handleFiltersChange}
               type={type}
+              disabled={todoes.length < 2}
             />
-            {todoes.length ? (
               <Sorting
                 options={type === "today" ? sortingOptions : allSortingOptions}
                 todoes={todoes}
                 setTodoes={setTodoes}
                 onReset={() => getTodoes(token, type, setTodoes, setLoading)}
+                disabled={todoes.length < 2}
               />
-            ) : null}
           </div>
         </div>
       )}
       <section className={styles.table_container}>
         {loading ? (
-          <Loader size="l" />
+          <Loader classes={styles.loader_container} size="l"/>
         ) : todoes.length > 0 ? (
           <table className={styles.table}>
             <thead className={styles.table_header}>

@@ -19,9 +19,10 @@ interface Props {
   ) => void;
   type: "today" | "upcoming" | "completed" | "important" | "all";
   onReset: () => void;
+  disabled?: boolean;
 }
 
-const Filters = ({ onChange, type, onReset }: Props) => {
+const Filters = ({ onChange, type, onReset, disabled }: Props) => {
   const [isActive, setIsActive] = useState(false);
   const [isPriorityOptionsOpen, setIsPriorityOptionsOpen] = useState(false);
   const [isCategoryOptionsOpen, setIsCategoryOptionsOpen] = useState(false);
@@ -70,7 +71,7 @@ const Filters = ({ onChange, type, onReset }: Props) => {
         priorityOptionsRef.current.style.maxHeight = `0`;
       }
     }
-    
+
     if (categoryOptionsRef.current) {
       if (isCategoryOptionsOpen) {
         categoryOptionsRef.current.style.maxHeight = `${categoryOptionsRef.current.scrollHeight}px`;
@@ -130,7 +131,14 @@ const Filters = ({ onChange, type, onReset }: Props) => {
 
   return (
     <div className={styles.filters_container}>
-      <button className={styles.filters_btn} onClick={() => setIsActive((prev) => !prev)}>
+      <button
+        className={
+          disabled && !filter.value
+            ? `${styles.filters_btn} ${styles.disabled_filters}`
+            : styles.filters_btn
+        }
+        onClick={() => setIsActive((prev) => !prev)}
+      >
         <FilterAltIcon />
         <span>
           {!filter.value ? (

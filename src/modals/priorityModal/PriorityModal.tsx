@@ -6,7 +6,7 @@ import { useAddTaskForm } from "@/store/addTaskForm/addTaskForm";
 
 interface Props {
   value?: number;
-  handleChange?: (value: number) => void;
+  handleChange: (value: number) => void;
   setIsOpen: Dispatch<
     SetStateAction<{
       isOpen: boolean;
@@ -43,30 +43,30 @@ const PriorityModal = ({ value, handleChange, setIsOpen, classes }: Props) => {
   return (
     <ul ref={priorityRef} className={`${styles.ul_container} ${classes ?? ""}`}>
       <li
-        onClick={(e: any) => (handleChange ? handleChange(e?.target?.dataset?.value ?? 1) : {})}
+        onClick={(e: any)=> handleChange(e.target.value)}
         className={`${styles.list_item} ${value === 1 ? styles.active_item : ""}`}
-        data-value={1}
+        value={1}
       >
         <PriorityIcon color="#68FF6D" /> 1
       </li>
       <li
-        onClick={(e: any) => (handleChange ? handleChange(e?.target?.dataset?.value ?? 1) : {})}
+        onClick={(e: any)=> handleChange(e.target.value)}
         className={`${styles.list_item} ${value === 2 ? styles.active_item : ""}`}
-        data-value={2}
+        value={2}
       >
         <PriorityIcon color="#E6FF00" /> 2
       </li>
       <li
-        onClick={(e: any) => (handleChange ? handleChange(e?.target?.dataset?.value ?? 1) : {})}
+        onClick={(e: any)=> handleChange(e.target.value)}
         className={`${styles.list_item} ${value === 3 ? styles.active_item : ""}`}
-        data-value={3}
+        value={3}
       >
         <PriorityIcon color="#FFBB1A" /> 3
       </li>
       <li
-        onClick={(e: any) => (handleChange ? handleChange(e?.target?.dataset?.value ?? 1) : {})}
+        onClick={(e: any)=> handleChange(e.target.value)}
         className={`${styles.list_item} ${value === 4 ? styles.active_item : ""}`}
-        data-value={4}
+        value={4}
       >
         <PriorityIcon color="#FF0000" /> 4
       </li>

@@ -4,10 +4,6 @@ import styles from "./Sidebar.module.css";
 import { sidebarLinks } from "../model/sidebarLinks";
 import Link from "next/link";
 import "../../../app/globals.css";
-import StarsIcon from "@mui/icons-material/Stars";
-import TodayIcon from "@mui/icons-material/Today";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import AddTaskIcon from "@mui/icons-material/AddTask";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useSidebarStore } from "@/store/sidebar/sidebar";
@@ -21,7 +17,6 @@ import { handleDisableEvents } from "@/utils/handleDisableEvents";
 import { getUserAttribute } from "@/utils/getUser";
 import axios from "axios";
 
-const icons = [<TodayIcon />, <CalendarMonthIcon />, <StarsIcon />, <AddTaskIcon />];
 
 export default function Sidebar() {
   const { showSidebar, setSidebar } = useSidebarStore();
@@ -185,7 +180,7 @@ export default function Sidebar() {
             <AddTaskButton />
           </div>
           <nav className={styles.navigation_container}>
-            {sidebarLinks.map((elem, ind) => {
+            {sidebarLinks.map((elem) => {
               const isActive = elem.path === currentPage;
               return (
                 <Link
@@ -197,7 +192,7 @@ export default function Sidebar() {
                   }
                 >
                   <div className={styles.link_text}>
-                    {icons[ind]}
+                    {elem.icon}
                     {!isTablet && elem.label}
                   </div>
                   {isTablet && (

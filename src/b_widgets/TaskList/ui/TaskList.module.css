@@ -10,6 +10,10 @@
     align-items: center;
 }
 
+.loader_container{
+    margin-top: 75px;
+}
+
 .expired_state{
     opacity: 0.4;
     pointer-events: none;

@@ -19,6 +19,11 @@
     border: 1px solid grey;
 }
 
+.disabled_filters{
+    opacity: 0.5;
+    pointer-events: none;
+}
+
 .filters_btn span{
     display: flex;
     justify-content: center;

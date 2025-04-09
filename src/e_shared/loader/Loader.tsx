@@ -3,6 +3,7 @@ import styles from "./Loader.module.css";
 interface Props {
   size: "xs" | "s" | "m" | "l";
   color?: "primary" | "secondary";
+  classes?: string
 }
 
 const generateStyle = (size: string, color: string | undefined) => {
@@ -34,9 +35,9 @@ const generateStyle = (size: string, color: string | undefined) => {
   return style;
 };
 
-const Loader = ({ size, color }: Props) => {
+const Loader = ({ size, color, classes }: Props) => {
   return (
-    <div className={styles.loader_wrapper}>
+    <div className={`${styles.loader_wrapper} ${classes ?? ""}`}>
       <div style={generateStyle(size, color)} className={styles.loader} />
     </div>
   );

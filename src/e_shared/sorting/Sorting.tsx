@@ -10,6 +10,7 @@ interface Props {
   setTodoes: Dispatch<SetStateAction<ITodoResponse[]>>;
   options: ISortingOptions[];
   onReset: () => void;
+  disabled?: boolean;
 }
 
 interface ISortOrder {
@@ -28,7 +29,7 @@ const sortOrder: ISortOrder[] = [
   },
 ];
 
-const Sorting = ({ todoes, setTodoes, options, onReset }: Props) => {
+const Sorting = ({ todoes, setTodoes, options, onReset, disabled }: Props) => {
   const [open, setOpen] = useState(false);
   const [orderValue, setOrderValue] = useState<ISortOrder>(sortOrder[0]);
   const [option, setOption] = useState<{
@@ -68,7 +69,14 @@ const Sorting = ({ todoes, setTodoes, options, onReset }: Props) => {
 
   return (
     <div className={styles.sort_wrapper}>
-      <button onClick={() => setOpen((prev) => !prev)} className={styles.sorting_btn}>
+      <button
+        onClick={() => setOpen((prev) => !prev)}
+        className={
+          disabled && option.value === "default"
+            ? `${styles.sorting_btn} ${styles.disabled_sort_btn}`
+            : styles.sorting_btn
+        }
+      >
         <SwapVertIcon fontSize="medium" />
         <span className={styles.sorting_container}>{option.label}</span>
       </button>
