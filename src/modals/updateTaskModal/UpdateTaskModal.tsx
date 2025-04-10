@@ -6,7 +6,6 @@ import dayjs, { Dayjs, isDayjs } from "dayjs";
 import { parseDay, parseDeadlineToReadable } from "@/utils/getDate";
 import Calendar from "@/e_shared/calendar/Calendar";
 import DefaultButton from "@/e_shared/defaultButton/DefaultButton";
-import PriorityIcon from "@/icons/priorityIcon/PriorityIcon";
 import { priorityColors } from "@/e_shared/constants/priority";
 import { categoryIcons, ICategoryList } from "@/e_shared/constants/categories";
 import PriorityModal from "../priorityModal/PriorityModal";
@@ -15,6 +14,7 @@ import { getToken } from "@/utils/getToken";
 import { strapi } from "@/e_shared/api";
 import { apiUrl } from "@/routes";
 import { ISnackBar } from "@/store/global/global";
+import Priority from "@/icons/priority/Priority";
 
 interface Props {
   modalState: {
@@ -234,7 +234,7 @@ const UpdateTaskModal = ({
               role="button"
               className={`${styles.option} ${styles.priority_options}`}
             >
-              <PriorityIcon color={priorityColors[updatedTodo.priority]} />
+              <Priority value={updatedTodo.priority} />
             </div>
             {priorityState.isOpen && (
               <PriorityModal

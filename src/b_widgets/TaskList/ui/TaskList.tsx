@@ -10,8 +10,6 @@ import { getUserAttribute } from "@/utils/getUser";
 import { getToken } from "@/utils/getToken";
 import Loader from "@/e_shared/loader/Loader";
 import AddIcon from "@mui/icons-material/Add";
-import PriorityIcon from "@/icons/priorityIcon/PriorityIcon";
-import { priorityColors } from "@/e_shared/constants/priority";
 import { dottedDayFormat, parseDay } from "@/utils/getDate";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -25,6 +23,9 @@ import { sliceRest } from "@/utils/parseString";
 import { useGlobalStore } from "@/store/global/global";
 import Filters from "@/e_shared/filters/Filters";
 import { getTodoes } from "../api";
+import NoDataFound from "@/e_shared/noDataFound/NoDataFound";
+import { useFilters } from "@/e_shared/filters/store";
+import Priority from "@/icons/priority/Priority";
 
 interface Props {
   type: "today" | "upcoming" | "completed" | "important" | "all";
@@ -44,6 +45,8 @@ const TaskList = ({ type }: Props) => {
   });
   const [token, setToken] = useState("");
   const { snackBar, setSnackBar } = useGlobalStore();
+  const [isFilter, setIsFilter] = useState(false);
+  const resetFilters = useFilters((state) => state.resetFilters);
 
   useEffect(() => {
     setLoading(true);
@@ -97,6 +100,8 @@ const TaskList = ({ type }: Props) => {
   function handleDelete(documentId: string) {
     document.body.style.overflowY = "hidden";
     Swal.fire({
+      background: "var(--modal-bg)",
+      color: "var(--modal-color)",
       icon: "warning",
       title: "Вы действительно хотите удалить задачу?",
       showCancelButton: true,
@@ -141,6 +146,7 @@ const TaskList = ({ type }: Props) => {
     filterType: "category" | "deadline" | "priority"
   ) => {
     setLoading(true);
+    setIsFilter(true);
     let responseQuery;
     switch (filterType) {
       case "category":
@@ -220,19 +226,19 @@ const TaskList = ({ type }: Props) => {
               type={type}
               disabled={todoes.length < 2}
             />
-              <Sorting
-                options={type === "today" ? sortingOptions : allSortingOptions}
-                todoes={todoes}
-                setTodoes={setTodoes}
-                onReset={() => getTodoes(token, type, setTodoes, setLoading)}
-                disabled={todoes.length < 2}
-              />
+            <Sorting
+              options={type === "today" ? sortingOptions : allSortingOptions}
+              todoes={todoes}
+              setTodoes={setTodoes}
+              onReset={() => getTodoes(token, type, setTodoes, setLoading)}
+              disabled={todoes.length < 2}
+            />
           </div>
         </div>
       )}
       <section className={styles.table_container}>
         {loading ? (
-          <Loader classes={styles.loader_container} size="l"/>
+          <Loader classes={styles.loader_container} size="l" />
         ) : todoes.length > 0 ? (
           <table className={styles.table}>
             <thead className={styles.table_header}>
@@ -248,9 +254,14 @@ const TaskList = ({ type }: Props) => {
               {todoes.map((todo, ind) => {
                 const slicedTask = sliceRest(todo.subject, 20);
                 return (
-                  <tr key={todo.id}>
+                  <tr className={styles.table_row} key={todo.id}>
                     <td className={styles.btn_cell}>
                       <button
+                        style={
+                          completeLoding.loading && completeLoding.id === todo.documentId
+                            ? { background: "transparent" }
+                            : {}
+                        }
                         className={
                           completeLoding.loading && completeLoding.id === todo.documentId
                             ? styles.loading
@@ -289,8 +300,7 @@ const TaskList = ({ type }: Props) => {
                     </td>
                     <td className={`${styles.body_data} ${styles.adaptive_view}`}>
                       <div className={styles.priority_cell}>
-                        {<PriorityIcon color={priorityColors[todo.priority]} />}{" "}
-                        <span>{todo.priority}</span>
+                        {<Priority value={todo.priority} />}{" "}
                       </div>
                     </td>
                     <td className={styles.actions_cell}>
@@ -317,7 +327,21 @@ const TaskList = ({ type }: Props) => {
               })}
             </tbody>
           </table>
-        ) : null}
+        ) : (
+          <NoDataFound
+            isFilter={isFilter}
+            setShowAddTaskModal={setIsTaskFormActive}
+            onReset={() => {
+              resetFilters();
+              getTodoes(token, type, setTodoes, setLoading);
+            }}
+            infoText={
+              type === "today"
+                ? "На сегодня нет запланированных задач."
+                : "Нет запланированных задач."
+            }
+          />
+        )}
       </section>
     </main>
   );

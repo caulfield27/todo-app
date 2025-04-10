@@ -4,34 +4,44 @@
 
 .active_dropdown{
     position: absolute;
-    top: 50px;
+    top: 40px;
     left: 0;
-    width: 290px;
-    padding: 8px 12px 8px 12px;
+    padding: 8px 4px;
     border-radius: 12px;
-    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: var(--default-box-shadow);
     display: block;
-    background: white;
+    background: var(--modal-bg);
     z-index: 100;
+    width: max-content;
 
 }
 
-.logout_btn{
+
+.dropdown_item{
     display: flex;
     flex-direction: row;
     gap: 8px;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     border: none;
     outline: none;
     background: transparent;
-    padding: 2px 10px 2px 2px;
+    padding: 8px;
     cursor: pointer;
+    color: var(--header-color);
+    border-radius: 8px;
 }
 
-.logout_btn:hover{
-    border-radius: 8px;
-    background: rgb(229, 229, 229);
+.exit_wrapper{
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.dropdown_item:hover{
+    background: var(--default-bg-hover);
 }
 
 .dots{
@@ -45,7 +55,7 @@
 }
 
 .dot_1, .dot_2, .dot_3{
-    border: 2px solid #000;
+    border: 2px solid var(--header-color);
     border-radius: 50%;
 }
 

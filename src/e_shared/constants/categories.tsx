@@ -63,14 +63,14 @@ export const categoryList: ICategoryList[] = [
 ];
 
 export const categoryIcons: {[key: string] : [ReactElement, string]} = {
-  "home": [<HomeIcon style={{color: "grey", width: "18px"}}/>,'Дом'],
-  "work": [<WorkIcon style={{color: "grey", width: "18px"}}/>,'Работа'],
-  "sport": [<SportsSoccerIcon style={{color: "grey", width: "18px"}}/>,'Спорт'],
-  "study": [<LocalLibraryIcon style={{color: "grey", width: "18px"}}/>,'Учёба'],
-  "self-development": [<SelfImprovementIcon style={{color: "grey", width: "18px"}}/>,'Саморазвитие'],
-  "health" : [<FavoriteIcon style={{color: "grey", width: "18px"}}/>, 'Здоровье'],
-  "finance" : [<PaidIcon style={{color: "grey", width: "18px"}}/>,'Финансы'],
-  "trips" : [<LocalAirportIcon style={{color: "grey", width: "18px"}}/>,'Путешевствия'],
-  "rest" : [<SpaIcon style={{color: "grey", width: "18px"}}/>,'Отдых'], 
-  "others" : [<InterestsIcon style={{color: "grey", width: "18px"}}/>,'Другое']
+  "home": [<HomeIcon style={{color: "var(--defaultColor)", width: "18px"}}/>,'Дом'],
+  "work": [<WorkIcon style={{color: "var(--defaultColor)", width: "18px"}}/>,'Работа'],
+  "sport": [<SportsSoccerIcon style={{color: "var(--defaultColor)", width: "18px"}}/>,'Спорт'],
+  "study": [<LocalLibraryIcon style={{color: "var(--defaultColor)", width: "18px"}}/>,'Учёба'],
+  "self-development": [<SelfImprovementIcon style={{color: "var(--defaultColor)", width: "18px"}}/>,'Саморазвитие'],
+  "health" : [<FavoriteIcon style={{color: "var(--defaultColor)", width: "18px"}}/>, 'Здоровье'],
+  "finance" : [<PaidIcon style={{color: "var(--defaultColor)", width: "18px"}}/>,'Финансы'],
+  "trips" : [<LocalAirportIcon style={{color: "var(--defaultColor)", width: "18px"}}/>,'Путешевствия'],
+  "rest" : [<SpaIcon style={{color: "var(--defaultColor)", width: "18px"}}/>,'Отдых'], 
+  "others" : [<InterestsIcon style={{color: "var(--defaultColor)", width: "18px"}}/>,'Другое']
 }

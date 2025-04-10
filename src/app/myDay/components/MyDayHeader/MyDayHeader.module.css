@@ -7,12 +7,12 @@
 .my_day_span{
     font-size: 24px;
     font-weight: 500;
-    color: rgb(0, 0, 0);
+    color: var(--header-color);
 }
 
 .date_span{
     font-size: 14px;
-    color: gray;
+    color: var(--default-color);
 }
 
 

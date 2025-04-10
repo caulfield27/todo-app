@@ -1,17 +1,24 @@
 .sidebar_container{
     position: fixed;
     height: 100%;
-    border-right: 1px solid gainsboro;
+    border-right: 1px solid var(--hover-color);
     padding: 15px 20px 15px 20px;
     transition: all 0.3s ease-in;
     scroll-behavior: auto;
     z-index: 1;
-    background: #ffffff;
+    background: var(--sidebar-bg);
     display: none;
 }
 
 .sidebar_header{
     margin-bottom: 15px;
+}
+
+.closedArrow, .openArrow{
+    background: none;
+    outline: none;
+    border: none;
+    cursor: pointer;
 }
 
 .closedArrow{
@@ -23,6 +30,10 @@
 .openArrow{
     position: absolute;
     top: 0;
+}
+
+.arrow{
+    color: var(--defaultColor);
 }
 
 .sidebar_content{
@@ -47,14 +58,14 @@
 }
 
 .active_link{
-    background: rgb(255, 213, 213);
+    background: #ffd5d5;
     color: var(--secondaryRed);
     pointer-events: none;
 }
 
 .link_item:hover{
-    background: rgb(225, 255, 225);
-    color: var(--defaultColor);
+    background: var(--nav-link-hover);
+    color: var(--secondaryRed);
 }
 
 .user_wrapper{
@@ -81,7 +92,7 @@
 }
 
 .header_btn:hover{
-    background: rgb(228, 228, 228);
+    background: var(--hover-color);
 }
 
 .add{
@@ -90,7 +101,7 @@
 
 .add:hover{
     border-radius: 8px;
-    background: rgb(225, 255, 225);;
+    background: var(--hover-color);
 }
 
 .add:active{
@@ -120,6 +131,7 @@
     background: var(--primaryRed);
     color: white;
     border-radius: 50%;
+    cursor: pointer;
 }
 
 .user_btn span{
@@ -134,11 +146,15 @@
 
 .userName{
     font-size: 18px;
-    color: black;
+    color: var(--header-color);
     font-weight: 500;
 }
 
 .popover_position{
     left: 50px;
     top: 0;
+}
+
+.notification{
+    color: var(--defaultColor);
 }

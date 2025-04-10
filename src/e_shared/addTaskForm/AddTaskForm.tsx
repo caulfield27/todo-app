@@ -6,23 +6,22 @@ import "../../app/globals.css";
 import Calendar from "../calendar/Calendar";
 import dayjs, { Dayjs } from "dayjs";
 import { parseDay, parseDeadlineToReadable } from "@/utils/getDate";
-import { CalendarIcon } from "@/icons/calendarIcon/CalendarIcon";
-import PriorityStatic from "@/icons/priorityIcon/PriorityStatic";
 import PriorityModal from "@/modals/priorityModal/PriorityModal";
 import Popover from "../popover/Popover";
-import PriorityIcon from "@/icons/priorityIcon/PriorityIcon";
 import { getToken } from "@/utils/getToken";
 import { strapi } from "../api";
 import { apiUrl } from "@/routes";
 import { ITodoResponse } from "../types/types";
-import { priorityColors } from "../constants/priority";
-import CategoryIcon from "@/icons/categoryIcon/CategoryIcon";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CategoryModal from "@/modals/categoryModal/CategoryModal";
 import { ICategoryList } from "../constants/categories";
 import InterestsIcon from "@mui/icons-material/Interests";
 import DefaultButton from "../defaultButton/DefaultButton";
 import { useAddTaskForm } from "@/store/addTaskForm/addTaskForm";
-import { ISnackBar, useGlobalStore } from "@/store/global/global";
+import { ISnackBar } from "@/store/global/global";
+import LowPriorityIcon from "@mui/icons-material/LowPriority";
+import CategoryIcon from "@mui/icons-material/Category";
+import Priority from "@/icons/priority/Priority";
 
 interface IFormData {
   subject: string;
@@ -213,7 +212,7 @@ const AddTaskFrom = ({
             <div className={styles.options_icon_container}>
               {calendarState.isSelected ? (
                 <div className={styles.selected_wrapper}>
-                  <CalendarIcon />
+                  <CalendarMonthIcon />
                   <span>
                     {parseDeadlineToReadable(formData.deadline?.toDate().toString() ?? "")}
                   </span>
@@ -228,12 +227,13 @@ const AddTaskFrom = ({
                   </button>
                 </div>
               ) : (
-                <CalendarIcon
-                  cursor="pointer"
-                  handleClick={() =>
-                    setCalendarState((prev) => ({ ...prev, isOpen: !prev.isOpen }))
-                  }
-                />
+                <div
+                  role="button"
+                  onClick={() => setCalendarState((prev) => ({ ...prev, isOpen: true }))}
+                  style={{ cursor: "pointer" }}
+                >
+                  <CalendarMonthIcon />
+                </div>
               )}
 
               {!calendarState.isSelected && !calendarState.isOpen && (
@@ -259,10 +259,9 @@ const AddTaskFrom = ({
             <div className={styles.options_icon_container}>
               {priorityState.isSelected ? (
                 <div className={styles.selected_wrapper}>
-                  <PriorityStatic />
+                  <LowPriorityIcon />
                   <span>
-                    <PriorityIcon color={priorityColors[formData.priority]} />
-                    {formData.priority}
+                    <Priority value={formData.priority} />
                   </span>
                   <button
                     ref={priorityCloseRef}
@@ -275,12 +274,13 @@ const AddTaskFrom = ({
                   </button>
                 </div>
               ) : (
-                <PriorityStatic
-                  cursor="pointer"
-                  handleClick={() =>
-                    setPriorityState((prev) => ({ ...prev, isOpen: !prev.isOpen }))
-                  }
-                />
+                <div
+                  role="button"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setPriorityState((prev) => ({ ...prev, isOpen: !prev.isOpen }))}
+                >
+                  <LowPriorityIcon />
+                </div>
               )}
               {!priorityState.isSelected && !priorityState.isOpen && (
                 <Popover
@@ -326,15 +326,19 @@ const AddTaskFrom = ({
               </div>
             ) : (
               <div className={styles.category_options_container}>
-                <CategoryIcon
-                  cursor="pointer"
-                  handleCLick={() =>
+                <div
+                  role="button"
+                  style={{ cursor: "pointer" }}
+                  onClick={() =>
                     setCategoryState((prev) => ({
                       isOpen: !prev.isOpen,
                       isSelected: prev.isSelected,
                     }))
                   }
-                />
+                >
+                  <CategoryIcon />
+                </div>
+
                 {!categoryState.isSelected && !categoryState.isOpen && (
                   <Popover
                     classes={styles["popover_position"]}

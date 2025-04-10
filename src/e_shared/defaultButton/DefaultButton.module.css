@@ -2,32 +2,43 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid gainsboro;
+    border: none;
     border-radius: 8px;
     padding: 8px;
-    color: #ffffff;
+    color: var(--default-btn-color);
     cursor: pointer;
-    transition: all 0.3s ease-out;
     min-width: 80px;
 }
 
 .btn:disabled{
+    pointer-events: none;
     cursor: not-allowed;
     opacity: 0.3;
 }
 
+
 .cancel_btn:hover{
-    background: #9b0606;
+    scale: 1.02;
+}
+
+.cancel_btn:active{
+    scale:0.98;
 }
 
 .submit_btn:hover{
-    background: #0d0d97;
+    scale: 1.02;
 }
 
+.submit_btn:active{
+    scale:0.98;
+}
+
+
 .cancel_btn{
-    background: var(--primaryRed);
+    background: var(--cancel-btn-bg);
+    
 }
 
 .submit_btn{
-    background: #1a1ace;
+    background: var(--confirm-btn-bg);
 }

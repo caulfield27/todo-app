@@ -1,14 +1,14 @@
-import PriorityIcon from "@/icons/priorityIcon/PriorityIcon";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import EditCalendarIcon from '@mui/icons-material/EditCalendar';
 import EventIcon from '@mui/icons-material/Event';
 import { ISortingOptions } from "@/e_shared/sorting/types";
+import LowPriorityIcon from "@mui/icons-material/LowPriority";
 
 
 const sortingOptions: ISortingOptions[] = [
     {
         label: "Важность",
-        icon: <PriorityIcon color="red"/>,
+        icon: <LowPriorityIcon/>,
         value: "importance"
     },
     {
@@ -26,7 +26,7 @@ const sortingOptions: ISortingOptions[] = [
 const allSortingOptions: ISortingOptions[] = [
     {
         label: "Важность",
-        icon: <PriorityIcon color="red"/>,
+        icon: <LowPriorityIcon/>,
         value: "importance"
     },
     {

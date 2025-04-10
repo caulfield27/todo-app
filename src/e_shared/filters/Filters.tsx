@@ -7,10 +7,10 @@ import { categoryList, priorityColors, priorityList } from "./data";
 import Calendar from "../calendar/Calendar";
 import dayjs, { Dayjs } from "dayjs";
 import { parseDay } from "@/utils/getDate";
-import { CalendarIcon } from "@/icons/calendarIcon/CalendarIcon";
+import EventIcon from "@mui/icons-material/Event";
 import { useTimeoutState } from "@/hooks/useTimeoutState";
-import PriorityIcon from "@/icons/priorityIcon/PriorityIcon";
-import { isDate } from "util/types";
+import Priority from "@/icons/priority/Priority";
+import { useFilters } from "./store";
 
 interface Props {
   onChange: (
@@ -31,22 +31,14 @@ const Filters = ({ onChange, type, onReset, disabled }: Props) => {
   const priorityOptionsRef = useRef<HTMLUListElement | null>(null);
   const categoryOptionsRef = useRef<HTMLUListElement | null>(null);
   const dateOptionsRef = useRef<HTMLUListElement | null>(null);
-  const [filter, setFilter] = useState({
-    value: "",
-    label: "",
-  });
+  const { filter, setFilter, date, setDate, resetFilters } = useFilters();
+
   const [calendarState, setCalendarState] = useTimeoutState<{
     isOpen: boolean;
     isSelected: boolean;
   }>({
     isOpen: false,
     isSelected: false,
-  });
-  const [date, setDate] = useState({
-    from: false,
-    to: false,
-    fromValue: "",
-    toValue: "",
   });
 
   useEffect(() => {
@@ -74,7 +66,7 @@ const Filters = ({ onChange, type, onReset, disabled }: Props) => {
 
     if (categoryOptionsRef.current) {
       if (isCategoryOptionsOpen) {
-        categoryOptionsRef.current.style.maxHeight = `${categoryOptionsRef.current.scrollHeight}px`;
+        categoryOptionsRef.current.style.maxHeight = `135px`;
       } else {
         categoryOptionsRef.current.style.maxHeight = `0`;
       }
@@ -108,24 +100,20 @@ const Filters = ({ onChange, type, onReset, disabled }: Props) => {
 
   const handleCalendarChange = (newValue: Dayjs) => {
     const parsedDay = parseDay(newValue.toDate().toDateString());
+    if (date.curDate === "from") {
+      setDate((prev) => ({ ...prev, fromValue: parsedDay }));
+    } else if (date.curDate === "to") {
+      setDate((prev) => ({ ...prev, toValue: parsedDay }));
+    }
+
     if (date.fromValue || date.toValue) {
-      if (date.fromValue) {
-        setDate((prev) => ({ ...prev, toValue: parsedDay }));
-      } else {
-        setDate((prev) => ({ ...prev, fromValue: parsedDay }));
-      }
-      const from = date.fromValue ? date.fromValue : parsedDay;
-      const to = date.toValue ? date.toValue : parsedDay;
+      const from = date.curDate === "from" ? parsedDay : date.fromValue;
+      const to = date.curDate === "to" ? parsedDay : date.toValue;
       closeDropdowns();
       setFilter({ value: `от ${from} до ${to}`, label: `от ${from} до ${to}` });
       onChange({ from, to }, "deadline");
-    } else {
-      if (date.from) {
-        setDate((prev) => ({ ...prev, fromValue: parsedDay }));
-      } else {
-        setDate((prev) => ({ ...prev, toValue: parsedDay }));
-      }
     }
+
     setCalendarState((prev) => ({ ...prev, isOpen: false }));
   };
 
@@ -145,8 +133,7 @@ const Filters = ({ onChange, type, onReset, disabled }: Props) => {
             "Фильтры"
           ) : +filter.value ? (
             <>
-              {filter.value}
-              {<PriorityIcon color={priorityColors[filter.value]} />}
+              <Priority value={filter.value} />
             </>
           ) : (
             filter.label
@@ -169,14 +156,13 @@ const Filters = ({ onChange, type, onReset, disabled }: Props) => {
                 style={isPriorityOptionsOpen ? { transform: "rotate(180deg)" } : {}}
               />
             </li>
-            <ul ref={priorityOptionsRef} className={styles.options}>
+            <ul style={{ overflow: "hidden" }} ref={priorityOptionsRef} className={styles.options}>
               {priorityList.map((elem) => (
                 <li
                   onClick={() => handleFilterChange(String(elem.value), "priority")}
                   className={styles.list_item_options}
                   key={elem.value}
                 >
-                  {elem.value}
                   {elem.icon}
                 </li>
               ))}
@@ -194,7 +180,7 @@ const Filters = ({ onChange, type, onReset, disabled }: Props) => {
           Категория
           <ExpandMoreIcon style={isCategoryOptionsOpen ? { transform: "rotate(180deg)" } : {}} />
         </li>
-        <ul ref={categoryOptionsRef} className={styles.options}>
+        <ul ref={categoryOptionsRef} style={{ overflowY: "scroll" }} className={styles.options}>
           {categoryList.map((elem) => (
             <li
               onClick={() => handleFilterChange(elem.value, "category", elem.label.text)}
@@ -219,10 +205,14 @@ const Filters = ({ onChange, type, onReset, disabled }: Props) => {
               Срок
               <ExpandMoreIcon style={isDateOptionsOpen ? { transform: "rotate(180deg)" } : {}} />
             </li>
-            <ul ref={dateOptionsRef} className={`${styles.options} ${styles.calendar_options}`}>
+            <ul
+              ref={dateOptionsRef}
+              style={{ overflow: "hidden" }}
+              className={`${styles.options} ${styles.calendar_options}`}
+            >
               <li
                 onClick={() => {
-                  setDate((prev) => ({ ...prev, to: false, from: true }));
+                  setDate((prev) => ({ ...prev, curDate: "from" }));
                   setCalendarState((prev) => ({ ...prev, isOpen: true }));
                 }}
                 className={styles.list_item_options}
@@ -231,13 +221,13 @@ const Filters = ({ onChange, type, onReset, disabled }: Props) => {
                   `от ${date.fromValue}`
                 ) : (
                   <>
-                    Начало даты <CalendarIcon />
+                    Начало даты <EventIcon />
                   </>
                 )}
               </li>
               <li
                 onClick={() => {
-                  setDate((prev) => ({ ...prev, to: true, from: false }));
+                  setDate((prev) => ({ ...prev, curDate: "to" }));
                   setCalendarState((prev) => ({ ...prev, isOpen: true }));
                 }}
                 className={styles.list_item_options}
@@ -246,7 +236,7 @@ const Filters = ({ onChange, type, onReset, disabled }: Props) => {
                   `до ${date.toValue}`
                 ) : (
                   <>
-                    Конец даты <CalendarIcon />
+                    Конец даты <EventIcon />
                   </>
                 )}
               </li>
@@ -267,10 +257,7 @@ const Filters = ({ onChange, type, onReset, disabled }: Props) => {
           className={styles.list_item}
           onClick={() => {
             setIsActive(false);
-            setFilter({
-              value: "",
-              label: "",
-            });
+            resetFilters();
             onReset();
           }}
         >

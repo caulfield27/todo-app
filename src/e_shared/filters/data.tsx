@@ -1,4 +1,3 @@
-import PriorityIcon from "@/icons/priorityIcon/PriorityIcon";
 import HomeIcon from "@mui/icons-material/Home";
 import WorkIcon from "@mui/icons-material/Work";
 import SportsSoccerIcon from "@mui/icons-material/SportsSoccer";
@@ -9,8 +8,9 @@ import PaidIcon from "@mui/icons-material/Paid";
 import LocalAirportIcon from "@mui/icons-material/LocalAirport";
 import SpaIcon from "@mui/icons-material/Spa";
 import InterestsIcon from "@mui/icons-material/Interests";
-import { CalendarIcon } from "@/icons/calendarIcon/CalendarIcon";
 import { ReactElement } from "react";
+import Priority from "@/icons/priority/Priority";
+import LowPriorityIcon from "@mui/icons-material/LowPriority";
 
 interface IPriorityList{
     value: number;
@@ -28,19 +28,19 @@ interface ICategoryList{
 export const priorityList: IPriorityList[] = [
   {
     value: 1,
-    icon: <PriorityIcon color="#68FF6D" />,
+    icon: <Priority value={"1"}/>,
   },
   {
     value: 2,
-    icon: <PriorityIcon color="#E6FF00" />,
+    icon: <Priority value={"2"}/>,
   },
   {
     value: 3,
-    icon: <PriorityIcon color="#FFBB1A" />,
+    icon: <Priority value={"3"}/>,
   },
   {
     value: 4,
-    icon: <PriorityIcon color="#FF0000" />,
+    icon: <Priority value={"4"}/>,
   },
 ];
 

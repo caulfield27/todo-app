@@ -21,7 +21,7 @@
 
 .expired_span{
     font-size: 12px;
-    color: red;
+    color: var(--expired-span-color);
 }
 
 .add_task_btn{
@@ -34,13 +34,11 @@
 
 
 .add_task_btn:hover .add_span {
-    /* color: var(--primaryRed); */
-    color: #23e0c7;
+    color: var(--add-task-hover);
 }
 
 .add_task_btn:hover .add_sign {
-    color: #23e0c7;
-    /* color: var(--primaryRed); */
+    color: var(--add-task-hover);
 }
 
 .table_container{
@@ -50,10 +48,18 @@
 .table{
     width: 100%;
     padding: 10px;
-    background: #ffffff;
+    background: var(--sidebar-bg);
     border-radius: 8px;
     box-shadow: var(--default-box-shadow);
     border-collapse: collapse;
+}
+
+.table_row{
+    border-bottom: 1px solid var(--row-divider-color)
+}
+
+.table_row:last-child{
+    border: none;
 }
 
 .header_cell{
@@ -62,7 +68,6 @@
 }
 
 .header_cell, .body_data{
-    border-bottom: 1px solid whitesmoke;
     padding: 10px;
     cursor: default;
 }
@@ -73,12 +78,12 @@
 }
 
 .btn_cell button{
-    color: blue;
+    color: var(--table-checkbox-color);
     width: 20px;
     height: 20px;
-    border: 1px solid blue;
+    border: 1px solid var(--table-checkbox-color);
     border-radius: 50%;
-    background: none;
+    background: white;
     outline: none;
     text-align: center;
     cursor: pointer;
@@ -87,7 +92,7 @@
 
 .btn_cell button.completed{
     color: white;
-    background: blue;
+    background: var(--table-checkbox-color);
 }
 
 .btn_cell button.loading{
@@ -103,7 +108,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    border: 2px solid blue;
+    border: 2px solid var(--table-checkbox-color);
     border-radius: 50%;
     border-top-color: transparent;
     animation: spin 0.8s linear infinite;
@@ -143,7 +148,7 @@
 }
 
 .body_data:nth-child(2){
-    color: #000000;
+    color: var(--header-color);
 }
 
 .body_data:last-child{
@@ -158,7 +163,7 @@
 }
 
 .actions_cell{
-    border-bottom: 1px solid whitesmoke;
+    /* border-bottom: 1px solid whitesmoke; */
     font-size: 12px;
 }
 
@@ -167,7 +172,7 @@
     background: none;
     outline: none;
     cursor: pointer;
-    color: #aaa4a4;
+    color: var(--table-actions-color);
     transition: color 0.2s linear;
 }
 
@@ -176,15 +181,11 @@
 }
 
 .edit_btn:hover{
-    color: blue;
+    color: var(--update-hover-color);
 }
 
 .delete_btn:hover{
-    color: #ff0000;
-}
-
-.test{
-    color: #d30808;
+    color: var(--delete-hover-color);
 }
 
 .body_data_name{

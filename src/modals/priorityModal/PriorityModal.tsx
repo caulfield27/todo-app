@@ -1,8 +1,8 @@
-import PriorityIcon from "@/icons/priorityIcon/PriorityIcon";
 import styles from "./PriorityModal.module.css";
 import "../../app/globals.css";
 import { Dispatch, SetStateAction, useEffect, useRef } from "react";
 import { useAddTaskForm } from "@/store/addTaskForm/addTaskForm";
+import Priority from "@/icons/priority/Priority";
 
 interface Props {
   value?: number;
@@ -47,28 +47,28 @@ const PriorityModal = ({ value, handleChange, setIsOpen, classes }: Props) => {
         className={`${styles.list_item} ${value === 1 ? styles.active_item : ""}`}
         value={1}
       >
-        <PriorityIcon color="#68FF6D" /> 1
+        <Priority value={"1"} />
       </li>
       <li
         onClick={(e: any)=> handleChange(e.target.value)}
         className={`${styles.list_item} ${value === 2 ? styles.active_item : ""}`}
         value={2}
       >
-        <PriorityIcon color="#E6FF00" /> 2
+        <Priority value={"2"}/> 
       </li>
       <li
         onClick={(e: any)=> handleChange(e.target.value)}
         className={`${styles.list_item} ${value === 3 ? styles.active_item : ""}`}
         value={3}
       >
-        <PriorityIcon color="#FFBB1A" /> 3
+        <Priority value={"3"}/>
       </li>
       <li
         onClick={(e: any)=> handleChange(e.target.value)}
         className={`${styles.list_item} ${value === 4 ? styles.active_item : ""}`}
         value={4}
       >
-        <PriorityIcon color="#FF0000" /> 4
+        <Priority value={"4"}/> 
       </li>
     </ul>
   );

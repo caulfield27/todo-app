@@ -1,0 +1,30 @@
+.no_data_found_wrapper{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    padding: 18px 0;
+}
+
+
+.not_found_add_btn{
+    padding: 10px;
+    border-radius: 4px;
+    background: #ffd5d5;
+    color: var(--secondaryRed);
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.not_found_add_btn:hover{
+    scale: 1.01;
+}
+
+.not_found_add_btn:active{
+    scale: 0.98;
+}

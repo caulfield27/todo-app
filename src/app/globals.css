@@ -3,10 +3,32 @@
 :root{
     --defaultColor: #696666;
     --container-bg: #fdf9f9;
+    --header-color: #000000;
+    --hover-color: #dcdcdc;
+    --sidebar-bg: #ffffff;
     --primaryRed: #db1414;
     --secondaryRed: #740000;
     --default-box-shadow: 0px 0px 8px -3px gray;
+    --nav-link-hover: #e1ffe1;
+    --add-task-hover: #23e0c7;
+    --cancel-btn-bg: #db1414;
+    --confirm-btn-bg: #1a1ace;
+    --default-btn-color: #ffffff;
+    --modal-bg: #ffffff;
+    --modal-color: #696666;
+    --default-bg-hover: whitesmoke;
+    --table-checkbox-color:#0000ff;
+    --table-actions-color: #aaa4a4;
+    --update-hover-color: #0000ff;
+    --delete-hover-color: #ff0000;
+    --expired-span-color: #ff0000;
+    --row-divider-color: #dcdcdc;
 }
+
+
+
+
+
 
 *{
     margin: 0;
@@ -20,4 +42,9 @@ body{
     color: var(--defaultColor);
     width: 100%;
     height: 100vh;
+}
+
+.app_container{
+    min-height: 100vh;
+    overflow-y: auto;
 }

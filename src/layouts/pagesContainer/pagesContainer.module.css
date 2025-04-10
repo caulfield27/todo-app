@@ -1,5 +1,5 @@
 .pages_container{
-    height: 100vb;
+    min-height: 100vh;
     background: var(--container-bg);
     transition: all 0.3s ease-in;
 }

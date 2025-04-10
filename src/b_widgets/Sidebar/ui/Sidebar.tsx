@@ -5,7 +5,7 @@ import { sidebarLinks } from "../model/sidebarLinks";
 import Link from "next/link";
 import "../../../app/globals.css";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useSidebarStore } from "@/store/sidebar/sidebar";
 import { ProfileDropdown } from "@/c_feauters/profileDropdown";
 import { IUserData } from "@/e_shared/types/types";
@@ -14,9 +14,9 @@ import { useGlobalStore } from "@/store/global/global";
 import Popover from "@/e_shared/popover/Popover";
 import InfoModal from "@/modals/infoModal/InfoModal";
 import { handleDisableEvents } from "@/utils/handleDisableEvents";
-import { getUserAttribute } from "@/utils/getUser";
-import axios from "axios";
-
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 export default function Sidebar() {
   const { showSidebar, setSidebar } = useSidebarStore();
@@ -33,12 +33,10 @@ export default function Sidebar() {
   } = useGlobalStore();
   const [userDropdown, setUserDropdown] = useState(false);
   const currentPage = usePathname();
-  const navigate = useRouter();
   const [user, setUser] = useState<IUserData | "">("");
   const [isOpen, setIsOpen] = useState(false);
-  const [logoutLoading, setLogoutLoading] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const getUserFromStorage = localStorage.getItem("user");
     setUser(
       getUserFromStorage
@@ -97,25 +95,6 @@ export default function Sidebar() {
     }
   }, [showSidebar]);
 
-  const logout = () => {
-    const email = getUserAttribute("email");
-    localStorage.removeItem("user");
-    setLogoutLoading(true);
-    axios
-      .post("/api/logout", { email })
-      .then(() => {
-        navigate.push("auth/login");
-      })
-      .catch(() => {
-        setSnackBar({
-          type: "error",
-          isActive: true,
-          message: "Не удалось выйти с приложения, попробуйте еще раз.",
-        });
-        setLogoutLoading(false);
-      })
-  };
-
   return (
     <>
       {snackBar.isActive && <InfoModal modalState={snackBar} setModalState={setSnackBar} />}
@@ -136,7 +115,12 @@ export default function Sidebar() {
             <article
               style={{ display: "flex", alignItems: "center", gap: "12px", position: "relative" }}
             >
-              <ProfileDropdown loading={logoutLoading} active={userDropdown} handleClick={logout} />
+              {userDropdown && (
+                <ProfileDropdown
+                  onCLose={() => setUserDropdown(false)}
+                  active={userDropdown}
+                />
+              )}
               <div className={styles.user}>
                 <button
                   className={styles.user_btn}
@@ -152,7 +136,7 @@ export default function Sidebar() {
               </div>
               {!isTablet && (
                 <button className={`${styles.not_btn} ${styles.header_btn}`}>
-                  <img src="/notification.png" alt="notification" />
+                  <NotificationsNoneIcon className={styles.notification} />
                 </button>
               )}
             </article>
@@ -161,17 +145,21 @@ export default function Sidebar() {
                 isTablet
                   ? { display: "none" }
                   : !showSidebar
-                  ? { left: sidebarWidth - (isMobile ? 25 : 10) }
+                  ? { left: sidebarWidth - (isMobile ? 20 : 10) }
                   : {}
               }
               className={
                 !showSidebar
-                  ? `${styles.openArrow} ${styles.header_btn}`
-                  : `${styles.closedArrow} ${styles.header_btn}`
+                  ? styles.openArrow
+                  : styles.closedArrow
               }
               onClick={() => setSidebar(!showSidebar)}
             >
-              <img src={!showSidebar ? "/sidebarClosed.svg" : "/sidebarOpen.svg"} alt="hide icon" />
+              {!showSidebar ? (
+                <ArrowForwardIosIcon className={styles.arrow} />
+              ) : (
+                <ArrowBackIosIcon className={styles.arrow} />
+              )}
             </button>
           </div>
         </header>

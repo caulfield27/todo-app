@@ -9,14 +9,14 @@
     gap: 5px;
     justify-content: center;
     align-items: center;
-    color: #000;
+    color: var(--header-color);
     padding: 5px;
     border-radius: 4px;
     transition: all 0.3s linear;
     background: transparent;
     cursor: pointer;
     outline: none;
-    border: 1px solid grey;
+    border: none;
 }
 
 .disabled_filters{
@@ -33,6 +33,7 @@
 
 .filters_btn:hover{
     background: gainsboro;
+    color: #353535;
 }
 
 .non_active_dropdown{
@@ -46,7 +47,7 @@
     position: absolute;
     left: -40px;
     top: 40px;
-    background: white;
+    background: var(--modal-bg);
     border-radius: 8px;
     box-shadow: var(--default-box-shadow);
     z-index: 2;
@@ -81,12 +82,11 @@
 }
 
 .list_item_options:hover{
-    background: gainsboro;
+    background: var(--default-bg-hover);
 }
 
 .options{
     max-height: 0;
-    overflow: hidden;
     transition: max-height 0.4s ease-out;
 };
 

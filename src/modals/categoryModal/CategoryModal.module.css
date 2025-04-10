@@ -8,7 +8,7 @@
     overflow-y: scroll;
     box-shadow: var(--default-box-shadow);
     border-radius: 8px;
-    background: white;
+    background: var(--modal-bg);
 }
 
 .category_dropdown_container::-webkit-scrollbar{

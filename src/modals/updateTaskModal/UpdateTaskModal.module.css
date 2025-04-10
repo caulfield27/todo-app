@@ -18,7 +18,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: white;
+    background: var(--modal-bg);
     border-radius: 8px;
     z-index: 100;
     padding: 10px 20px 20px 20px;
@@ -49,15 +49,16 @@
 .option{
     padding: 5px;
     border: 1px solid gainsboro;
-    background: white;
+    background: transparent;
     border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    color: var(--defaultColor);
 }
 
 .option:hover{
-    background: whitesmoke;
+    background: var(--default-bg-hover);
 }
 
 .deadline_option{

@@ -1,0 +1,7 @@
+.priority_wrapper{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+    justify-content: flex-start;
+}

@@ -1,5 +1,9 @@
 .calendar_container{
-    background: white;
+    background: var(--modal-bg);
     box-shadow: var(--default-box-shadow);
     border-radius: 8px;
+}
+
+.calendar_container *{
+    color: var(--modal-color);
 }

@@ -1,6 +1,5 @@
 .ul_container{
-    width: 100px;
-    background: white;
+    background: var(--modal-bg);
     padding: 8px;
     display: flex;
     flex-direction: column;
@@ -9,13 +8,13 @@
 }
 
 .list_item{
+    color: var(--modal-color);
     display: flex;
     flex-direction: row;
     gap: 5px;
     align-items: center;
     justify-content: flex-start;
-    width: 50px;
-    width: 100%;
+    width: max-content;
     border-radius: 8px;
     padding: 2px;
     cursor: pointer;
@@ -23,9 +22,9 @@
 }
 
 .list_item:hover{
-    background: whitesmoke;
+    background: var(--default-bg-hover);
 }
 
 .active_item{
-    background: whitesmoke;
+    background: var(--default-bg-hover);
 }
