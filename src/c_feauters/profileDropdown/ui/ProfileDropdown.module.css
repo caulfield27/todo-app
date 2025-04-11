@@ -54,6 +54,18 @@
     font-weight: bold;
 }
 
+.logout_loader_wrapper{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.display_none{
+    display: none;
+}
+
 .dot_1, .dot_2, .dot_3{
     border: 2px solid var(--header-color);
     border-radius: 50%;

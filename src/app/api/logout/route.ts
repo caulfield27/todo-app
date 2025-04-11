@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { stopCron } from "../../../../server";
+import { stopCron } from "@/utils/cron";
 
 
 export async function POST(request: NextRequest){
@@ -11,6 +11,6 @@ export async function POST(request: NextRequest){
         token = cookiesStore.get("authToken")?.value;
         cookiesStore.delete("authToken");
     };
-    stopCron(email, token);
+    stopCron(email, token ?? "");
     return NextResponse.json({message: "Успешный выход"}, {status: 200});
 }

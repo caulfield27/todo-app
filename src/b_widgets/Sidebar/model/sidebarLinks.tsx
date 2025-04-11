@@ -32,7 +32,7 @@ export const sidebarLinks = [
     {
         id: 5,
         label: 'Все задачи',
-        path: '/all',
+        path: '/tasks',
         icon: <ChecklistIcon/>
     },
 

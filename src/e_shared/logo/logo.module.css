@@ -5,6 +5,11 @@
     align-items: center;
 }
 
+.logo_wrap h1{
+    font-size: 26px;
+    color: #535353;
+}
+
 
 .logo_img{
     width: 100px;

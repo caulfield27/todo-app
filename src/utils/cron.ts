@@ -1,51 +1,53 @@
+"use server";
+
 import { BASE_URL } from "@/e_shared/get-env";
 import { apiUrl } from "@/routes";
 import cron from "node-cron";
 
-export async function startCron(email, userId, token) {
+export async function startCron(email: string, userId: number, token: string) {
   try {
-    const cronId = cron.schedule("0 9 * * *", () => {
-      fetch(`${process.env.NEXT_PUBLIC_ORIGIN_URL}/api/checkTodoes`, {
+    fetch(`${process.env.NEXT_PUBLIC_ORIGIN_URL}/api/checkTodoes`, {
         method: "POST",
         body: JSON.stringify({
           email,
           userId,
           token,
         }),
-      });
     });
-    fetch(`${process.env.NEXT_PUBLIC_ORIGIN_URL}/api/checkTodoes`, {
-      method: "POST",
-      body: JSON.stringify({
-        email,
-        userId,
-        token,
-      }),
-    });
+    // const cronId: any = cron.schedule("0 9 * * *", () => {
+    //   fetch(`${process.env.NEXT_PUBLIC_ORIGIN_URL}/api/checkTodoes`, {
+    //     method: "POST",
+    //     body: JSON.stringify({
+    //       email,
+    //       userId,
+    //       token,
+    //     }),
+    //   });
+    // });
 
-    const strapiPayload = {
-      data: {
-        cronId: cronId.options.name,
-        user: email,
-      },
-    };
+    // const strapiPayload = {
+    //   data: {
+    //     cronId: cronId.options.name,
+    //     user: email,
+    //   },
+    // };
 
-    fetch(`${BASE_URL}/api${apiUrl.cronId}`, {
-      method: "POST",
-      body: JSON.stringify(strapiPayload),
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    }).catch((e) => {
-      console.log("strapi cron post error: ", e);
-    });
+    // fetch(`${BASE_URL}/api${apiUrl.cronId}`, {
+    //   method: "POST",
+    //   body: JSON.stringify(strapiPayload),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${token}`,
+    //   },
+    // }).catch((e) => {
+    //   console.log("strapi cron post error: ", e);
+    // });
   } catch (e) {
-    console.log(e);
+    console.log("start cron err: ", e);
   }
 }
 
-export async function stopCron(email, token) {
+export async function stopCron(email: string, token: string) {
   const cronTasks = cron.getTasks();
   fetch(`${BASE_URL}/api${apiUrl.getUserCron(email)}`, {
     method: "GET",

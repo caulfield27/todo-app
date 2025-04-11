@@ -73,19 +73,15 @@ export default function ProfileDropdown({ active, onCLose }: Props) {
       </div>
       <div role="button" className={styles.dropdown_item} onClick={logout}>
         <LogoutIcon />
-        {logoutLoading ? (
-          <>
+        <div className={logoutLoading ? styles.logout_loader_wrapper : styles.display_none}>
           <span>Выход</span>
-            <div className={styles.dots}>
-              <span className={styles.dot_1}></span>
-              <span className={styles.dot_2}></span>
-              <span className={styles.dot_3}></span>
-            </div>
-          </>
-          
-        ) : (
-          <span>Выйти</span>
-        )}
+          <div className={styles.dots}>
+            <span className={styles.dot_1}></span>
+            <span className={styles.dot_2}></span>
+            <span className={styles.dot_3}></span>
+          </div>
+        </div>
+        <span style={!logoutLoading ? {display: "block"} : {display: "none"}}>Выйти</span>
       </div>
     </div>
   );

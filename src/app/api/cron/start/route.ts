@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import {startCron} from "../../../../../server"
+import { startCron } from "@/utils/cron";
 
 
 export async function POST(request: NextRequest){

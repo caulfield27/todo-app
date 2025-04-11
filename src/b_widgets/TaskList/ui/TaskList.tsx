@@ -300,7 +300,7 @@ const TaskList = ({ type }: Props) => {
                     </td>
                     <td className={`${styles.body_data} ${styles.adaptive_view}`}>
                       <div className={styles.priority_cell}>
-                        {<Priority value={todo.priority} />}{" "}
+                        {<Priority isTable={true} value={todo.priority} />}{" "}
                       </div>
                     </td>
                     <td className={styles.actions_cell}>

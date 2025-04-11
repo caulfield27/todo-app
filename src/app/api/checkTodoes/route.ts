@@ -13,7 +13,12 @@ export async function POST(request: NextRequest) {
             headers:{
                 Authorization: `Bearer ${token}`
             }
-        }).then((res)=> res.json());
+        }).then((res)=> {
+            console.log(res);
+            return res.json();
+        });
+        console.log('case 1');
+        
         const todaySeconds = generalDaySeconds(new Date());
         const todoes: ITodoResponse[] = todoResponse?.data;
         let hasTodayTask = false;
@@ -69,6 +74,8 @@ export async function POST(request: NextRequest) {
         }
         return NextResponse.json({message: "успешно"}, {status: 200});
     }catch(e){
+        console.log('1224: ', e);
+        
         return NextResponse.json({error: e}, {status: 500})
     }    
 }
