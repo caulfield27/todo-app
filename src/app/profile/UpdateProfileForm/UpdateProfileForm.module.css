@@ -1,0 +1,146 @@
+.edit_profile_container {
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.btn {
+  border: none;
+  outline: none;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 10px;
+  background: var(--confirm-btn-bg);
+  color: var(--default-btn-color);
+}
+
+.btn:hover {
+  scale: 1.01;
+}
+
+.btn:active {
+  scale: 0.99;
+}
+
+.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.form {
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.avatar_wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  padding: 10px;
+  border-radius: 50%;
+  background: gainsboro;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar span {
+  font-size: 52px;
+  font-weight: 500;
+}
+
+.input_wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.input_wrapper span {
+  color: var(--table-actions-color);
+  font-size: 14px;
+}
+
+.pw_input_wrapper {
+  position: relative;
+}
+
+.pw_visibility_btn {
+  border: none;
+  outline: none;
+  background: none;
+  position: absolute;
+  color: var(--header-color);
+  position: absolute;
+  right: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.input {
+  width: 100%;
+  border: 1px solid gainsboro;
+  padding: 8px;
+  color: var(--header-color);
+  background: var(--sidebar-bg);
+}
+
+.footer_actions {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
+
+.save_btn {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  background: var(--confirm-btn-bg);
+  color: var(--default-btn-color);
+}
+
+.save_btn:hover {
+  scale: 1.01;
+}
+
+.save_btn:active {
+  scale: 0.98;
+}
+
+.cancel_btn {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  background: var(--cancel-btn-bg);
+  color: var(--default-btn-color);
+}
+
+.cancel_btn:hover {
+  scale: 1.01;
+}
+
+.cancel_btn:active {
+  scale: 0.98;
+}
+
+.error_text{
+    font-size: 10px;
+    color: var(--error-color) !important;
+}

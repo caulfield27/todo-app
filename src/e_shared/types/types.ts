@@ -8,7 +8,8 @@ interface IUserData{
     provider?: string,
     publishedAt?: string,
     updatedAt?: string,
-    username: string
+    username: string,
+    avatar: string | null
 }
 
 interface ITodoResponse{

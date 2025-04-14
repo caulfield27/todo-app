@@ -1,6 +1,4 @@
-import { use } from "react";
-
-export function getUserAttribute(key: 'id' | 'email' | 'blocked' | 'confirmed' | 'createdAt' | 'documentId' | 'email' | 'username') {
+export function getUserAttribute(key: 'id' | 'email' | 'blocked' | 'confirmed' | 'createdAt' | 'documentId' | 'email' | 'username' | 'avatar') {
     const user = localStorage.getItem("user");
     if (user) {
         switch (key) {
@@ -18,6 +16,8 @@ export function getUserAttribute(key: 'id' | 'email' | 'blocked' | 'confirmed' |
                 return JSON.parse(user).email;
             case "username":
                 return JSON.parse(user).username;
+            case "avatar":
+                return JSON.parse(user).avatar;
             default:
                 throw new Error('Такого атрибута пользователя не существует');
         }

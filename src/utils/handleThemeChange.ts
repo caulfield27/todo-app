@@ -24,6 +24,7 @@ export function handleThemeChange(theme: string | null){
           root.style.setProperty("--update-hover-color", "#7d7de7");
           root.style.setProperty("--expired-span-color", "#ff815b");
           root.style.setProperty("--row-divider-color", "#b34f38");
+          root.style.setProperty("--error-color", "#ff815b");
         } else {
           root.style.setProperty("--defaultColor", "#696666");
           root.style.setProperty("--container-bg", "#fdf9f9");
@@ -47,6 +48,7 @@ export function handleThemeChange(theme: string | null){
           root.style.setProperty("--update-hover-color", "#7d7de7");
           root.style.setProperty("--expired-span-color", "#ff0000");
           root.style.setProperty("--row-divider-color", "#dcdcdc");
+          root.style.setProperty("--error-color", "#ff0000")
         }
       }
 }

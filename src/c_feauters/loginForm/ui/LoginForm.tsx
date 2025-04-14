@@ -92,6 +92,7 @@ export default function LoginForm() {
       }
     }).then((response) => {
       const user: IUserData = response?.data?.user;
+      console.log(user);
       const jwt = response?.data?.jwt;
       token = jwt;
       if (user && jwt) {
