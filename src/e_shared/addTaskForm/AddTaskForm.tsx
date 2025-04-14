@@ -296,7 +296,7 @@ const AddTaskFrom = ({
                 value={formData.priority}
                 handleChange={handlePriorityChange}
                 setIsOpen={setPriorityState}
-                classes={styles["priority_modal"]}
+                classes={`${styles["priority_modal"]} ${calendarState.isSelected ? styles['priority_modal_adaptive'] : ""}`}
               />
             )}
           </div>
@@ -354,7 +354,7 @@ const AddTaskFrom = ({
                 value={formData.category.value}
                 handleChange={handleCategoryChange}
                 setCategoryState={setCategoryState}
-                classes={styles["category_dropdown"]}
+                classes={`${styles["category_dropdown"]} ${calendarState.isSelected || priorityState.isSelected ? styles["category_dropdown_adaptive"] : ""}`}
               />
             )}
           </div>

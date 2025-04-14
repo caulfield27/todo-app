@@ -1,4 +1,3 @@
-import { strapi } from "@/e_shared/api";
 import { BASE_URL } from "@/e_shared/get-env";
 import { ITodoResponse } from "@/e_shared/types/types";
 import { apiUrl } from "@/routes";
@@ -13,12 +12,8 @@ export async function POST(request: NextRequest) {
             headers:{
                 Authorization: `Bearer ${token}`
             }
-        }).then((res)=> {
-            console.log(res);
-            return res.json();
-        });
-        console.log('case 1');
-        
+        }).then((res)=> res.json());
+
         const todaySeconds = generalDaySeconds(new Date());
         const todoes: ITodoResponse[] = todoResponse?.data;
         let hasTodayTask = false;
@@ -53,6 +48,8 @@ export async function POST(request: NextRequest) {
         }
 
         if(hasTodayTask){
+            console.log("alisher: ", todayTasks);
+            
             const transport = createTransport();
             const taskList = todayTasks.map((task)=> `
                 <li>${task.subject}</li>
@@ -74,8 +71,6 @@ export async function POST(request: NextRequest) {
         }
         return NextResponse.json({message: "успешно"}, {status: 200});
     }catch(e){
-        console.log('1224: ', e);
-        
         return NextResponse.json({error: e}, {status: 500})
     }    
 }

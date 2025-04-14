@@ -157,12 +157,8 @@
 }
 
 @media screen and (max-width: 768px) {
-    .category_dropdown{
+    .category_dropdown_adaptive, .priority_modal_adaptive{
         left: -95px;
-    }
-
-    .priority_modal{
-        left: -112px;
     }
 }
 

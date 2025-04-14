@@ -63,7 +63,7 @@ export default function ProfileDropdown({ active, onCLose }: Props) {
 
   return (
     <div ref={dropdownRef} className={active ? styles.active_dropdown : styles.dropdown_container}>
-      <div role="button" className={styles.dropdown_item}>
+      <div onClick={()=> navigate.push("/profile")} role="button" className={styles.dropdown_item}>
         <AccountCircleIcon style={{ color: "gray" }} />
         <span>Мой профиль</span>
       </div>
