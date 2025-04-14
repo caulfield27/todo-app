@@ -9,7 +9,7 @@ import styles from "./page.module.css"
 const Profile = () => {
 
     useEffect(()=> {
-        document.title = `DailyDo | Профиль(${getUserAttribute("username")})`
+        document.title = `DailyDo | Профиль`
     },[]);
 
     return <PagesContainer>
