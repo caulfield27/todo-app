@@ -10,7 +10,7 @@ const Profile = () => {
 
     useEffect(()=> {
         document.title = `DailyDo | Профиль(${getUserAttribute("username")})`
-    });
+    },[]);
 
     return <PagesContainer>
         <Wrapper>
