@@ -15,7 +15,7 @@ const Profile = () => {
     return <PagesContainer>
         <Wrapper>
             <div>
-                <h1 className={styles.profile_header}>{`Мой профиль(${getUserAttribute("username")})`}</h1>
+                <h1 className={styles.profile_header}>{`Мой профиль`}</h1>
             </div>
         </Wrapper>
     </PagesContainer>
