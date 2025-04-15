@@ -17,6 +17,8 @@ import { handleDisableEvents } from "@/utils/handleDisableEvents";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import Image from "next/image";
+import { BASE_URL } from "@/e_shared/get-env";
 
 export default function Sidebar() {
   const { showSidebar, setSidebar } = useSidebarStore();
@@ -35,6 +37,7 @@ export default function Sidebar() {
   const currentPage = usePathname();
   const [user, setUser] = useState<IUserData | "">("");
   const [isOpen, setIsOpen] = useState(false);
+  const { avatar } = useGlobalStore();
 
   useLayoutEffect(() => {
     const getUserFromStorage = localStorage.getItem("user");
@@ -116,18 +119,34 @@ export default function Sidebar() {
               style={{ display: "flex", alignItems: "center", gap: "12px", position: "relative" }}
             >
               {userDropdown && (
-                <ProfileDropdown
-                  onCLose={() => setUserDropdown(false)}
-                  active={userDropdown}
-                />
+                <ProfileDropdown onCLose={() => setUserDropdown(false)} active={userDropdown} />
               )}
               <div className={styles.user}>
-                <button
-                  className={styles.user_btn}
-                  onClick={() => setUserDropdown((prev) => !prev)}
-                >
-                  <span>{typeof user === "object" ? user?.username[0] : "U"}</span>
-                </button>
+                {avatar ? (
+                  <div
+                    className={styles.avatar_wrapper}
+                    role="button"
+                    onClick={() => setUserDropdown((prev) => !prev)}
+                  >
+                    <Image
+                      src={avatar.startsWith("/uploads") ? BASE_URL + avatar : avatar}
+                      priority
+                      quality={100}
+                      width={24}
+                      height={24}
+                      alt="user avatar"
+                      style={{ borderRadius: "50%" }}
+                    />
+                  </div>
+                ) : (
+                  <button
+                    className={styles.user_btn}
+                    onClick={() => setUserDropdown((prev) => !prev)}
+                  >
+                    <span>{typeof user === "object" ? user?.username[0] : "U"}</span>
+                  </button>
+                )}
+
                 {!isTablet && (
                   <span className={styles.userName}>
                     {typeof user === "object" ? user.username : "User"}
@@ -148,11 +167,7 @@ export default function Sidebar() {
                   ? { left: sidebarWidth - (isMobile ? 20 : 10) }
                   : {}
               }
-              className={
-                !showSidebar
-                  ? styles.openArrow
-                  : styles.closedArrow
-              }
+              className={!showSidebar ? styles.openArrow : styles.closedArrow}
               onClick={() => setSidebar(!showSidebar)}
             >
               {!showSidebar ? (

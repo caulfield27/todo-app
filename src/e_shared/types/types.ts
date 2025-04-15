@@ -4,7 +4,7 @@ interface IUserData{
     createdAt?: string,
     documentId?: string,
     email: string,
-    id?: number,
+    id: number,
     provider?: string,
     publishedAt?: string,
     updatedAt?: string,

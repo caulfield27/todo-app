@@ -132,16 +132,20 @@
     color: white;
     border-radius: 50%;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .user_btn span{
     font-size: 18px;
 }
 
-.user img{
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
+.avatar_wrapper{
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .userName{

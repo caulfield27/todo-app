@@ -17,7 +17,7 @@ interface Props {
 export default function RootLayout({ children }: Props) {
   const pathname = usePathname();
   const { setSidebar, showSidebar } = useSidebarStore();
-  const { isMobile, theme, setTheme } = useGlobalStore();
+  const { isMobile, theme, setTheme, setAvatar } = useGlobalStore();
 
   useLayoutEffect(() => {
     if (isMobile && showSidebar) {
@@ -27,6 +27,7 @@ export default function RootLayout({ children }: Props) {
 
   useLayoutEffect(() => {
     setTheme(localStorage.getItem("theme") || "light");
+    setAvatar(getUserAttribute("avatar") || null);
   }, []);
 
   useEffect(() => {

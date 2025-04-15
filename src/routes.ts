@@ -3,6 +3,8 @@ export const apiUrl = {
   signUp: "/auth/local/register",
   cronId: "/cron-tasks",
   updateUser: (userId: number)=>  `/users/${userId}`,
+  getUser: (id: number)=> `/users/${id}?populate=*`,
+  getUserAvatar: (id: number) => `/users/${id}?populate[avatar]=*`,
   getFilteredTodoes: (filter: string, userId: number | string) => `/todoes?populate=*&filters[userId][id]=${userId}&${filter}`,
   getUserCron: (email: string)=> `/cron-tasks?filters[user]=${email}`,
   deleteCron: (docId: string)=> `/cron-tasks/${docId}`,

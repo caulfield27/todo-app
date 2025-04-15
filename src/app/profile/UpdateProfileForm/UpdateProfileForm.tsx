@@ -11,6 +11,9 @@ import { apiUrl } from "@/routes";
 import { useGlobalStore } from "@/store/global/global";
 import Image from "next/image";
 import { useValidation } from "@/hooks/useValidation";
+import { BASE_URL } from "@/e_shared/get-env";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 const UpdateProfileForm = () => {
   const [passwordType, setPasswordType] = useState("password");
@@ -21,20 +24,20 @@ const UpdateProfileForm = () => {
   const [user, setUser] = useState({
     username: "",
     email: "",
-    avatar: null,
   });
-  const [avatar, setAvatar] = useState("");
+  const avatar = useGlobalStore((state) => state.avatar);
+  const setAvatar = useGlobalStore((state) => state.setAvatar);
   const { setSnackBar } = useGlobalStore();
   const [pwValidation, setPwValidation] = useValidation();
   const [confirmPwValidation, setConfirmPwValidation] = useValidation();
   const [password, setPassword] = useState("");
   const saveDisabled = disabled || loading || pwValidation.isError || confirmPwValidation.isError;
+  const [isChanged, setIsChanged] = useState(false);
 
   useEffect(() => {
     setUser({
       username: getUserAttribute("username"),
       email: getUserAttribute("email"),
-      avatar: getUserAttribute("avatar"),
     });
   }, []);
 
@@ -49,58 +52,126 @@ const UpdateProfileForm = () => {
     if (file) {
       const imgUrl = URL.createObjectURL(file);
       setAvatar(imgUrl);
+      if (!isChanged) {
+        setIsChanged(true);
+      }
     }
   };
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    if (
-      formData.get("username") === user.username &&
-      formData.get("email") === user.email &&
-      !avatar &&
-      !formData.get("password")
-    ) {
-      setSnackBar({
-        isActive: true,
-        type: "success",
-        message: "Без изменений!",
-      });
-      return;
-    }
-    try {
+    if (formData.get("username") === user.username) formData.delete("username");
+    if (formData.get("email") === user.email) formData.delete("email");
+    if (!formData.get("password")) formData.delete("password");
+    if (!avatar) formData.delete("avatar");
+
+    if (formData.has("email")) {
+      const email = formData.get("email");
       setLoading(true);
-      const file = formData.get("avatar") as File;
-      formData.delete("avatar");
-      const imgFormData = new FormData();
-      imgFormData.append("files", file);
-      const token = await getToken();
-      const imgResponse = await strapi.post("/upload", imgFormData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      formData.append("avatar", imgResponse.data?.[0]?.id);
-      const userId = getUserAttribute("id");
-      await strapi.put(apiUrl.updateUser(userId), formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setSnackBar({
-        isActive: true,
-        type: "success",
-        message: "Ваши данные успешно обновлены!",
-      });
-    } catch (e) {
-      console.log(e);
-      setSnackBar({
-        isActive: true,
-        type: "error",
-        message: "Не удалось сохранить изменения, попробуйте ещё раз",
-      });
-    } finally {
-      setLoading(false);
+      axios
+        .post("/api/check-email-code", { email })
+        .then((res) => {
+          if (res.status === 200) {
+            Swal.fire({
+              title: "Подтвердите адресс почты",
+              input: "text",
+              inputLabel: `Код отправлен на почту: ${email}`,
+              confirmButtonText: "Подтвердить",
+            }).then((res) => {
+              setLoading(true);
+              axios
+                .post("/api/check-email-code", {
+                  email,
+                  code: res.value,
+                  type: "check",
+                })
+                .then((res) => {
+                  if (res.status === 200) {
+                    handleSaveChanges();
+                  }else{
+                    setSnackBar({
+                      isActive: true,
+                      type: "error",
+                      message: res.data?.message || "неверный код"
+                    })
+                  }
+                })
+            });
+          }else{
+            setSnackBar(({
+              isActive: true,
+              type: "error",
+              message: res.data.message || "Неверный адресс почты!"
+            }))
+          }
+        })
+        .catch((e) => {
+          setSnackBar({
+            isActive: true,
+            type: "error",
+            message: "Ошибка, не удалось сохранить изменения",
+          });
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      handleSaveChanges();
+    }
+
+    async function handleSaveChanges() {
+      try {
+        setLoading(true);
+        const token = await getToken();
+        const file = formData.get("avatar") as File;
+        if (file && file.name) {
+          formData.delete("avatar");
+          const imgFormData = new FormData();
+          imgFormData.append("files", file);
+          const imgResponse = await strapi.post("/upload", imgFormData, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          formData.append("avatar", imgResponse.data?.[0]?.id);
+        }
+        const userId = getUserAttribute("id");
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+        await strapi.put(apiUrl.updateUser(userId), formData, config);
+        const newAvatar = await strapi.get(apiUrl.getUserAvatar(userId), config);
+        const updatedData: any = {};
+        for (const [key, value] of formData.entries() as any) {
+          if (key === "avatar") {
+            updatedData[key] = newAvatar.data?.avatar?.url ?? avatar;
+          } else {
+            updatedData[key] = value;
+          }
+        }
+        const currentUser = localStorage.getItem("user");
+        const newUser = currentUser
+          ? { ...JSON.parse(currentUser), ...updatedData }
+          : { ...updatedData };
+        localStorage.setItem("user", JSON.stringify(newUser));
+        setSnackBar({
+          isActive: true,
+          type: "success",
+          message: "Ваши данные успешно обновлены!",
+        });
+      } catch (e) {
+        console.log(e);
+        setSnackBar({
+          isActive: true,
+          type: "error",
+          message: "Не удалось сохранить изменения, попробуйте ещё раз",
+        });
+      } finally {
+        setLoading(false);
+      }
     }
   }
 
@@ -122,26 +193,27 @@ const UpdateProfileForm = () => {
       </button>
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.avatar_wrapper}>
-          <div className={styles.avatar}>
-            {user.avatar || avatar ? (
-              <Image
-                src={user.avatar ?? avatar}
-                alt="user avatar"
-                width={80}
-                height={80}
-                priority
-                quality={100}
-              />
-            ) : (
+          {avatar ? (
+            <Image
+              src={avatar.startsWith("/uploads") ? BASE_URL + avatar : avatar}
+              alt="user avatar"
+              width={80}
+              height={80}
+              priority
+              quality={100}
+              className={styles.avatar_img}
+            />
+          ) : (
+            <div className={styles.avatar}>
               <span>{user.username[0]?.toLocaleUpperCase() ?? "U"}</span>
-            )}
-          </div>
+            </div>
+          )}
           <button
             disabled={disabled || loading}
             className={disabled || loading ? `${styles.btn} ${styles.disabled}` : styles.btn}
             type="button"
             onClick={handleUploadAvatar}
-          >{`${user.avatar || avatar ? "Изменить" : "Добавить"} аватар`}</button>
+          >{`${avatar ? "Изменить" : "Добавить"} аватар`}</button>
           <input
             accept="image/png, image/jpeg, image/svg+xml, image/x-icon"
             onChange={handleAvatarChange}
@@ -156,6 +228,9 @@ const UpdateProfileForm = () => {
           <span>Имя</span>
           <input
             required
+            onChange={() => {
+              if (!isChanged) setIsChanged(true);
+            }}
             onFocus={handleFocus}
             onBlur={handleBlur}
             className={styles.input}
@@ -169,6 +244,9 @@ const UpdateProfileForm = () => {
           <span>Почта</span>
           <input
             required
+            onChange={() => {
+              if (!isChanged) setIsChanged(true);
+            }}
             onFocus={handleFocus}
             onBlur={handleBlur}
             className={styles.input}
@@ -183,6 +261,7 @@ const UpdateProfileForm = () => {
           <div className={styles.pw_input_wrapper}>
             <input
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                if (!isChanged) setIsChanged(true);
                 if (pwValidation.isError) {
                   if (e.target.value.length > 5) {
                     setPwValidation({ isError: false, message: "" });
@@ -263,19 +342,30 @@ const UpdateProfileForm = () => {
         </div>
         <div className={styles.footer_actions}>
           <button
-            className={saveDisabled ? `${styles.save_btn} ${styles.disabled}` : styles.save_btn}
-            disabled={saveDisabled}
+            className={
+              saveDisabled || !isChanged ? `${styles.save_btn} ${styles.disabled}` : styles.save_btn
+            }
+            disabled={saveDisabled || !isChanged}
             type="submit"
           >
             {loading ? `Сохранение...` : `Сохранить`}
           </button>
-          <button className={styles.cancel_btn} type="reset" onClick={()=>{
-            setPassword("");
-            setPwValidation({isError: false, message: ""});
-            setConfirmPwValidation({isError: false, message: ""})
-            setDisabled(true);
-            setAvatar("");
-          }}>
+          <button
+            className={
+              saveDisabled || !isChanged
+                ? `${styles.cancel_btn} ${styles.disabled}`
+                : styles.cancel_btn
+            }
+            type="reset"
+            onClick={() => {
+              setPassword("");
+              setPwValidation({ isError: false, message: "" });
+              setConfirmPwValidation({ isError: false, message: "" });
+              setDisabled(true);
+              setAvatar(getUserAttribute("avatar"));
+              setIsChanged(false);
+            }}
+          >
             Отмена
           </button>
         </div>

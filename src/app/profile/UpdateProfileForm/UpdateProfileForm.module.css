@@ -61,6 +61,11 @@
   font-weight: 500;
 }
 
+.avatar_img{
+  padding: 10px 0;
+  border-radius: 50%;
+}
+
 .input_wrapper {
   width: 100%;
   display: flex;

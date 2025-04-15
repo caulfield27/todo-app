@@ -11,7 +11,8 @@ interface IStates{
     isTablet: boolean,
     isMobile: boolean,
     snackBar: ISnackBar,
-    theme: string | null
+    theme: string | null,
+    avatar: string | null
 }
 
 type Actions = {
@@ -19,7 +20,8 @@ type Actions = {
     setIsMobile: (payload: boolean)=> void,
     setIsTablet: (payload: boolean)=> void,
     setSnackBar: (payload: ISnackBar)=> void,
-    setTheme: (theme: string)=> void
+    setTheme: (theme: string)=> void,
+    setAvatar: (payload: string)=> void,
 }
 
 export const useGlobalStore = create<IStates & Actions>((set)=>({
@@ -31,7 +33,9 @@ export const useGlobalStore = create<IStates & Actions>((set)=>({
         message: "",
         type: "success"
     },
+    avatar: null,
     theme: null,
+    setAvatar: (payload)=> set({avatar: payload}),
     setTheme: (theme)=> set({theme: theme}),
     setSnackBar: (payload: ISnackBar)=> set({snackBar: payload}),
     setIsTablet: (payload: boolean) => set({isTablet: payload}),
