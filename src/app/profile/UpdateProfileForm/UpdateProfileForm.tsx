@@ -87,23 +87,22 @@ const UpdateProfileForm = () => {
                   type: "check",
                 })
                 .then(() => {
-                    handleSaveChanges();      
-                }).catch((e)=>{
+                  handleSaveChanges();
+                })
+                .catch((e) => {
                   setSnackBar({
                     isActive: true,
                     type: "error",
-                    message: e?.response?.data?.message || "Неверный код"
-                  })                  
-                }).finally(()=>{
-                  setLoading(false);
+                    message: e?.response?.data?.message || "Неверный код",
+                  });
                 });
-            })
-          }else{
-            setSnackBar(({
+            });
+          } else {
+            setSnackBar({
               isActive: true,
               type: "error",
-              message: res.data.message || "Неверный адресс почты!"
-            }))
+              message: res.data.message || "Неверный адресс почты!",
+            });
           }
         })
         .catch((e) => {
@@ -156,8 +155,6 @@ const UpdateProfileForm = () => {
         const newUser = currentUser
           ? { ...JSON.parse(currentUser), ...updatedData }
           : { ...updatedData };
-          console.log(newUser);
-          
         localStorage.setItem("user", JSON.stringify(newUser));
         setSnackBar({
           isActive: true,
@@ -165,7 +162,6 @@ const UpdateProfileForm = () => {
           message: "Ваши данные успешно обновлены!",
         });
       } catch (e) {
-        console.log(e);
         setSnackBar({
           isActive: true,
           type: "error",
@@ -184,7 +180,7 @@ const UpdateProfileForm = () => {
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     e.target.style.outline = "1px solid gainsboro";
   };
-  
+
   return (
     <div className={styles.edit_profile_container}>
       <button
@@ -197,7 +193,7 @@ const UpdateProfileForm = () => {
         <div className={styles.avatar_wrapper}>
           {avatar ? (
             <Image
-              src={avatar.startsWith("/uploads") ? BASE_URL+avatar : avatar}
+              src={avatar.startsWith("/uploads") ? BASE_URL + avatar : avatar}
               alt="user avatar"
               width={80}
               height={80}
