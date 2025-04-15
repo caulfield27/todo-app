@@ -86,18 +86,18 @@ const UpdateProfileForm = () => {
                   code: res.value,
                   type: "check",
                 })
-                .then((res) => {
-                  if (res.status === 200) {
-                    handleSaveChanges();
-                  }else{
-                    setSnackBar({
-                      isActive: true,
-                      type: "error",
-                      message: res.data?.message || "неверный код"
-                    })
-                  }
-                })
-            });
+                .then(() => {
+                    handleSaveChanges();      
+                }).catch((e)=>{
+                  setSnackBar({
+                    isActive: true,
+                    type: "error",
+                    message: e?.response?.data?.message || "Неверный код"
+                  })                  
+                }).finally(()=>{
+                  setLoading(false);
+                });
+            })
           }else{
             setSnackBar(({
               isActive: true,
