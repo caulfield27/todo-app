@@ -156,6 +156,8 @@ const UpdateProfileForm = () => {
         const newUser = currentUser
           ? { ...JSON.parse(currentUser), ...updatedData }
           : { ...updatedData };
+          console.log(newUser);
+          
         localStorage.setItem("user", JSON.stringify(newUser));
         setSnackBar({
           isActive: true,
@@ -182,7 +184,7 @@ const UpdateProfileForm = () => {
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     e.target.style.outline = "1px solid gainsboro";
   };
-
+  
   return (
     <div className={styles.edit_profile_container}>
       <button
@@ -195,7 +197,7 @@ const UpdateProfileForm = () => {
         <div className={styles.avatar_wrapper}>
           {avatar ? (
             <Image
-              src={avatar.startsWith("/uploads") ? BASE_URL + avatar : avatar}
+              src={avatar.startsWith("/uploads") ? BASE_URL+avatar : avatar}
               alt="user avatar"
               width={80}
               height={80}
