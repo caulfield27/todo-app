@@ -3,6 +3,7 @@ import TodayIcon from "@mui/icons-material/Today";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import ChecklistIcon from '@mui/icons-material/Checklist';
+import ChatIcon from '@mui/icons-material/Chat';
 
 export const sidebarLinks = [
     {
@@ -35,5 +36,11 @@ export const sidebarLinks = [
         path: '/tasks',
         icon: <ChecklistIcon/>
     },
+    {
+        id:6,
+        label: 'Чат',
+        path: "/chat",
+        icon: <ChatIcon/>
+    }
 
 ]

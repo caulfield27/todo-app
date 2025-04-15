@@ -10,6 +10,12 @@ const nextConfig = {
               hostname: 'todo-app-cms.onrender.com',
               port: '',
             },
+            {
+              protocol: 'http',
+              hostname: 'localhost',
+              port: '1337',
+            },
+            
           ],
     }
 };
