@@ -12,7 +12,7 @@ interface IStates{
     isMobile: boolean,
     snackBar: ISnackBar,
     theme: string | null,
-    avatar: string | null
+    avatar: string | null,
 }
 
 type Actions = {

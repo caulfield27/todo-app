@@ -4,6 +4,7 @@ export const apiUrl = {
   cronId: "/cron-tasks",
   updateUser: (userId: number)=>  `/users/${userId}`,
   getUser: (id: number)=> `/users/${id}?populate=*`,
+  getUsers: `/users?populate=*`,
   getUserAvatar: (id: number) => `/users/${id}?populate[avatar]=*`,
   getFilteredTodoes: (filter: string, userId: number | string) => `/todoes?populate=*&filters[userId][id]=${userId}&${filter}`,
   getUserCron: (email: string)=> `/cron-tasks?filters[user]=${email}`,

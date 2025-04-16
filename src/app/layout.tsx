@@ -6,9 +6,9 @@ import { useGlobalStore } from "@/store/global/global";
 import { usePathname } from "next/navigation";
 import { useSidebarStore } from "@/store/sidebar/sidebar";
 import { handleThemeChange } from "@/utils/handleThemeChange";
-import { BASE_URL } from "@/e_shared/get-env";
-import { apiUrl } from "@/routes";
 import { getUserAttribute } from "@/utils/getUser";
+import { PoppinsText } from "@/fonts";
+import { WebSocketProvider } from "@/c_feauters/WebSocket/WebSocketProvider";
 
 interface Props {
   children: ReactNode;
@@ -36,9 +36,13 @@ export default function RootLayout({ children }: Props) {
 
   return (
     <>
-      <html lang="en">
+      <html className={PoppinsText.variable} lang="en">
         <body>
-          <div className="app_container">{children}</div>
+          <div className="app_container">
+            <WebSocketProvider>
+              {children}  
+            </WebSocketProvider>  
+          </div>
         </body>
       </html>
     </>

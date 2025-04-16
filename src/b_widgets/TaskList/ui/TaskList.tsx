@@ -186,6 +186,7 @@ const TaskList = ({ type }: Props) => {
         setLoading(false);
       });
   };
+  
 
   return (
     <main className={styles.task_list_section}>

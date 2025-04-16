@@ -105,7 +105,6 @@ export default function LoginForm() {
         })
         .then((res) => console.log(res.data))
         .catch((err) => console.log(err));
-      setLoading(false);
       router.push("/myDay");
     } catch (e: any) {
       Swal.fire({
