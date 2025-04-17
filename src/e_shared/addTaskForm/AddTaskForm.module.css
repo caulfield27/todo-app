@@ -160,6 +160,10 @@
     .category_dropdown_adaptive, .priority_modal_adaptive{
         left: -95px;
     }
+
+    .category_dropdown_adaptive_1{
+        left: -20;
+    }
 }
 
 @media screen and (max-width: 525px) {

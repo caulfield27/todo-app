@@ -1,0 +1,7 @@
+.content_wrapper{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    color: var(--header-color);
+}

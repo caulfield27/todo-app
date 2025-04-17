@@ -39,9 +39,11 @@ export default function RootLayout({ children }: Props) {
       <html className={PoppinsText.variable} lang="en">
         <body>
           <div className="app_container">
-            <WebSocketProvider>
-              {children}  
-            </WebSocketProvider>  
+            {pathname.startsWith("/auth") ? (
+              children
+            ) : (
+              <WebSocketProvider>{children}</WebSocketProvider>
+            )}
           </div>
         </body>
       </html>

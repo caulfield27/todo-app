@@ -195,11 +195,11 @@ const UpdateProfileForm = () => {
             <Image
               src={avatar.startsWith("/uploads") ? BASE_URL + avatar : avatar}
               alt="user avatar"
-              width={80}
-              height={80}
+              width={100}
+              height={100}
               priority
               quality={100}
-              className={styles.avatar_img}
+              style={{borderRadius: "8px"}}
             />
           ) : (
             <div className={styles.avatar}>

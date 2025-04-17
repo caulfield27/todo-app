@@ -19,6 +19,8 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Image from "next/image";
 import { BASE_URL } from "@/e_shared/get-env";
+import { Avatar } from "@mui/material";
+import { deepOrange, deepPurple } from "@mui/material/colors";
 
 export default function Sidebar() {
   const { showSidebar, setSidebar } = useSidebarStore();
@@ -124,29 +126,26 @@ export default function Sidebar() {
               <div className={styles.user}>
                 {avatar ? (
                   <div
-                    className={styles.avatar_wrapper}
+                    style={{ cursor: "pointer" }}
                     role="button"
                     onClick={() => setUserDropdown((prev) => !prev)}
                   >
-                    <Image
+                    <Avatar
+                      alt={"user photo"}
                       src={avatar.startsWith("/uploads") ? BASE_URL + avatar : avatar}
-                      priority
-                      quality={100}
-                      width={24}
-                      height={24}
-                      alt="user avatar"
-                      style={{ borderRadius: "50%" }}
                     />
                   </div>
                 ) : (
-                  <button
-                    className={styles.user_btn}
+                  <div
+                    role="button"
+                    style={{ cursor: "pointer" }}
                     onClick={() => setUserDropdown((prev) => !prev)}
                   >
-                    <span>{typeof user === "object" ? user?.username[0] : "U"}</span>
-                  </button>
+                    <Avatar sx={{ bgcolor: deepOrange["500"] }}>
+                      <span>{typeof user === "object" ? user?.username[0] : "U"}</span>
+                    </Avatar>
+                  </div>
                 )}
-
                 {!isTablet && (
                   <span className={styles.userName}>
                     {typeof user === "object" ? user.username : "User"}

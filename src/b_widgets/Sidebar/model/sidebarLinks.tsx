@@ -38,8 +38,8 @@ export const sidebarLinks = [
     },
     {
         id:6,
-        label: 'Чат',
-        path: "/chat",
+        label: 'Сообщество',
+        path: "/community",
         icon: <ChatIcon/>
     }
 

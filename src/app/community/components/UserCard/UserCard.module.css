@@ -1,0 +1,47 @@
+.user_card_container{
+    position: relative;
+    width: 300px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    background: transparent;
+    transition: background 0.2s ease-out;
+    border-radius: 12px;
+    cursor: default;
+}
+
+.msg_wrapper{
+    margin-right: 10px;
+    cursor: pointer;
+    position: relative;
+}
+
+.user_card_info_wrapper{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+}
+
+.user_card_container:hover{
+    background: #f1f1f1;
+}
+
+
+.online{
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #74ff6f;
+    position: absolute;
+    left: 30px;
+    bottom: 4px;
+}
+
+.popover{
+    width: fit-content;
+    left: -27px;
+}
