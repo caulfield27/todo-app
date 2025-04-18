@@ -1,18 +1,39 @@
 "use client";
-import { useCommunityStore } from "../../store/store";
 import { tabContent, tabList } from "./data";
 import styles from "./Content.module.css";
 import { Tabs, Tab } from "@mui/material";
-import { useGlobalStore } from "@/store/global/global";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useCommunityStore } from "../../store/store";
 
 export const CommunityContent = () => {
-  const { currentComponent, setCurrentComponent } = useCommunityStore();
+  const searchParams = useSearchParams();
+  const [currentComponent, setCurrentComponent] =  useState(searchParams.get("type") ?? "users");
+  const {setCurrentChat, chats} = useCommunityStore(); 
+  const pathname = usePathname();
+  const router = useRouter();
+
+  useEffect(()=>{
+    const type = searchParams.get("type");
+    const chat = searchParams.get("chat");
+    if(type && type !== currentComponent) setCurrentComponent(type);
+    if(chat){
+      const newChat = chats.find((chat)=> chat.userId === Number(chat));
+      if(newChat) setCurrentChat(newChat); 
+    };
+  }, [searchParams]);
+
+  const handleTabsChange = (event: React.SyntheticEvent, newVal: string)=>{
+    const params = new URLSearchParams();
+    params.set("type", newVal);
+    router.replace(`${pathname}?${String(params)}`);
+  }
   
   return (
     <div className={styles.content_wrapper}>
       <Tabs
         value={currentComponent}
-        onChange={(event: React.SyntheticEvent, newVal: string) => setCurrentComponent(newVal)}
+        onChange={handleTabsChange}
         textColor="inherit"
         indicatorColor="primary"
         variant="scrollable"

@@ -1,15 +1,23 @@
-import { ReactElement } from "react";
+import { IChat, IUserData } from "@/e_shared/types/types";
 import { create } from "zustand";
 
 interface IState{
-    currentComponent: string
+    currentChat: IChat | null,
+    chats: IChat[],
+    users: IUserData[],
 }
 
 interface Actions{
-    setCurrentComponent: (payload: string)=> void
+    setCurrentChat: (payload: IChat | null)=> void,
+    setChats: (chats: IChat[])=> void,
+    setUsers: (users: IUserData[])=> void
 }
 
 export const useCommunityStore = create<IState & Actions>((set)=> ({
-    currentComponent: "users",
-    setCurrentComponent: (payload)=> set({currentComponent: payload}) 
+    currentChat: null,
+    chats: [],
+    users: [],
+    setUsers: (payload)=> set({users: payload}), 
+    setChats: (chats)=> set({chats: chats}),
+    setCurrentChat: (payload)=> set({currentChat: payload}) 
 }))

@@ -6,8 +6,10 @@ import { getUserAttribute } from "@/utils/getUser";
 import { Dispatch, SetStateAction } from "react";
 
 export function getChats(
-    setChats: Dispatch<SetStateAction<IChat[]>>,
-    setLoading: Dispatch<SetStateAction<boolean>>
+    setChats: (chats: IChat[])=> void,
+    setLoading: Dispatch<SetStateAction<boolean>>,
+    chatId: string | null,
+    setCurrentChat : (newChat: IChat | null)=> void
 ){
     setLoading(true);
     getToken().then((token)=>{
@@ -18,7 +20,15 @@ export function getChats(
                 }
             })
             .then((res)=>{
-                setChats(res?.data?.data[0]?.chats || []);
+                const chats = res?.data?.data[0]?.chats;
+                if(chats){
+                    setChats(chats);
+                    if(chatId){
+                        const currentChat = chats.find((chat: IChat)=> chat.userId === Number(chatId));        
+                        setCurrentChat(currentChat || null);
+                    }
+
+                }
             })
             .catch((e)=> console.log('get chats err: ', e))
             .finally(()=> setLoading(false))

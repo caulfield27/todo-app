@@ -17,7 +17,10 @@ interface Props {
 export default function RootLayout({ children }: Props) {
   const pathname = usePathname();
   const { setSidebar, showSidebar } = useSidebarStore();
-  const { isMobile, theme, setTheme, setAvatar } = useGlobalStore();
+  const isMobile = useGlobalStore((state)=> state.isMobile);
+  const theme = useGlobalStore((state)=> state.theme);
+  const setTheme = useGlobalStore(( state)=> state.setTheme);
+  const setAvatar = useGlobalStore((state)=> state.setAvatar);
 
   useLayoutEffect(() => {
     if (isMobile && showSidebar) {

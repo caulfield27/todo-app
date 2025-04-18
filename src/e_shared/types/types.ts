@@ -20,11 +20,22 @@ interface IChat{
 }
 
 interface IMessage{
+    id?: number,
     from: number | null,
     to: number | null,
-    isRed: boolean,
     message: string,
-    createdTime: string
+    createdTime?: Date
+}
+
+interface IDetailedMessage{
+    id?: number,
+    from: {
+        username: string,
+        avatar: string | null,
+        id: number | null
+    },
+    to: number | null,
+    message: string
 }
 
 interface IImg{
@@ -63,4 +74,4 @@ type CategoryType =
 | "rest"
 | "others";
 
-export type {IUserData, ITodoResponse, CategoryType, IChat, IMessage}
+export type {IUserData, ITodoResponse, CategoryType, IChat, IMessage, IDetailedMessage}
