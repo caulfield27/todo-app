@@ -1,0 +1,13 @@
+.no_chats_container{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.no_chats_text_wrapper p{
+    font-size: 16px;
+    color: gray;
+}
