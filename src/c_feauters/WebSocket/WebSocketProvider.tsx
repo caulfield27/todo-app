@@ -22,7 +22,9 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
   const chats = useCommunityStore((state) => state.chats);
 
   useEffect(() => {
-    webSocketRef.current = new WebSocket("ws://localhost:1337");
+    webSocketRef.current = new WebSocket(
+      process.env.NEXT_PUBLIC_WS_SERVER ?? "ws://todo-app-cms.onrender.com"
+    );
     const audio = new Audio("/message.wav");
     const id = getUserAttribute("id");
     webSocketRef.current.onopen = () => {
@@ -31,7 +33,7 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
       webSocketRef.current?.send(JSON.stringify({ type: "checkStatus", id }));
     };
     webSocketRef.current.onmessage = (msg) => {
-      if(audio){
+      if (audio) {
         audio.play();
       }
       const data = JSON.parse(msg.data);
