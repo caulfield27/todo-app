@@ -1,7 +1,7 @@
 "use client";
 
 import { useCommunityStore } from "@/app/community/store/store";
-import { IDetailedMessage, IMessage } from "@/e_shared/types/types";
+import { IDetailedMessage } from "@/e_shared/types/types";
 import { getUserAttribute } from "@/utils/getUser";
 import { createContext, ReactNode, useEffect, useRef, useState } from "react";
 
@@ -23,9 +23,8 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     webSocketRef.current = new WebSocket(
-      process.env.NEXT_PUBLIC_WS_SERVER ?? "ws://todo-app-cms.onrender.com"
+      process.env.NEXT_PUBLIC_WS_SERVER ?? "wss://todo-app-cms.onrender.com"
     );
-    const audio = new Audio("/message.wav");
     const id = getUserAttribute("id");
     webSocketRef.current.onopen = () => {
       console.log("соеденение установлено!");
@@ -33,9 +32,6 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
       webSocketRef.current?.send(JSON.stringify({ type: "checkStatus", id }));
     };
     webSocketRef.current.onmessage = (msg) => {
-      if (audio) {
-        audio.play();
-      }
       const data = JSON.parse(msg.data);
       switch (data.type) {
         case "usersStatus":
