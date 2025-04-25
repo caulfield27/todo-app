@@ -27,7 +27,7 @@ export async function getCommunityData(
                 setUsers(usersResponse.value.data ?? []);
             };
             if(chatsResponse.status === "fulfilled"){
-                setChats(chatsResponse.value.data?.data ?? [])
+                setChats(chatsResponse.value.data?.data[0].chats ?? [])
             }
         }).catch((err)=>{
             console.log('get community data err: ', err);

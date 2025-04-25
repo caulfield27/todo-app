@@ -47,8 +47,7 @@ export const CurrentChat = ({ setMessage, message, isMobile, isTablet }: Props) 
     const canvas = msgCanvas.current;
     const msg_container = messagesContainerRef.current;
     if (canvas) {
-      const offsetTop = canvas.getBoundingClientRect().top;
-      const validOffset = isMobile ? offsetTop - 25 : offsetTop;
+      const validOffset = isMobile ? 280 : 320;
       canvas.style.height = `calc(100vh - ${validOffset}px)`;
       if (msg_container) {
         msg_container.style.height = `calc(100vh - ${isMobile ? "280" : "320"}px)`;

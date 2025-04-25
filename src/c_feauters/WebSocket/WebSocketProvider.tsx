@@ -1,7 +1,7 @@
 "use client";
 
 import { useCommunityStore } from "@/app/community/store/store";
-import { IDetailedMessage } from "@/e_shared/types/types";
+import { IChat, IDetailedMessage } from "@/e_shared/types/types";
 import { getUserAttribute } from "@/utils/getUser";
 import { createContext, ReactNode, useEffect, useRef, useState } from "react";
 
@@ -20,18 +20,24 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
   const [activeUsers, setActiveUsers] = useState<Set<number>>(new Set());
   const addMessage = useCommunityStore((state) => state.addMessage);
   const chats = useCommunityStore((state) => state.chats);
+  const chatsRef = useRef<IChat[] | null>(null);
+
+  useEffect(() => {
+    chatsRef.current = chats;
+  }, [chats]);
 
   useEffect(() => {
     webSocketRef.current = new WebSocket(
       process.env.NEXT_PUBLIC_WS_SERVER ?? "wss://todo-app-cms.onrender.com"
     );
+    const ws = webSocketRef.current;
     const id = getUserAttribute("id");
-    webSocketRef.current.onopen = () => {
+    ws.onopen = () => {
       console.log("соеденение установлено!");
-      webSocketRef.current?.send(JSON.stringify({ type: "init", id }));
-      webSocketRef.current?.send(JSON.stringify({ type: "checkStatus", id }));
+      ws.send(JSON.stringify({ type: "init", id }));
+      ws.send(JSON.stringify({ type: "checkStatus", id }));
     };
-    webSocketRef.current.onmessage = (msg) => {
+    ws.onmessage = (msg) => {
       const data = JSON.parse(msg.data);
       switch (data.type) {
         case "usersStatus":
@@ -41,13 +47,25 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
           const msg: IDetailedMessage = data?.data;
           addMessage(msg);
           break;
+        case "getId":
+          localStorage.setItem("chatId", data.id);
       }
     };
 
+    const handleBeforeUnload = () => {
+      ws.send(
+        JSON.stringify({
+          type: "save",
+          chatId: localStorage.getItem("chatId"),
+          chats: chatsRef.current,
+        })
+      );
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
     return () => {
-      if (webSocketRef.current) {
-        webSocketRef.current.close();
-      }
+      ws.close();
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
 

@@ -9,6 +9,7 @@ import { IDetailedMessage } from "@/e_shared/types/types";
 import { CurrentChat } from "./CurrentChat";
 import { NoChats } from "./NoChats";
 import { useGlobalStore } from "@/store/global/global";
+import { handleUsername } from "@/utils/handleUsername";
 
 export const Chat = () => {
   const { activeUsers } = useContext(SocketContext);
@@ -59,7 +60,7 @@ export const Chat = () => {
                         <Avatar>{chat.username[0].toLocaleUpperCase()}</Avatar>
                       )}
                       <div className={styles.user_status_wrapper}>
-                        <span className={styles.name_span}>{chat.username}</span>
+                        <span className={styles.name_span}>{handleUsername(chat.username)}</span>
                         <span className={styles.status_span}>
                           {activeUsers?.has(chat.userId) ? "В сети" : "Не в сети"}
                         </span>
