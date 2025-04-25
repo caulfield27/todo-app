@@ -6,6 +6,7 @@ export const apiUrl = {
   getUser: (id: number)=> `/users/${id}?populate=*`,
   getUsers: (id: number)=> `/users?populate=*&filters[id][$ne]=${id}`,
   getChats: (id: number)=> `/chats?filters[chatId]=${id}&populate[chats][populate]=*`,
+  updateChats: (id: number)=> `/chats/${id}`,
   getUserAvatar: (id: number) => `/users/${id}?populate[avatar]=*`,
   getFilteredTodoes: (filter: string, userId: number | string) => `/todoes?populate=*&filters[userId][id]=${userId}&${filter}`,
   getUserCron: (email: string)=> `/cron-tasks?filters[user]=${email}`,

@@ -1,7 +1,9 @@
 "use client";
 
 import { useCommunityStore } from "@/app/community/store/store";
+import { strapi } from "@/e_shared/api";
 import { IChat, IDetailedMessage } from "@/e_shared/types/types";
+import { apiUrl } from "@/routes";
 import { getUserAttribute } from "@/utils/getUser";
 import { createContext, ReactNode, useEffect, useRef, useState } from "react";
 
