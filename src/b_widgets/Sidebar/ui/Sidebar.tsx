@@ -4,7 +4,7 @@ import styles from "./Sidebar.module.css";
 import { sidebarLinks } from "../model/sidebarLinks";
 import Link from "next/link";
 import "../../../app/globals.css";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useSidebarStore } from "@/store/sidebar/sidebar";
 import { ProfileDropdown } from "@/c_feauters/profileDropdown";
@@ -17,24 +17,17 @@ import { handleDisableEvents } from "@/utils/handleDisableEvents";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import Image from "next/image";
 import { BASE_URL } from "@/e_shared/get-env";
 import { Avatar } from "@mui/material";
-import { deepOrange, deepPurple } from "@mui/material/colors";
+import { deepOrange } from "@mui/material/colors";
+import { handleUsername } from "@/utils/handleUsername";
 
 export default function Sidebar() {
   const { showSidebar, setSidebar } = useSidebarStore();
   const sidebarRef = useRef<HTMLElement | null>(null);
-  const {
-    setSidebarWidth,
-    sidebarWidth,
-    isMobile,
-    setIsMobile,
-    isTablet,
-    setIsTablet,
-    snackBar,
-    setSnackBar,
-  } = useGlobalStore();
+  const { setSidebarWidth, sidebarWidth, isMobile, isTablet } = useGlobalStore();
+  const snackBar = useGlobalStore((state) => state.snackBar);
+  const setSnackBar = useGlobalStore((state) => state.setSnackBar);
   const [userDropdown, setUserDropdown] = useState(false);
   const currentPage = usePathname();
   const [user, setUser] = useState<IUserData | "">("");
@@ -59,23 +52,10 @@ export default function Sidebar() {
       sidebarRef.current.style.display = "block";
     }
 
-    function handleResize() {
-      setIsTablet(window.outerWidth < 768 && window.outerWidth >= 425);
-      setIsMobile(window.outerWidth < 425);
-
-      if (window.outerWidth < 425) {
-        setSidebar(false);
-      } else {
-        setSidebar(true);
-      }
+    if (window.outerWidth <= 425) {
+      setSidebar(false);
     }
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [isTablet, isMobile]);
+  }, []);
 
   useEffect(() => {
     if (isMobile) {
@@ -148,7 +128,7 @@ export default function Sidebar() {
                 )}
                 {!isTablet && (
                   <span className={styles.userName}>
-                    {typeof user === "object" ? user.username : "User"}
+                    {typeof user === "object" ? handleUsername(user.username) : "User"}
                   </span>
                 )}
               </div>

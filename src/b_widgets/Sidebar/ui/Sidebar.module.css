@@ -24,7 +24,7 @@
 .closedArrow{
     position: absolute;
     top: 0;
-    right: 0;
+    right: -12px;
 }
 
 .openArrow{

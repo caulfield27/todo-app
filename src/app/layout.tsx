@@ -17,10 +17,10 @@ interface Props {
 export default function RootLayout({ children }: Props) {
   const pathname = usePathname();
   const { setSidebar, showSidebar } = useSidebarStore();
-  const isMobile = useGlobalStore((state)=> state.isMobile);
-  const theme = useGlobalStore((state)=> state.theme);
-  const setTheme = useGlobalStore(( state)=> state.setTheme);
-  const setAvatar = useGlobalStore((state)=> state.setAvatar);
+  const { isMobile, setIsMobile, setIsTablet } = useGlobalStore();
+  const theme = useGlobalStore((state) => state.theme);
+  const setTheme = useGlobalStore((state) => state.setTheme);
+  const setAvatar = useGlobalStore((state) => state.setAvatar);
 
   useLayoutEffect(() => {
     if (isMobile && showSidebar) {
@@ -29,6 +29,8 @@ export default function RootLayout({ children }: Props) {
   }, [pathname]);
 
   useLayoutEffect(() => {
+    setIsTablet(window.outerWidth <= 768 && window.outerWidth > 425);
+    setIsMobile(window.outerWidth <= 425);
     setTheme(localStorage.getItem("theme") || "light");
     setAvatar(getUserAttribute("avatar") || null);
   }, []);

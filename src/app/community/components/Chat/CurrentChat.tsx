@@ -3,7 +3,15 @@ import { Avatar } from "@mui/material";
 import { useCommunityStore } from "../../store/store";
 import styles from "./CurrentChat.module.css";
 import { BASE_URL } from "@/e_shared/get-env";
-import { Dispatch, SetStateAction, useContext, useEffect, useRef, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { IDetailedMessage } from "@/e_shared/types/types";
 import { getUserAttribute } from "@/utils/getUser";
 import { handleMessageChange, handlePressEnter, handleSendMsg } from "./actions";
@@ -15,37 +23,52 @@ interface Props {
   setMessage: Dispatch<SetStateAction<IDetailedMessage>>;
   message: IDetailedMessage;
   isMobile?: boolean;
+  isTablet?: boolean;
 }
 
-export const CurrentChat = ({ setMessage, message, isMobile }: Props) => {
+export const CurrentChat = ({ setMessage, message, isMobile, isTablet }: Props) => {
   const { currentChat, setCurrentChat } = useCommunityStore();
   const { socket } = useContext(SocketContext);
   const messagesContainerRef = useRef<HTMLDivElement | null>(null);
+  const msgCanvas = useRef<HTMLDivElement | null>(null);
   const [readyToSend, setReadyToSend] = useState(false);
 
   useEffect(() => {
     if (currentChat && currentChat.userId !== message.to) {
       setMessage((prev) => ({ ...prev, to: currentChat.userId }));
     }
-
-    if (messagesContainerRef.current) {
-      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    const messagesContainer = messagesContainerRef.current;
+    if (messagesContainer) {
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
   }, [currentChat]);
 
+  useLayoutEffect(() => {
+    const canvas = msgCanvas.current;
+    const msg_container = messagesContainerRef.current;
+    if (canvas) {
+      const offsetTop = canvas.getBoundingClientRect().top;
+      const validOffset = isMobile ? offsetTop - 25 : offsetTop;
+      canvas.style.height = `calc(100vh - ${validOffset}px)`;
+      if (msg_container) {
+        msg_container.style.height = `calc(100vh - ${isMobile ? "280" : "320"}px)`;
+      }
+    }
+  }, []);
+
   return (
-    <div className={styles.chat_canvas}>
+    <div ref={msgCanvas} className={styles.chat_canvas}>
       <div className={styles.cnavas_container}>
-        <div>
+        <div className={styles.messages_wrapper}>
           <div className={styles.header_container}>
-            {isMobile && (
+            {(isMobile || isTablet) && (
               <button onClick={() => setCurrentChat(null)} className={styles.go_back_btn}>
                 <ArrowBackIcon />
               </button>
             )}
             <header className={styles.messages_header}>
               <div className={styles.chat_messages_avatar_wrapper}>
-                {isMobile && <span>{currentChat?.username}</span>}
+                {(isMobile || isTablet) && <span>{currentChat?.username}</span>}
                 {currentChat?.avatar ? (
                   <Avatar
                     alt={`${currentChat.username} avatar`}
@@ -54,7 +77,7 @@ export const CurrentChat = ({ setMessage, message, isMobile }: Props) => {
                 ) : (
                   <Avatar>{currentChat?.username[0].toLocaleUpperCase()}</Avatar>
                 )}
-                {!isMobile && <span>{currentChat?.username}</span>}
+                {!isMobile && !isTablet && <span>{currentChat?.username}</span>}
               </div>
             </header>
           </div>

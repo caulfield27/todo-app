@@ -14,6 +14,7 @@ export const Chat = () => {
   const { activeUsers } = useContext(SocketContext);
   const { currentChat, setCurrentChat, chats } = useCommunityStore();
   const isMobile = useGlobalStore((state) => state.isMobile);
+  const isTablet = useGlobalStore((state)=> state.isTablet);
   const [message, setMessage] = useState<IDetailedMessage>({
     from: {
       username: "",
@@ -39,8 +40,8 @@ export const Chat = () => {
     <div className={styles.chat_container}>
       {chats.length ? (
         <>
-          {currentChat && isMobile ? null : (
-            <aside className={isMobile ? styles.chat_aside_mobile : styles.chat_aside}>
+          {currentChat && (isMobile || isTablet) ? null : (
+            <aside className={isMobile || isTablet ? styles.chat_aside_mobile : styles.chat_aside}>
               <div className={styles.chat_aside_content}>
                 {chats.map((chat) => {
                   return (
