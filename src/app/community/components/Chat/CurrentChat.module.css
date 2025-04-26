@@ -35,6 +35,12 @@
     justify-content: space-between;
 }
 
+.fixed_header{
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
 .messages_header{
     padding: 10px 0;
 }
@@ -98,6 +104,12 @@
     font-size: 18px;
 }
 
+.fixed_messages_input{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
 .message_input::-webkit-scrollbar{
     display: none;
 }
@@ -136,13 +148,13 @@
 }
 
 
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 426px) {
     .messages_container{
         padding: 10px 0;
     }
-
-    .send_message_container{
-        padding: 5px 0;
+    
+    .send_btn_wrapper{
+        height: 73px;
     }
 } 
 

@@ -52,14 +52,14 @@ export const CurrentChat = ({ setMessage, message, isMobile, isTablet }: Props) 
       canvas.style.height = `calc(100vh - ${validOffset}px)`;
     }
     if (msg_container) {
-      msg_container.style.height = `calc(100vh - ${(isMobile || isTablet) ? "180" : "320"}px)`;
+      msg_container.style.height = `calc(100vh - ${(isMobile || isTablet) ? "100" : "320"}px)`;
     }
   }, []);
 
   return ((isMobile || isTablet) ? createPortal(<div ref={msgCanvas} className={styles.chat_canvas_mobile}>
     <div className={styles.cnavas_container}>
       <div className={styles.messages_wrapper}>
-        <div className={styles.header_container}>
+        <div className={`${styles.header_container} ${styles.fixed_header}`}>
           {(isMobile || isTablet) && (
             <button onClick={() => setCurrentChat(null)} className={styles.go_back_btn}>
               <ArrowBackIcon />
@@ -94,7 +94,7 @@ export const CurrentChat = ({ setMessage, message, isMobile, isTablet }: Props) 
           })}
         </div>
       </div>
-      <div className={styles.send_message_container}>
+      <div className={`${styles.send_message_container} ${styles.fixed_messages_input}`}>
         <textarea
           value={message.message}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
