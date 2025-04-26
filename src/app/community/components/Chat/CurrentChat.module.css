@@ -59,7 +59,6 @@
     flex-direction: column;
     gap: 15px;
     overflow-x: hidden;
-    padding: 12px;
 }
 
 .messages_container::-webkit-scrollbar{
@@ -149,12 +148,13 @@
 
 
 @media screen and (max-width: 426px) {
-    .messages_container{
-        padding: 10px 0;
-    }
-    
+
     .send_btn_wrapper{
         height: 73px;
+    }
+
+    .messages_wrapper{
+        padding-top: 55px;
     }
 } 
 

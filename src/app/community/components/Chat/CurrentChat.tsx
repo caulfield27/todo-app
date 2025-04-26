@@ -52,7 +52,7 @@ export const CurrentChat = ({ setMessage, message, isMobile, isTablet }: Props) 
       canvas.style.height = `calc(100vh - ${validOffset}px)`;
     }
     if (msg_container) {
-      msg_container.style.height = `calc(100vh - ${(isMobile || isTablet) ? "100" : "320"}px)`;
+      msg_container.style.height = `calc(100vh - ${(isMobile || isTablet) ? "170" : "320"}px)`;
     }
   }, []);
 
