@@ -20,7 +20,7 @@ export const sidebarLinks = [
     },
     {
         id: 3,
-        label: 'Выжные',
+        label: 'Важные',
         path: '/important',
         icon: <StarsIcon/>
     },
