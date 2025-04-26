@@ -54,6 +54,14 @@ export const CurrentChat = ({ setMessage, message, isMobile, isTablet }: Props) 
     if (msg_container) {
       msg_container.style.height = `calc(100vh - ${(isMobile || isTablet) ? "170" : "320"}px)`;
     }
+
+    if(isMobile || isTablet){
+      document.body.style.overflow = "hidden";
+    }
+
+    return ()=>{
+      document.body.style.overflow = "auto";
+    }
   }, []);
 
   return ((isMobile || isTablet) ? createPortal(<div ref={msgCanvas} className={styles.chat_canvas_mobile}>
