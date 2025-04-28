@@ -107,13 +107,12 @@ export default function LoginForm() {
         .catch((err) => console.log(err));
       router.push("/myDay");
     } catch (e: any) {
+      setLoading(false);
       Swal.fire({
         icon: "error",
         title: e?.response?.status === 400 ?  "Неверный логин или пароль" : "Ошибка, попробуйте ещё раз",
         text: "Проверьте данные и попробуйте ешё",
       });
-    } finally {
-      setLoading(false);
     }
   }
 
