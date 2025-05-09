@@ -35,8 +35,6 @@ export async function POST(request: NextRequest) {
                             Authorization: `Bearer ${token}`,
                             "Content-Type" : "application/json"
                         }
-                    }).then((res)=>{
-                        console.log('expired update response: ', res.status);
                     }).catch((e)=>{
                         console.log('expired update error: ', e);
                     });
@@ -48,8 +46,6 @@ export async function POST(request: NextRequest) {
         }
 
         if(hasTodayTask){
-            console.log("alisher: ", todayTasks);
-            
             const transport = createTransport();
             const taskList = todayTasks.map((task)=> `
                 <li>${task.subject}</li>

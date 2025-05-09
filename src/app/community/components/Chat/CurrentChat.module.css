@@ -59,6 +59,7 @@
     flex-direction: column;
     gap: 15px;
     overflow-x: hidden;
+    padding: 16px 8px 0 8px;
 }
 
 .messages_container::-webkit-scrollbar{
@@ -155,6 +156,10 @@
 
     .messages_wrapper{
         padding-top: 55px;
+    }
+
+    .messages_container{
+        padding: 0;
     }
 } 
 

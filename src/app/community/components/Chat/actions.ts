@@ -12,9 +12,7 @@ export function handlePressEnter(
 ) {
   if (chat && event.key === "Enter" && readyToSend && !event.shiftKey) {
     event.preventDefault();
-    addMessageToChat(chat, setChat, message);
-    handleSendMessage(ws, message, chat);
-    setMessage((prev) => ({ ...prev, message: "" }));
+    handleSendMsg(chat, setChat, message, setMessage, ws)
   }
 }
 
@@ -57,22 +55,22 @@ export function addMessageToChat(
   } else {
     message["id"] = 1;
   }
-  const updatedMessage = { ...message, from: message.from.id };
+  const updatedMessage = { ...message, from: message.from.id, createdTime: new Date() };
   messages.push(updatedMessage);
   const updatedChat = { ...chat, messages };
   setChat(updatedChat);
 }
 
 export function handleSendMessage(
-    ws: WebSocket | null, 
-    message: IDetailedMessage,
-    chat: IChat
+  ws: WebSocket | null,
+  message: IDetailedMessage,
+  chat: IChat
 ) {
   if (ws && ws.OPEN) {
     ws.send(
       JSON.stringify({
         type: "message",
-        data: { ...message, chatId: localStorage.getItem("chatId"), chat: chat},
+        data: message,
       })
     );
   }

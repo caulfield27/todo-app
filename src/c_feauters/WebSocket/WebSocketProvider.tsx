@@ -20,7 +20,7 @@ export const SocketContext = createContext<IContext>({
 export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
   const webSocketRef = useRef<WebSocket | null>(null);
   const [activeUsers, setActiveUsers] = useState<Set<number>>(new Set());
-  const addMessage = useCommunityStore((state) => state.addMessage);
+  const { addMessage, setChats } = useCommunityStore();
   const chats = useCommunityStore((state) => state.chats);
   const chatsRef = useRef<IChat[] | null>(null);
 
@@ -51,6 +51,8 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
           break;
         case "getId":
           localStorage.setItem("chatId", data.id);
+        case "update":
+          setChats(data?.data || []);
       }
     };
 
