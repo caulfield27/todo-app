@@ -28,7 +28,6 @@ const UserCard = ({ avatar, name, isOnline, handleOpenChat }: Props) => {
       </div>
       <div className={styles.msg_wrapper} onClick={handleOpenChat}>
         <MessageIcon style={{color: "#55df50"}}/>
-        <Popover content="Написать" classes={styles.popover} arrow="top" bg="black"/>
       </div>
       {isOnline && <div className={styles.online}></div>}
     </div>
