@@ -13,7 +13,7 @@ export function handlePressEnter(
   if (chat && event.key === "Enter" && readyToSend && !event.shiftKey) {
     event.preventDefault();
     addMessageToChat(chat, setChat, message);
-    handleSendMessage(ws, message, chat);
+    handleSendMessage(ws, message);
     setMessage((prev) => ({ ...prev, message: "" }));
   }
 }
@@ -27,7 +27,7 @@ export function handleSendMsg(
 ) {
   if (chat) {
     addMessageToChat(chat, setChat, msg);
-    handleSendMessage(ws, msg, chat);
+    handleSendMessage(ws, msg);
     setMessage((prev) => ({ ...prev, message: "" }));
   }
 }
@@ -66,13 +66,12 @@ export function addMessageToChat(
 export function handleSendMessage(
     ws: WebSocket | null, 
     message: IDetailedMessage,
-    chat: IChat
 ) {
   if (ws && ws.OPEN) {
     ws.send(
       JSON.stringify({
         type: "message",
-        data: { ...message, chatId: localStorage.getItem("chatId"), chat: chat},
+        data: { ...message, createdTime: new Date()},
       })
     );
   }

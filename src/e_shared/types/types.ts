@@ -35,7 +35,8 @@ interface IDetailedMessage{
         id: number | null
     },
     to: number | null,
-    message: string
+    message: string,
+    createdTime?: Date
 }
 
 interface IImg{

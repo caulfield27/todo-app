@@ -49,8 +49,9 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
           const msg: IDetailedMessage = data?.data;
           addMessage(msg);
           break;
-        case "getId":
-          localStorage.setItem("chatId", data.id);
+        case "getDocumentId":
+          localStorage.setItem("chatDocumentId", data.id);
+          break;
       }
     };
 
@@ -58,7 +59,7 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
       ws.send(
         JSON.stringify({
           type: "save",
-          chatId: localStorage.getItem("chatId"),
+          documentId: localStorage.getItem("chatDocumentId"),
           chats: chatsRef.current,
         })
       );
