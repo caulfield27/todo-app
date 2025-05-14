@@ -21,7 +21,7 @@ export const useCommunityStore = create<IState & Actions>((set) => ({
   setUsers: (payload) => set({ users: payload }),
   addMessage: (msg) =>
     set((state) => {
-      const updatedMsg: IMessage = { ...msg, from: msg.from.id };
+      const updatedMsg: IMessage = { ...msg, from: msg.from.id, createdTime: new Date() };
       if (state.currentChat && state.currentChat.userId === msg.from.id) {
         const updatedChat = {
           ...state.currentChat,

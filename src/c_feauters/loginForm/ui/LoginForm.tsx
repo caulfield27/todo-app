@@ -103,7 +103,6 @@ export default function LoginForm() {
           userId: user.id,
           token: jwt,
         })
-        .then((res) => console.log(res.data))
         .catch((err) => console.log(err));
       router.push("/myDay");
     } catch (e: any) {
