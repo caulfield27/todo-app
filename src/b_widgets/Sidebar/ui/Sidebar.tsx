@@ -4,7 +4,7 @@ import styles from "./Sidebar.module.css";
 import { sidebarLinks } from "../model/sidebarLinks";
 import Link from "next/link";
 import "../../../app/globals.css";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useSidebarStore } from "@/store/sidebar/sidebar";
 import { ProfileDropdown } from "@/c_feauters/profileDropdown";
@@ -21,11 +21,13 @@ import { BASE_URL } from "@/e_shared/get-env";
 import { Avatar } from "@mui/material";
 import { deepOrange } from "@mui/material/colors";
 import { handleUsername } from "@/utils/handleUsername";
+import { getNotesCounts } from "@/utils/getNotsCount";
 
 export default function Sidebar() {
   const { showSidebar, setSidebar } = useSidebarStore();
   const sidebarRef = useRef<HTMLElement | null>(null);
   const { setSidebarWidth, sidebarWidth, isMobile, isTablet } = useGlobalStore();
+  const notifications = useGlobalStore((state) => state.notifications);
   const snackBar = useGlobalStore((state) => state.snackBar);
   const setSnackBar = useGlobalStore((state) => state.setSnackBar);
   const [userDropdown, setUserDropdown] = useState(false);
@@ -33,6 +35,8 @@ export default function Sidebar() {
   const [user, setUser] = useState<IUserData | "">("");
   const [isOpen, setIsOpen] = useState(false);
   const { avatar } = useGlobalStore();
+  const router = useRouter();
+  const notsCounter = getNotesCounts(notifications);
 
   useLayoutEffect(() => {
     const getUserFromStorage = localStorage.getItem("user");
@@ -133,8 +137,12 @@ export default function Sidebar() {
                 )}
               </div>
               {!isTablet && (
-                <button className={`${styles.not_btn} ${styles.header_btn}`}>
+                <button
+                  onClick={() => router.push(`notifications`)}
+                  className={`${styles.not_btn} ${styles.header_btn}`}
+                >
                   <NotificationsNoneIcon className={styles.notification} />
+                  {notsCounter > 0 && <div className={styles.nots_counter}>{notsCounter}</div>}
                 </button>
               )}
             </article>

@@ -51,6 +51,7 @@ export function parseToSentense(date: string) {
 }
 
 export function parseDateToReadable(day: string, isShorted: boolean) {
+  if(!day.length) return "";
   const arr = day.split(" ");
   const validDay = arr[2][0] === "0" ? arr[2].slice(1) : arr[2];
   return `${isShorted ? weeksShorted[arr[0]] : weeks[arr[0]]}, ${validDay} ${parseMonth[arr[1]]}`;

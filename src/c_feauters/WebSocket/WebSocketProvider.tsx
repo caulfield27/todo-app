@@ -4,6 +4,7 @@ import { useCommunityStore } from "@/app/community/store/store";
 import { strapi } from "@/e_shared/api";
 import { IChat, IDetailedMessage } from "@/e_shared/types/types";
 import { apiUrl } from "@/routes";
+import { useGlobalStore } from "@/store/global/global";
 import { getUserAttribute } from "@/utils/getUser";
 import { createContext, ReactNode, useEffect, useRef, useState } from "react";
 
@@ -20,9 +21,11 @@ export const SocketContext = createContext<IContext>({
 export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
   const webSocketRef = useRef<WebSocket | null>(null);
   const [activeUsers, setActiveUsers] = useState<Set<number>>(new Set());
+  const addNotification = useGlobalStore((state) => state.addNotification);
   const { addMessage, setChats } = useCommunityStore();
   const chats = useCommunityStore((state) => state.chats);
   const chatsRef = useRef<IChat[] | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     chatsRef.current = chats;
@@ -46,13 +49,24 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
           setActiveUsers(new Set(data.data));
           break;
         case "message":
+          if (audioRef.current) {
+            audioRef.current.play();
+          }
           const msg: IDetailedMessage = data?.data;
           addMessage(msg);
           break;
         case "getId":
           localStorage.setItem("chatId", data.id);
+          break;
         case "update":
           setChats(data?.data || []);
+          break;
+        case "notify":
+          if (audioRef.current) {
+            audioRef.current.play();
+          }
+          addNotification(data?.data);
+          break;
       }
     };
 
@@ -60,15 +74,24 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
       ws.send(
         JSON.stringify({
           type: "save",
-          documentId: localStorage.getItem("chatDocumentId"),
+          chatId: localStorage.getItem("chatId"),
           chats: chatsRef.current,
         })
       );
     };
 
+    const onMouseMove = () => {
+      if (!audioRef.current) {
+        audioRef.current = new Audio("message.wav");
+      }
+      window.removeEventListener("mousemove", onMouseMove);
+    };
+
+    window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("beforeunload", handleBeforeUnload);
     return () => {
       ws.close();
+      window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);

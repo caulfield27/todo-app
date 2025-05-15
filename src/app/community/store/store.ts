@@ -5,6 +5,7 @@ interface IState {
   currentChat: IChat | null;
   chats: IChat[];
   users: IUserData[];
+  currentComponent: string;
 }
 
 interface Actions {
@@ -12,12 +13,15 @@ interface Actions {
   setChats: (chats: IChat[]) => void;
   setUsers: (users: IUserData[]) => void;
   addMessage: (newMsg: IDetailedMessage) => void;
+  setCurrentComponent: (payload: string) => void;
 }
 
 export const useCommunityStore = create<IState & Actions>((set) => ({
   currentChat: null,
   chats: [],
   users: [],
+  currentComponent: "users",
+  setCurrentComponent: (payload) => set({ currentComponent: payload }),
   setUsers: (payload) => set({ users: payload }),
   addMessage: (msg) =>
     set((state) => {

@@ -1,0 +1,52 @@
+.header_title {
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--header-color);
+    margin-bottom: 24px;
+}
+
+.not_container{
+    padding: 50px 75px;
+}
+
+.nots_article{
+    border-top: 1px solid gainsboro;
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px 20px;
+    cursor: pointer;
+    background: transparent;
+    transition: background 0.5s ease-in-out;
+}
+
+.nots_article:hover{
+    background: #eeeded;
+}
+
+.msg_icon{
+    color: blue;
+    font-size: 30px;
+}
+
+.content{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.content span{
+    font-size: 12px;
+    font-weight: 400;
+    color: gray;
+}
+
+.content p{
+    font-size: 18px;
+    color: #000000;
+    font-weight: 500;
+}

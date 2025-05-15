@@ -8,11 +8,12 @@ export function handlePressEnter(
   message: IDetailedMessage,
   setMessage: Dispatch<SetStateAction<IDetailedMessage>>,
   chat: IChat | null,
-  setChat: (newChat: IChat) => void
+  setChat: (newChat: IChat) => void,
+  chats: IChat[]
 ) {
   if (chat && event.key === "Enter" && readyToSend && !event.shiftKey) {
     event.preventDefault();
-    handleSendMsg(chat, setChat, message, setMessage, ws)
+    handleSendMsg(chat, setChat, message, setMessage, ws, chats)
   }
 }
 
@@ -21,11 +22,12 @@ export function handleSendMsg(
   setChat: (newChat: IChat) => void,
   msg: IDetailedMessage,
   setMessage: Dispatch<SetStateAction<IDetailedMessage>>,
-  ws: WebSocket | null
+  ws: WebSocket | null,
+  chats: IChat[]
 ) {
   if (chat) {
     addMessageToChat(chat, setChat, msg);
-    handleSendMessage(ws, msg);
+    handleSendMessage(ws, msg, chats);
     setMessage((prev) => ({ ...prev, message: "" }));
   }
 }
@@ -64,13 +66,14 @@ export function addMessageToChat(
 export function handleSendMessage(
   ws: WebSocket | null,
   message: IDetailedMessage,
-  chat: IChat
+  chats: IChat[]
 ) {
   if (ws && ws.OPEN) {
     ws.send(
       JSON.stringify({
         type: "message",
         data: message,
+        chats
       })
     );
   }

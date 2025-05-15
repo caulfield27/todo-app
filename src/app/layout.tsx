@@ -9,6 +9,9 @@ import { handleThemeChange } from "@/utils/handleThemeChange";
 import { getUserAttribute } from "@/utils/getUser";
 import { PoppinsText } from "@/fonts";
 import { WebSocketProvider } from "@/c_feauters/WebSocket/WebSocketProvider";
+import { strapi } from "@/e_shared/api";
+import { getToken } from "@/utils/getToken";
+import { apiUrl } from "@/routes";
 
 interface Props {
   children: ReactNode;
@@ -17,7 +20,7 @@ interface Props {
 export default function RootLayout({ children }: Props) {
   const pathname = usePathname();
   const { setSidebar, showSidebar } = useSidebarStore();
-  const { isMobile, setIsMobile, setIsTablet } = useGlobalStore();
+  const { isMobile, setIsMobile, setIsTablet, setNotifications } = useGlobalStore();
   const theme = useGlobalStore((state) => state.theme);
   const setTheme = useGlobalStore((state) => state.setTheme);
   const setAvatar = useGlobalStore((state) => state.setAvatar);
@@ -38,6 +41,23 @@ export default function RootLayout({ children }: Props) {
   useEffect(() => {
     handleThemeChange(theme);
   }, [theme]);
+
+  useEffect(() => {
+    getToken().then((token) => {
+      strapi
+        .get(apiUrl.getNotifications(getUserAttribute("id")), {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          if (res.data?.data) {
+            setNotifications(res.data?.data);
+          }
+        })
+        .catch((e) => {});
+    });
+  }, []);
 
   return (
     <>

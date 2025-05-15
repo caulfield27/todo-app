@@ -63,6 +63,16 @@ interface ITodoResponse{
     userId?: IUserData
 }
 
+interface INotifications{
+    id: number,
+    documentId: string,
+    isRead: boolean,
+    type: "message" | "task",
+    subject: string,
+    createdAt: string,
+    updatedAt: string,
+}
+
 type CategoryType = 
 | "work"
 | "home"
@@ -75,4 +85,4 @@ type CategoryType =
 | "rest"
 | "others";
 
-export type {IUserData, ITodoResponse, CategoryType, IChat, IMessage, IDetailedMessage}
+export type {IUserData, ITodoResponse, CategoryType, IChat, IMessage, IDetailedMessage, INotifications}

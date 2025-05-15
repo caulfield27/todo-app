@@ -10,12 +10,13 @@ import { CurrentChat } from "./CurrentChat";
 import { NoChats } from "./NoChats";
 import { useGlobalStore } from "@/store/global/global";
 import { handleUsername } from "@/utils/handleUsername";
+import { sliceRest } from "@/utils/parseString";
 
 export const Chat = () => {
   const { activeUsers } = useContext(SocketContext);
   const { currentChat, setCurrentChat, chats } = useCommunityStore();
   const isMobile = useGlobalStore((state) => state.isMobile);
-  const isTablet = useGlobalStore((state)=> state.isTablet);
+  const isTablet = useGlobalStore((state) => state.isTablet);
   const [message, setMessage] = useState<IDetailedMessage>({
     from: {
       username: "",
@@ -54,15 +55,20 @@ export const Chat = () => {
                         currentChat?.userId === chat.userId ? styles.active_chat : ""
                       }`}
                     >
-                      {chat.avatar ? (
-                        <Avatar alt={`${chat.username} avatar`} src={BASE_URL + chat.avatar} />
-                      ) : (
-                        <Avatar>{chat.username[0].toLocaleUpperCase()}</Avatar>
-                      )}
+                      <div className={styles.avatar_wrapper}>
+                        {chat.avatar ? (
+                          <Avatar alt={`${chat.username} avatar`} src={BASE_URL + chat.avatar} />
+                        ) : (
+                          <Avatar>{chat.username[0].toLocaleUpperCase()}</Avatar>
+                        )}
+                        {activeUsers?.has(chat.userId) && <div className={styles.online}></div>}
+                      </div>
                       <div className={styles.user_status_wrapper}>
                         <span className={styles.name_span}>{handleUsername(chat.username)}</span>
                         <span className={styles.status_span}>
-                          {activeUsers?.has(chat.userId) ? "В сети" : "Не в сети"}
+                          {chat.messages.length
+                            ? sliceRest(chat.messages[chat.messages.length - 1].message, 25)
+                            : "сообщений нет"}
                         </span>
                       </div>
                     </div>
