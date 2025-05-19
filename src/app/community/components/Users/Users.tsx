@@ -15,6 +15,7 @@ export const Users = () => {
 
   const { users } = useCommunityStore();
   const { activeUsers } = useContext(SocketContext);
+  const activeUsersList = users.filter((user) => activeUsers?.has(user.id));
 
   const handleOpenChat = (user: IUserData) => {
     const foundChat = chats.find((chat) => chat.userId === user.id);
@@ -37,15 +38,21 @@ export const Users = () => {
   return (
     <div>
       <div className={styles.users_container}>
-        {users.map((user) => (
-          <UserCard
-            handleOpenChat={() => handleOpenChat(user)}
-            key={user.id}
-            isOnline={activeUsers?.has(user.id)}
-            avatar={user.avatar?.url ?? null}
-            name={user.username}
-          />
-        ))}
+        {activeUsersList.length ? (
+          activeUsersList.map((user: IUserData) => {
+            return (
+              <UserCard
+                handleOpenChat={() => handleOpenChat(user)}
+                key={user.id}
+                isOnline={activeUsers?.has(user.id)}
+                avatar={user.avatar?.url ?? null}
+                name={user.username}
+              />
+            );
+          })
+        ) : (
+          <span className={styles.no_users_span}>{`На данный момент нет пользователей онлайн :(`}</span>
+        )}
       </div>
     </div>
   );

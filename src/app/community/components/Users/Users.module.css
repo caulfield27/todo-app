@@ -5,3 +5,8 @@
     align-items: flex-start;
     gap: 10px;
 }
+
+.no_users_span{
+    color: #919191;
+    font-size: 14px;
+}
