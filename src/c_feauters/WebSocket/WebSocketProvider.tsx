@@ -1,9 +1,7 @@
 "use client";
 
 import { useCommunityStore } from "@/app/community/store/store";
-import { strapi } from "@/e_shared/api";
 import { IChat, IDetailedMessage } from "@/e_shared/types/types";
-import { apiUrl } from "@/routes";
 import { useGlobalStore } from "@/store/global/global";
 import { getUserAttribute } from "@/utils/getUser";
 import { createContext, ReactNode, useEffect, useRef, useState } from "react";
@@ -55,29 +53,10 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
           const msg: IDetailedMessage = data?.data;
           addMessage(msg);
           break;
-        case "getId":
-          localStorage.setItem("chatId", data.id);
-          break;
-        case "update":
-          setChats(data?.data || []);
-          break;
         case "notify":
-          if (audioRef.current) {
-            audioRef.current.play();
-          }
           addNotification(data?.data);
           break;
       }
-    };
-
-    const handleBeforeUnload = () => {
-      ws.send(
-        JSON.stringify({
-          type: "save",
-          chatId: localStorage.getItem("chatId"),
-          chats: chatsRef.current,
-        })
-      );
     };
 
     const onMouseMove = () => {
@@ -88,11 +67,9 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
     };
 
     window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("beforeunload", handleBeforeUnload);
     return () => {
       ws.close();
       window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
 

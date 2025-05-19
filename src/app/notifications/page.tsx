@@ -18,32 +18,13 @@ const Page = () => {
 
   useEffect(() => {
     document.title = "DailyDo | Уведомления";
-    getToken().then((token) => {
-      notifications.forEach((notification, i) => {
-        if (!notification.isRead) {
-          strapi
-            .put(
-              `notifications/${notification.documentId}`,
-              {
-                data: {
-                  isRead: true,
-                },
-              },
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                  "Content-Type": "application/json",
-                },
-              }
-            )
-            .then(() => {
-              notification.isRead = true;
-              setNotifications(notifications);
-            })
-            .catch(() => {});
-        }
-      });
-    });
+    const updatedNots = notifications.map((not)=>{
+      if(!not.isRead){
+        not.isRead = true;
+      }
+      return not;
+    })
+    setNotifications(updatedNots);
   }, []);
 
   return (

@@ -65,12 +65,10 @@ interface ITodoResponse{
 
 interface INotifications{
     id: number,
-    documentId: string,
     isRead: boolean,
     type: "message" | "task",
     subject: string,
     createdAt: string,
-    updatedAt: string,
 }
 
 type CategoryType = 

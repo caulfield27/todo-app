@@ -42,23 +42,6 @@ export default function RootLayout({ children }: Props) {
     handleThemeChange(theme);
   }, [theme]);
 
-  useEffect(() => {
-    getToken().then((token) => {
-      strapi
-        .get(apiUrl.getNotifications(getUserAttribute("id")), {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((res) => {
-          if (res.data?.data) {
-            setNotifications(res.data?.data);
-          }
-        })
-        .catch((e) => {});
-    });
-  }, []);
-
   return (
     <>
       <html className={PoppinsText.variable} lang="en">
