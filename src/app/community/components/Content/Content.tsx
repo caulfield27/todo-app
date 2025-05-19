@@ -12,11 +12,10 @@ export const CommunityContent = () => {
   const searchParams = useSearchParams();
   const { currentComponent, setCurrentComponent } = useCommunityStore();
   const [loading, setLoading] = useState(false);
-  const setChats = useCommunityStore((state) => state.setChats);
   const setUsers = useCommunityStore((state) => state.setUsers);
 
   useEffect(() => {
-    getCommunityData(setUsers, setChats, setLoading);
+    getCommunityData(setUsers, setLoading);
   }, []);
 
   useLayoutEffect(() => {
